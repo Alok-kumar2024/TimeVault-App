@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/white"
+    tools:context=".View.vaultCreationActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/IbVaultBackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="BackToMainActivity"
+                android:src="@drawable/arrow_back_vector"
+                android:backgroundTint="@color/transparent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Personal Vault"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Vault Information"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20sp"/>
+
+        <LinearLayout
+            android:id="@+id/LLvaultInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILvaultName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextColor="@color/gray"
+                android:hint="Vault Name*"
+                android:background="@drawable/textbox"
+                android:layout_marginTop="10dp"
+                android:elevation="2dp"
+                android:layout_marginHorizontal="30dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TIEvaultName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:drawableLeft="@drawable/vault_name_vector"
+                    android:drawablePadding="10dp"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILvaultPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextColor="@color/gray"
+                android:hint="Password*"
+                android:background="@drawable/textbox"
+                android:layout_marginTop="10dp"
+                android:elevation="2dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/black"
+                android:layout_marginHorizontal="30dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TIEvaultPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:drawableStart="@drawable/password_vector"
+                    android:drawablePadding="10dp"
+                    android:inputType="textPassword"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILvaultConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextColor="@color/gray"
+                android:hint="Confirm Password*"
+                android:background="@drawable/textbox"
+                android:layout_marginTop="10dp"
+                android:elevation="2dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/black"
+                android:layout_marginHorizontal="30dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TIEvaultConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"
+                    android:background="@color/transparent"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/confirm_password_vector"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILvaultDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextColor="@color/gray"
+                android:hint="Description*"
+                android:background="@drawable/textbox"
+                android:layout_marginTop="10dp"
+                android:elevation="2dp"
+                android:layout_marginHorizontal="30dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TIEvaultDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textMultiLine"
+                    android:background="@color/transparent"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:drawablePadding="10dp"
+                    android:drawableLeft="@drawable/description_vector"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILvaultEmailRecipent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextColor="@color/gray"
+                android:hint="Email Recipent"
+                android:background="@drawable/textbox"
+                android:layout_marginTop="10dp"
+                android:elevation="2dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginHorizontal="30dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TIEvaultEmailRecipent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textMultiLine"
+                    android:background="@color/transparent"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:drawablePadding="10dp"
+                    android:drawableLeft="@drawable/email_vector"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/TvUnlockTime"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/textbox"
+                android:clickable="true"
+                android:drawablePadding="10dp"
+                android:elevation="2dp"
+                android:gravity="center_vertical"
+                android:text="Set Unlock Time"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:drawableStartCompat="@drawable/calender_vector" />
+
+
+        </LinearLayout>
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:text="Upload Data to Vault"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:drawableStart="@drawable/upload_vector"-->
+<!--            android:drawableEnd="@drawable/upload_vector"-->
+<!--            android:layout_marginStart="10dp"/>-->
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="upload Image"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RvShowImages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"/>
+
+        <Button
+            android:id="@+id/btnVaultUploadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/blue"
+            android:drawableLeft="@drawable/photo_vector"
+            android:drawablePadding="8dp"
+            android:text="Upload"
+            android:textSize="16dp" />
+
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="upload Video"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RvShowVideos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"/>
+
+            <Button
+                android:id="@+id/btnVaultUploadVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/blue"
+                android:drawableLeft="@drawable/video_vector"
+                android:drawablePadding="8dp"
+                android:text="Upload"
+                android:textSize="16dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="upload PDF"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RvShowPDFs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <Button
+                android:id="@+id/btnVaultUploadPDF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/blue"
+                android:drawableLeft="@drawable/pdf_vector"
+                android:drawablePadding="8dp"
+                android:text="Upload"
+                android:textSize="16dp"
+                android:layout_marginBottom="10dp"/>
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/BtnCreateVault"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CREATE VAULT"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/red"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="30dp" />
+
+    </LinearLayout>
+
+</ScrollView>

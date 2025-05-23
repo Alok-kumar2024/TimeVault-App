@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">TimeVault</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--For Bottom Navigation-->
+    <string name="home">HOME</string>
+    <string name="vault">VAULT</string>
+    <string name="settings">SETTINGS</string>
+    <string name="vault_button_des">Create Vault For Storage</string>
+</resources>

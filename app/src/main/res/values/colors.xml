@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Basic Colors -->
+    <color name="white">#FFFF</color>
+    <color name="white_New">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Primary Colors -->
+    <color name="primary">#6200EE</color>
+    <color name="primary_variant">#3700B3</color>
+    <color name="secondary">#03DAC5</color>
+    <color name="secondary_variant">#018786</color>
+
+    <!-- Accent Colors -->
+    <color name="accent">#FF4081</color>
+    <color name="accent_dark">#C51162</color>
+    <color name="accent_light">#FF80AB</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_on_secondary">#000000</color>
+
+    <!-- Background Colors -->
+    <color name="background">#F5F5F5</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="error">#B00020</color>
+
+    <!-- Shades of Gray -->
+    <color name="gray_light">#E0E0E0</color>
+    <color name="gray">#9E9E9E</color>
+    <color name="gray_dark">#616161</color>
+    <color name="gray_darker">#424242</color>
+
+    <!-- Blue Tones -->
+    <color name="blue_light">#81D4FA</color>
+    <color name="blue">#2196F3</color>
+    <color name="blue_dark">#1565C0</color>
+
+    <!-- Green Tones -->
+    <color name="green_light">#A5D6A7</color>
+    <color name="green">#4CAF50</color>
+    <color name="green_dark">#2E7D32</color>
+
+    <!-- Red Tones -->
+    <color name="red_light">#EF9A9A</color>
+    <color name="red">#F44336</color>
+    <color name="red_dark">#D32F2F</color>
+
+    <!-- Yellow Tones -->
+    <color name="yellow_light">#FFF59D</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="yellow_dark">#FBC02D</color>
+
+    <!-- Purple Tones -->
+    <color name="purple_light">#CE93D8</color>
+    <color name="purple">#9C27B0</color>
+    <color name="purple_dark">#7B1FA2</color>
+
+    <!-- Orange Tones -->
+    <color name="orange_light">#FFCC80</color>
+    <color name="orange">#FF9800</color>
+    <color name="orange_dark">#F57C00</color>
+
+    <color name="black_transparent">#80000000</color>
+
+    <!-- Palette 16 -->
+    <color name="soft_lavender">#CCA8DB</color>
+    <color name="dusty_purple">#B57AA1</color>
+    <color name="mint_cyan">#86C9CA</color>
+    <color name="teal_blue">#08979D</color>
+    <color name="deep_teal">#055B5C</color>
+
+    <!-- Palette 19 -->
+    <color name="aqua_blue">#5CC6CC</color>
+    <color name="forest_green">#2F5F59</color>
+    <color name="olive_green">#71AD6F</color>
+    <color name="lime_yellow">#DCDC64</color>
+    <color name="dark_moss_green">#215502</color>
+
+    <!-- Palette 17 -->
+    <color name="pastel_teal">#85C8CE</color>
+    <color name="lime_pastel">#DDE5A5</color>
+    <color name="soft_yellow">#FFD09F</color>
+    <color name="peach_pink">#FA857D</color>
+    <color name="lilac_purple">#CCADDB</color>
+
+    <!-- Blue Palette (assumed as 18) -->
+    <color name="navy_blue">#091B4B</color>
+    <color name="deep_sapphire">#04257A</color>
+    <color name="bright_cyan">#039BAE</color>
+    <color name="sky_blue">#75CADB</color>
+    <color name="ice_blue">#D6E8EE</color>
+
+    <!-- Palette 20 -->
+    <color name="coral_red">#E25845</color>
+    <color name="pumpkin_orange">#F18557</color>
+    <color name="sunset_yellow">#FAC172</color>
+    <color name="seafoam_green">#B8D5C9</color>
+    <color name="fresh_green">#A2D685</color>
+
+    <!-- Palette 15 -->
+    <color name="blush_pink">#B5CAC7</color>
+    <color name="rosy_peach">#E29796</color>
+    <color name="pale_orange">#F1C0B8</color>
+    <color name="light_apricot">#FFB284</color>
+    <color name="beige_tan">#C5B09C</color>
+
+    <!-- Palette 1 -->
+    <color name="muted_maroon">#6F4D57</color>
+    <color name="dusty_pink">#BD6C7D</color>
+    <color name="rosy_mauve">#D79BA5</color>
+    <color name="blush_rose">#DDA6A7</color>
+    <color name="creamy_white">#EDE7E5</color>
+
+    <!-- Palette 2 -->
+    <color name="rich_indigo">#302E63</color>
+    <color name="royal_blue">#434D9C</color>
+    <color name="sky_blue_vivid">#78A2D2</color>
+    <color name="aqua_light">#98CCD3</color>
+    <color name="light_mint">#D0EBE5</color>
+
+    <!-- Palette 3 -->
+    <color name="burnt_orange">#B4533E</color>
+    <color name="terracotta">#DE7755</color>
+    <color name="soft_peach">#F6C09C</color>
+    <color name="lemon_cream">#F6E1C3</color>
+    <color name="pale_rose">#F3EBE2</color>
+
+    <!-- Palette 4 -->
+    <color name="sage_green">#3C6B64</color>
+    <color name="green_leaf">#78A28A</color>
+    <color name="mint_leaf">#AAC6B1</color>
+    <color name="light_olive">#C3E0C8</color>
+    <color name="frosted_white">#E4EFE8</color>
+
+    <!-- Palette 5 -->
+    <color name="charcoal_grey">#333333</color>
+    <color name="dark_grey">#585858</color>
+    <color name="grey_medium">#909090</color>
+    <color name="light_grey">#D1D1D1</color>
+    <color name="off_white">#F1F1F1</color>
+
+    <!-- Palette 6 -->
+    <color name="midnight_blue">#171E37</color>
+    <color name="denim_blue">#2F3E63</color>
+    <color name="steel_blue">#4D6E85</color>
+    <color name="cool_grey_blue">#88B1B7</color>
+    <color name="cloud_grey">#E4E8E8</color>
+
+
+</resources>

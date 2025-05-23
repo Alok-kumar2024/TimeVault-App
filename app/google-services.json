@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "469002913284",
+    "project_id": "timevault-ceeaf",
+    "storage_bucket": "timevault-ceeaf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469002913284:android:6f860e357b0e7cf54e1751",
+        "android_client_info": {
+          "package_name": "com.example.timevault"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "469002913284-ntlg4t4c26je94u8ajmdbkrcpaj9too6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.timevault",
+            "certificate_hash": "6e92b6af446d549a9bc832f2b5db3065a4a5c0a7"
+          }
+        },
+        {
+          "client_id": "469002913284-70r32gsj5eqmblp45bok59tr287m1g8t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDid4_YowFnG0qeAcIGYEwOnGoMRBRiiLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "469002913284-70r32gsj5eqmblp45bok59tr287m1g8t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
