@@ -74,7 +74,13 @@ dependencies {
     implementation (libs.androidx.work.runtime.ktx)
     implementation (libs.okhttp) // For HTTP upload
     implementation (libs.cloudinary.android)
-    
+
+
+    //Dependency of Data and Time picker -> IOS-style wheel picker (Not Using ,problem in year displaying)
+//    implementation (libs.singledateandtimepicker)
+
+    //Dependency of Date and Time Picker -> Material Date/Time Picker (Android's Material Design)
+    implementation (libs.material.v190)
 
 
 }

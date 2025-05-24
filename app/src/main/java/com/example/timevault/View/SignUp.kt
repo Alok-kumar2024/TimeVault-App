@@ -3,6 +3,8 @@ package com.example.timevault.View
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.util.Patterns
 import androidx.fragment.app.Fragment
@@ -10,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import com.airbnb.lottie.LottieDrawable
 import com.example.timevault.Model.DatabaseSignUp
 import com.example.timevault.Model.useGenerateID
@@ -29,6 +32,11 @@ class SignUp : Fragment() {
 
     private lateinit var database: DatabaseReference
 
+    private val signUpTimeOutMills = 15000L
+    private val timeoutHandler = Handler(Looper.getMainLooper())
+    private var timeoutRunnable : Runnable? = null
+    private var signUpInProgress = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,11 +47,13 @@ class SignUp : Fragment() {
 
         database = FirebaseDatabase.getInstance().reference
 
+        binding.etFullName.addTextChangedListener { resetSignUpState() }
+        binding.etEmail.addTextChangedListener { resetSignUpState() }
+        binding.etPassword.addTextChangedListener { resetSignUpState() }
+        binding.etPasswordConfirm.addTextChangedListener { resetSignUpState() }
+
 
         binding.btnSignUp.setOnClickListener {
-            binding.ProgressbarAnimation.visibility = View.VISIBLE
-            binding.ProgressbarAnimation.repeatCount = LottieDrawable.INFINITE
-            binding.ProgressbarAnimation.playAnimation()
 
             val fullname = binding.etFullName.text?.trim().toString()
             val email = binding.etEmail.text?.trim().toString()
@@ -52,9 +62,23 @@ class SignUp : Fragment() {
 
             if (fullname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty()) {
                 Toast.makeText(context, "Fields Cannot Empty.", Toast.LENGTH_SHORT).show()
-                binding.ProgressbarAnimation.cancelAnimation()
-                binding.ProgressbarAnimation.visibility = View.GONE
-            } else {
+                return@setOnClickListener
+            }
+
+            binding.ProgressbarAnimation.visibility = View.VISIBLE
+            binding.ProgressbarAnimation.repeatCount = LottieDrawable.INFINITE
+            binding.ProgressbarAnimation.playAnimation()
+            signUpInProgress = true
+
+            timeoutRunnable = Runnable {
+                if (signUpInProgress)
+                {
+                    resetSignUpState()
+                    Toast.makeText(requireContext(),"Sign-Up timed put. Please try again Later.. ",Toast.LENGTH_SHORT).show()
+                }
+            }
+            timeoutHandler.postDelayed(timeoutRunnable!!,signUpTimeOutMills)
+
                 if (isvaildemail(email)) {
                     if (password == confirmpassword) {
                         auth.createUserWithEmailAndPassword(email, password)
@@ -97,8 +121,10 @@ class SignUp : Fragment() {
                                                 val intent =
                                                     Intent(context, MainActivity::class.java)
                                                 startActivity(intent)
+
+                                                resetSignUpState("Success")
                                                 requireActivity().finishAffinity()
-                                                binding.ProgressbarAnimation.visibility = View.GONE
+//                                                binding.ProgressbarAnimation.visibility = View.GONE
                                                 Toast.makeText(
                                                     context,
                                                     "Welcome $fullname..",
@@ -107,8 +133,9 @@ class SignUp : Fragment() {
                                             } else {
                                                 Toast.makeText(requireContext(),"Error : Couldn't Sync To the Database.",Toast.LENGTH_SHORT).show()
 
-                                                binding.ProgressbarAnimation.cancelAnimation()
-                                                binding.ProgressbarAnimation.visibility = View.GONE
+                                                resetSignUpState("Sync Error")
+//                                                binding.ProgressbarAnimation.cancelAnimation()
+//                                                binding.ProgressbarAnimation.visibility = View.GONE
                                             }
                                         }
                                 }else
@@ -129,8 +156,9 @@ class SignUp : Fragment() {
                                             Toast.makeText(context, "Signup failed: ${exception?.localizedMessage}", Toast.LENGTH_SHORT).show()
                                         }
                                     }
-                                    binding.ProgressbarAnimation.cancelAnimation()
-                                    binding.ProgressbarAnimation.visibility = View.GONE
+                                    resetSignUpState("Error : Due To Input Values")
+//                                    binding.ProgressbarAnimation.cancelAnimation()
+//                                    binding.ProgressbarAnimation.visibility = View.GONE
                                 }
                             }
 
@@ -140,16 +168,19 @@ class SignUp : Fragment() {
                             "password and confirm Password not matching.",
                             Toast.LENGTH_SHORT
                         ).show()
-                        binding.ProgressbarAnimation.cancelAnimation()
-                        binding.ProgressbarAnimation.visibility = View.GONE
+
+                        resetSignUpState("Password Not Matching")
+//                        binding.ProgressbarAnimation.cancelAnimation()
+//                        binding.ProgressbarAnimation.visibility = View.GONE
                     }
                 } else {
-                    Toast.makeText(context, "Enter a Vaild Email Format.", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "Enter a Valid Email Format.", Toast.LENGTH_SHORT)
                         .show()
-                    binding.ProgressbarAnimation.cancelAnimation()
-                    binding.ProgressbarAnimation.visibility = View.GONE
+
+                    resetSignUpState("Not Valid Email Format")
+//                    binding.ProgressbarAnimation.cancelAnimation()
+//                    binding.ProgressbarAnimation.visibility = View.GONE
                 }
-            }
         }
 
 
@@ -157,6 +188,19 @@ class SignUp : Fragment() {
 
 
         return binding.root
+    }
+
+    private fun resetSignUpState(reason : String = "Unknown")
+    {
+        signUpInProgress = false
+
+        timeoutRunnable?.let { timeoutHandler.removeCallbacks(it) }
+
+        binding.ProgressbarAnimation.cancelAnimation()
+        binding.ProgressbarAnimation.visibility = View.GONE
+
+        Log.d("SignUpDebug", "Resetting due to: $reason")
+
     }
 
     fun isvaildemail(check: String): Boolean {

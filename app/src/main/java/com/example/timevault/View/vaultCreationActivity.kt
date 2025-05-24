@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,100 +19,164 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.example.timevault.Model.CloudinaryUploadWorker
 import com.example.timevault.Model.VaultCretionFireStore
+import com.example.timevault.Model.fileType
 import com.example.timevault.Model.useGenerateID
 import com.example.timevault.Model.vaultFileItem
 import com.example.timevault.R
 import com.example.timevault.ViewModel.VaultFileAdapter
 import com.example.timevault.databinding.ActivityVaultCreationBinding
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
+import java.text.Format
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 import kotlin.uuid.Uuid
 
 class vaultCreationActivity : AppCompatActivity() {
 
-    private lateinit var imageAdapter: VaultFileAdapter
-    private lateinit var videoAdapter: VaultFileAdapter
-    private lateinit var pdfAdapter: VaultFileAdapter
+//    private lateinit var imageAdapter: VaultFileAdapter
+//    private lateinit var videoAdapter: VaultFileAdapter
+//    private lateinit var pdfAdapter: VaultFileAdapter
+
+    private lateinit var selectedAdapter: VaultFileAdapter
 
     private lateinit var binding: ActivityVaultCreationBinding
 
     private lateinit var firestore: FirebaseFirestore
-    private lateinit var database : DatabaseReference
+    private lateinit var database: DatabaseReference
+
+    private var selectedDate: Date? = null
 
     val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
 
-    private val imageFiles = mutableListOf<vaultFileItem>()
-    private val videoFiles = mutableListOf<vaultFileItem>()
-    private val PDFFiles = mutableListOf<vaultFileItem>()
+//    private val imageFiles = mutableListOf<vaultFileItem>()
+//    private val videoFiles = mutableListOf<vaultFileItem>()
+//    private val PDFFiles = mutableListOf<vaultFileItem>()
 
-    private val imagePicker =
-        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments())
-        { uris ->
+    private val selectedFiles = mutableListOf<vaultFileItem>()
 
-            uris?.forEach { uri ->
-                uriToFile(uri)?.let { file ->
-                    val name = getFileName(uri)
-                    val item = vaultFileItem(file, name)
-
-                    imageFiles.add(item)
-                }
-
-            }
-            imageAdapter.notifyDataSetChanged()
-
-//        val selectedImages = imageFiles
-//        val names = selectedImages.joinToString("\n"){it.name}
-//        findViewById<TextView>(R.id.TVShowImage).text = "Selected Images : \n$names"
-
-        }
-
-    private val videoPicker =
+    private val filePicker =
         registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments())
         { uris ->
             uris?.forEach { uri ->
+
                 uriToFile(uri)?.let { file ->
+
                     val name = getFileName(uri)
-                    val item = vaultFileItem(file, name)
-                    videoFiles.add(item)
+                    val type = contentResolver.getType(uri)
+
+                    val fileType = when {
+                        type?.startsWith("image/") == true -> fileType.IMAGE
+                        type?.startsWith("video/") == true -> fileType.VIDEO
+                        type == "application/pdf" -> fileType.PDF
+                        else -> null
+                    }
+
+                    if (file != null && name != null && fileType != null) {
+                        if (isFileSizeAllowed(file)) {
+                            selectedFiles.add(vaultFileItem(file, name, fileType))
+                            Toast.makeText(
+                                this,
+                                "File $name added ",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        } else {
+                            Toast.makeText(
+                                this,
+                                "File size cant exceed a max limit of 10 MB.., file -> $name",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        Toast.makeText(this, "Error : Couldn't get the file.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
                 }
             }
-            videoAdapter.notifyDataSetChanged()
-
-//        val selectedVideos = videoFiles
-//        val names = selectedVideos.joinToString("\n"){it.name}
-//        findViewById<TextView>(R.id.TVShowVideo).text = "Selected Videos : \n$names"
-
+            selectedAdapter.notifyDataSetChanged()
         }
 
-    private val pdfPicker =
-        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments())
-        { uris ->
-            uris?.forEach { uri ->
-                uriToFile(uri)?.let { file ->
-                    val name = getFileName(uri)
-                    val item = vaultFileItem(file, name)
-
-                    PDFFiles.add(item)
-                }
-            }
-            pdfAdapter.notifyDataSetChanged()
-
-//        val selectedPDFs = PDFFiles
-//        val names = selectedPDFs.joinToString("\n"){it.name}
-//        findViewById<TextView>(R.id.TVShowPdf).text = "Selected PDF's : \n$names"
-
-        }
+//    private val imagePicker =
+//        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments())
+//        { uris ->
+//
+//            uris?.forEach { uri ->
+//                uriToFile(uri)?.let { file ->
+//                    val name = getFileName(uri)
+//                    val item = vaultFileItem(file, name)
+//
+//                    imageFiles.add(item)
+//                }
+//
+//            }
+//            imageAdapter.notifyDataSetChanged()
+//
+////        val selectedImages = imageFiles
+////        val names = selectedImages.joinToString("\n"){it.name}
+////        findViewById<TextView>(R.id.TVShowImage).text = "Selected Images : \n$names"
+//
+//        }
+//
+//    private val videoPicker =
+//        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments())
+//        { uris ->
+//            uris?.forEach { uri ->
+//                uriToFile(uri)?.let { file ->
+//                    val name = getFileName(uri)
+//                    val item = vaultFileItem(file, name)
+//                    videoFiles.add(item)
+//                }
+//            }
+//            videoAdapter.notifyDataSetChanged()
+//
+////        val selectedVideos = videoFiles
+////        val names = selectedVideos.joinToString("\n"){it.name}
+////        findViewById<TextView>(R.id.TVShowVideo).text = "Selected Videos : \n$names"
+//
+//        }
+//
+//
+//
+//    private val pdfPicker =
+//        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments())
+//        { uris ->
+//            uris?.forEach { uri ->
+//                uriToFile(uri)?.let { file ->
+//                    val name = getFileName(uri)
+//                    val item = vaultFileItem(file, name)
+//
+//                    PDFFiles.add(item)
+//                }
+//            }
+//            pdfAdapter.notifyDataSetChanged()
+//
+////        val selectedPDFs = PDFFiles
+////        val names = selectedPDFs.joinToString("\n"){it.name}
+////        findViewById<TextView>(R.id.TVShowPdf).text = "Selected PDF's : \n$names"
+//
+//        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityVaultCreationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.black)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -122,51 +187,74 @@ class vaultCreationActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().getReference("USERS")
 
         val getdata = getSharedPreferences("DATA", MODE_PRIVATE)
-        val userID = getdata.getString("customuserID",null) ?: "Not Received"
+        val userID = getdata.getString("customuserID", null) ?: "Not Received"
 
-        Log.d("USERIDvault","The Custom userid from sharedPreference is $userID")
+        Log.d("USERIDvault", "The Custom userid from sharedPreference is $userID")
 
         binding.IbVaultBackButton.setOnClickListener {
             finish()
         }
 
-        imageAdapter = VaultFileAdapter(
-            imageFiles,
-            R.drawable.vault_image_vector,
-            onDeleteClick = { item -> imageFiles.remove(item) })
+//        imageAdapter = VaultFileAdapter(
+//            imageFiles,
+//            R.drawable.vault_image_vector,
+//            onDeleteClick = { item -> imageFiles.remove(item) })
+//
+//
+//        videoAdapter = VaultFileAdapter(
+//            videoFiles,
+//            R.drawable.vault_videofile_vector,
+//            onDeleteClick = { item -> videoFiles.remove(item) })
+//
+//        pdfAdapter = VaultFileAdapter(
+//            PDFFiles,
+//            R.drawable.vault_pdf_vector,
+//            onDeleteClick = { item -> PDFFiles.remove(item) })
+//
+//        binding.RvShowImages.layoutManager = LinearLayoutManager(this)
+//        binding.RvShowImages.adapter = imageAdapter
+//
+//        binding.RvShowVideos.layoutManager = LinearLayoutManager(this)
+//        binding.RvShowVideos.adapter = videoAdapter
+//
+//        binding.RvShowPDFs.layoutManager = LinearLayoutManager(this)
+//        binding.RvShowPDFs.adapter = pdfAdapter
 
+        selectedAdapter = VaultFileAdapter(selectedFiles, onDeleteClick = { item ->
+            selectedFiles.remove(item)
+        })
 
-        videoAdapter = VaultFileAdapter(
-            videoFiles,
-            R.drawable.vault_videofile_vector,
-            onDeleteClick = { item -> videoFiles.remove(item) })
+        binding.RvShowFiles.layoutManager = LinearLayoutManager(this)
+        binding.RvShowFiles.adapter = selectedAdapter
 
-        pdfAdapter = VaultFileAdapter(
-            PDFFiles,
-            R.drawable.vault_pdf_vector,
-            onDeleteClick = { item -> PDFFiles.remove(item) })
+//
+//
+//        binding.btnVaultUploadImage.setOnClickListener {
+//            imagePicker.launch(arrayOf("image/*"))
+//        }
+//
+//        binding.btnVaultUploadVideo.setOnClickListener {
+//            videoPicker.launch(arrayOf("video/*"))
+//        }
+//
+//        binding.btnVaultUploadPDF.setOnClickListener {
+//            pdfPicker.launch(arrayOf("application/pdf"))
+//        }
 
-        binding.RvShowImages.layoutManager = LinearLayoutManager(this)
-        binding.RvShowImages.adapter = imageAdapter
-
-        binding.RvShowVideos.layoutManager = LinearLayoutManager(this)
-        binding.RvShowVideos.adapter = videoAdapter
-
-        binding.RvShowPDFs.layoutManager = LinearLayoutManager(this)
-        binding.RvShowPDFs.adapter = pdfAdapter
-
-
-
-        binding.btnVaultUploadImage.setOnClickListener {
-            imagePicker.launch(arrayOf("image/*"))
+        binding.btnVaultUploadFiles.setOnClickListener {
+            filePicker.launch(arrayOf("image/*", "video/*", "application/pdf"))
         }
 
-        binding.btnVaultUploadVideo.setOnClickListener {
-            videoPicker.launch(arrayOf("video/*"))
-        }
-
-        binding.btnVaultUploadPDF.setOnClickListener {
-            pdfPicker.launch(arrayOf("application/pdf"))
+        binding.TvUnlockTime.setOnClickListener {
+//            SingleDateAndTimePickerDialog.Builder(this).bottomSheet().curved().mustBeOnFuture()
+//                .minutesStep(1).title("Choose Unlock Time")
+//                .mainColor(ContextCompat.getColor(this, R.color.purple_dark)).listener { date ->
+//                    val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+//                    val selectedTime = sdf.format(date)
+//
+//                    binding.TvUnlockTime.text = selectedTime
+//                }.display()
+            showDateTimePicker()
         }
 
         binding.BtnCreateVault.setOnClickListener {
@@ -190,12 +278,14 @@ class vaultCreationActivity : AppCompatActivity() {
                         vaultPassword,
                         vaultDescription,
                         vaultEmailRecipent,
-                        vaultUnlockTime
+                        vaultUnlockTime,
+                        "Locked"
                     )
 
 
 
-                    firestore.collection("USERS").document(userID).set(data)
+                    firestore.collection("USERS").document(userID).collection("Vaults")
+                        .document(uniqueid).set(data)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 Toast.makeText(
@@ -204,9 +294,9 @@ class vaultCreationActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 //will write
-                                val allFiles = imageFiles + videoFiles + PDFFiles
+                                val allFiles = selectedFiles
                                 Log.d("UploadFiles", "Total files to upload: ${allFiles.size}")
-                                allFiles.forEach { (file, _) ->
+                                allFiles.forEach { (file, _, _) ->
                                     startUploadWorker(file, vaultPassword, uniqueid, userID)
                                 }
 
@@ -299,5 +389,83 @@ class vaultCreationActivity : AppCompatActivity() {
         }
 
         return tempFile
+    }
+
+    fun isFileSizeAllowed(file: File): Boolean {
+        val maxSize = 10 * 1024 * 1024
+
+        return file.length() <= maxSize
+
+    }
+
+    // Date Time Using IOS-Style (Not Using)
+
+//    private fun showDateTimePicker() {
+//        val currentTime = Date()
+//        val datetoShow = selectedDate ?: currentTime
+//
+////        val calender = Calendar.getInstance()
+////        calender.time = datetoShow
+////        val year = calender.get(Calendar.YEAR)
+//
+//        SingleDateAndTimePickerDialog.Builder(this).bottomSheet().curved().defaultDate(datetoShow)
+//            .mustBeOnFuture().minutesStep(1).displayMinutes(true).displayHours(true)
+//            .displayDaysOfMonth(true).displayYears(true)
+//            .title("Select Unlock Time").listener { date ->
+//                val now = Date()
+//                if (date.before(now)) {
+//                    Toast.makeText(this, "Please select a future time", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    selectedDate = date
+//                    val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+//                    binding.TvUnlockTime.text = sdf.format(date)
+//                }
+//            }.display()
+//    }
+
+
+    private fun showDateTimePicker() {
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker().setTitleText("Select Unlock Time : ").build()
+
+        datePicker.show(supportFragmentManager, "DATE_PICKER")
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+
+            val now = Calendar.getInstance()
+            now.set(Calendar.HOUR_OF_DAY,0)
+            now.set(Calendar.MINUTE,0)
+            now.set(Calendar.SECOND,0)
+            now.set(Calendar.MILLISECOND,0)
+
+            val calender = Calendar.getInstance()
+            calender.timeInMillis = selection
+
+            if (calender.before(now))
+            {
+                Toast.makeText(this, "Please select a future time", Toast.LENGTH_SHORT).show()
+                return@addOnPositiveButtonClickListener
+            }
+
+            val timePicker =
+                MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H).setHour(12)
+                    .setMinute(0).setTitleText("Select Unlock Time : ").build()
+
+            timePicker.show(supportFragmentManager,"TIME_PICKER")
+
+            timePicker.addOnPositiveButtonClickListener {
+
+                calender.set(Calendar.HOUR_OF_DAY,timePicker.hour)
+                calender.set(Calendar.MINUTE,timePicker.minute)
+                calender.set(Calendar.SECOND,0)
+                calender.set(Calendar.MILLISECOND,0)
+
+                val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+                val formattedDateTime = sdf.format(calender.time)
+
+                binding.TvUnlockTime.text = formattedDateTime
+            }
+
+        }
     }
 }

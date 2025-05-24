@@ -7,12 +7,12 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.timevault.Model.fileType
 import com.example.timevault.Model.vaultFileItem
 import com.example.timevault.R
 
 class VaultFileAdapter(
     private val file : MutableList<vaultFileItem> ,
-    private val fileIcon : Int,
     private val onDeleteClick : (vaultFileItem) -> Unit
 
 ) : RecyclerView.Adapter<VaultFileAdapter.VaultFileViewHolder>() {
@@ -39,6 +39,14 @@ class VaultFileAdapter(
     override fun onBindViewHolder(holder: VaultFileViewHolder, position: Int) {
 
         val item = file[position]
+
+        val fileIcon = when{
+            item.type == fileType.IMAGE -> R.drawable.vault_image_vector
+            item.type == fileType.VIDEO -> R.drawable.vault_videofile_vector
+            item.type == fileType.PDF -> R.drawable.vault_pdf_vector
+            else -> R.drawable.vault_unknow_vector
+        }
+
         holder.fileicon.setImageResource(fileIcon)
         holder.fileName.text = item.fileName
         holder.removebtn.setOnClickListener {

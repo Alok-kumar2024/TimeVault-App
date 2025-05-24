@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     private var currentFragment = Home_id
 
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -75,6 +76,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         database = FirebaseDatabase.getInstance().getReference("USERS")
+
+        if (savedInstanceState == null) {
+
+            Log.d("MainActivity","Accessing if (savedInstanceState == null) ")
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.FrameLayoutMainActivity, Home_Fragment()).commit()
+        }else
+        {
+            Log.d("MainActivity","Accessing savedInstanceState.getInt(\"CURRENT_FRAGMENT\", Home_id) ")
+            currentFragment = savedInstanceState.getInt("CURRENT_FRAGMENT", Home_id)
+
+            val fragment: Fragment = when (currentFragment) {
+                1 -> Home_Fragment()
+                2 -> VaultFragment()
+
+                else -> Home_Fragment()
+            }
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.FrameLayoutMainActivity, fragment)
+                .commit()
+        }
 
         val share =getSharedPreferences("DATA",
             Context.MODE_PRIVATE)
@@ -138,11 +161,6 @@ class MainActivity : AppCompatActivity() {
                 bottomNavViewHolder.setBottom(it.id)
             }
             show(Home_id)
-        }
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.FrameLayoutMainActivity, Home_Fragment()).commit()
         }
 
         profileimg = binding.CVOfMainActivityProfilePic
@@ -287,6 +305,11 @@ class MainActivity : AppCompatActivity() {
 
         HidePopUp()
         bottomNavViewHolder.hidePopup()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("CURRENT_FRAGMENT",currentFragment)
     }
 }
 
