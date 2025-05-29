@@ -38,7 +38,7 @@
                 android:text="Vault Title"
                 android:inputType="textMultiLine"
                 android:textStyle="bold"
-                android:textColor="@color/gray_dark"
+                android:textColor="@color/black"
                 android:textSize="28sp"
                 tools:ignore="TextViewEdits" />
 
@@ -83,8 +83,10 @@
                 android:src="@drawable/settings_vector" />
 
             <ImageView
+                android:id="@+id/IvLockRv"
                 android:layout_width="70dp"
                 android:layout_height="60dp"
+                android:tint="@color/black"
                 android:layout_gravity="start"
                 android:backgroundTint="@color/black"
                 android:src="@drawable/lock" />

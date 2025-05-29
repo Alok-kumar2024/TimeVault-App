@@ -1,49 +1,87 @@
 package com.example.timevault.ViewModel
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.timevault.Model.VaultCretionFireStore
+import com.example.timevault.Model.FileITems
+import com.example.timevault.Model.vaultFilesDecrypt
 import com.example.timevault.R
+import okhttp3.internal.format
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class VaultShowAdapter(
-    private val vaultInfo: MutableList<VaultCretionFireStore>,
-    private val onSettingsClick : () -> Unit
-) :
-    RecyclerView.Adapter<VaultShowAdapter.VaultFileHolder>() {
+    private val fileList : List<vaultFilesDecrypt> ,
+    private val onDownloadClick : (vaultFilesDecrypt) -> Unit
+) : RecyclerView.Adapter<VaultShowAdapter.HolderVaultShowInVaultShow>() {
 
-    inner class VaultFileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        val vaultTitleRv : TextView = itemView.findViewById(R.id.TvShowVaultTitleRv)
-        val statusRv : TextView = itemView.findViewById(R.id.TvShowStatusRv)
-        val unlockTimeRv : TextView = itemView.findViewById(R.id.TvShowUnlockTimeRv)
-        val settingsBtn : ImageButton = itemView.findViewById(R.id.IbSettingsRv)
-
+    inner class HolderVaultShowInVaultShow(itemview : View) : RecyclerView.ViewHolder(itemview)
+    {
+        val filename = itemview.findViewById<TextView>(R.id.TvShowFileNameRv)
+        val icon = itemview.findViewById<ImageView>(R.id.IvShowImageOfFileType)
+        val uploadedDate = itemview.findViewById<TextView>(R.id.TvShowUploadDateRv)
+        val downloadBtn = itemview.findViewById<Button>(R.id.BtnDownloadFilesRv)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VaultFileHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.vault_lists_rv, parent, false)
-
-        return VaultFileHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HolderVaultShowInVaultShow {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.vaultfiles_rv,parent,false)
+        return HolderVaultShowInVaultShow(view)
     }
 
     override fun getItemCount(): Int {
-        return vaultInfo.size
+        return fileList.size
     }
 
-    override fun onBindViewHolder(holder: VaultFileHolder, position: Int) {
-        val items = vaultInfo[position]
+    override fun onBindViewHolder(holder: HolderVaultShowInVaultShow, position: Int) {
+        val item = fileList[position]
 
-        holder.vaultTitleRv.text = items.vaultname
-        holder.statusRv.text = items.status
-        holder.unlockTimeRv.text = items.unlockTime
 
-        holder.settingsBtn.setOnClickListener {
-            onSettingsClick()
+//        holder.icon.setImageResource()
+
+        val mimeType = when {
+            item.file?.endsWith(".pdf") == true -> R.drawable.pdf_icon
+            item.file?.endsWith(".jpg") == true || item.file?.endsWith(".jpeg") == true ->R.drawable.image_icon
+            item.file?.endsWith(".png") == true -> R.drawable.image_icon
+            item.file?.endsWith(".mp4") == true -> R.drawable.video_icon
+            else -> R.drawable.vault_unknow_vector
         }
+
+        holder.icon.setImageResource(mimeType)
+
+        holder.filename.text = item.file
+
+        Log.d("VaultShowAdapter", "uploadTime = ${item.uploadTime}")
+
+//        holder.uploadedDate.text =
+//            item.uploadTime?.let {
+//                try {
+//                    val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()) // Match the input string format
+//                    val outputFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault()) // Desired display format
+//
+//                    val parseDate = inputFormat.parse(it)
+//
+//                    parseDate?.let { date-> outputFormat.format(date) }
+//                }catch (e : Exception)
+//                {
+//                    e.printStackTrace()
+//                    "Invalid date"
+//                }
+//            }
+        val date = item.uploadTime?.toDate()
+
+        val sdf = SimpleDateFormat("dd MMM yyyy HH:mm a", Locale.getDefault())
+        holder.uploadedDate.text = sdf.format(date)
+
+
+        holder.downloadBtn.setOnClickListener {
+            onDownloadClick(item)
+        }
+
     }
 }

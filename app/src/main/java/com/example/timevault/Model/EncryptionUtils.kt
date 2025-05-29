@@ -39,14 +39,20 @@ object EncryptionUtils {
     {
         val secretKey = generateKey(password)
 
-        val cipher = Cipher.getInstance("AES")
-        cipher.init(Cipher.ENCRYPT_MODE,secretKey)
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        val iv = ByteArray(16)
+        java.security.SecureRandom().nextBytes(iv)
+        val ivSpec = javax.crypto.spec.IvParameterSpec(iv)
 
-        val encryptedFile = File(context.cacheDir,"enc_${inputfile.name}")
+        cipher.init(Cipher.ENCRYPT_MODE,secretKey,ivSpec)
 
-        val inputbyte = inputfile.readBytes()
-        val outputbyte = cipher.doFinal(inputbyte)
-        encryptedFile.writeBytes(outputbyte)
+        val inputBytes = inputfile.readBytes()
+        val encryptedBytes = cipher.doFinal(inputBytes)
+
+        val ivPlusencrypted = iv + encryptedBytes
+
+        val encryptedFile = File(context.cacheDir, inputfile.name)
+        encryptedFile.writeBytes(ivPlusencrypted)
 
         return encryptedFile
     }

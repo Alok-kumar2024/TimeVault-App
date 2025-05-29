@@ -1,13 +1,16 @@
 package com.example.timevault.Model
 
+import com.google.firebase.Timestamp
+
 data class VaultCretionFireStore(
     var uniqueID : String? = null,
     var vaultname: String?,
     var vaultpassword: String?,
     var description: String?,
     var emailrecipent: String?,
-    var unlockTime: String?,
-    var status : String? = null
+    var unlockTime: Timestamp? = null,
+    var status : String? = null,
+    var unlocked : Boolean? = null
 )
 {
     constructor() : this(null,null,null,null,null,null,null)

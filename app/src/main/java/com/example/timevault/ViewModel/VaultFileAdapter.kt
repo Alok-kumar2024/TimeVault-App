@@ -41,9 +41,9 @@ class VaultFileAdapter(
         val item = file[position]
 
         val fileIcon = when{
-            item.type == fileType.IMAGE -> R.drawable.vault_image_vector
-            item.type == fileType.VIDEO -> R.drawable.vault_videofile_vector
-            item.type == fileType.PDF -> R.drawable.vault_pdf_vector
+            item.type == fileType.IMAGE -> R.drawable.image_icon
+            item.type == fileType.VIDEO -> R.drawable.video_icon
+            item.type == fileType.PDF -> R.drawable.pdf_icon
             else -> R.drawable.vault_unknow_vector
         }
 

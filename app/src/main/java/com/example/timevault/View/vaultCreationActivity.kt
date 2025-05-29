@@ -29,6 +29,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -278,11 +279,21 @@ class vaultCreationActivity : AppCompatActivity() {
                         vaultPassword,
                         vaultDescription,
                         vaultEmailRecipent,
-                        vaultUnlockTime,
-                        "Locked"
+                        selectedDate?.let { it1 -> Timestamp(it1) },
+                        "Locked",
+                        false
                     )
 
+                    val time = mapOf("createdAt : " to Timestamp.now())
 
+                    firestore.collection("USERS").document(userID).set(time).addOnCompleteListener{
+                        if (it.isSuccessful)
+                        {
+                            Log.d("FireStore Under USER","Added timestamp under USERS->$userID")
+                        }else{
+                            Log.e("FireStore Under USER","Couldn't add timestamp under USERS->$userID")
+                        }
+                    }
 
                     firestore.collection("USERS").document(userID).collection("Vaults")
                         .document(uniqueid).set(data)
@@ -296,8 +307,8 @@ class vaultCreationActivity : AppCompatActivity() {
                                 //will write
                                 val allFiles = selectedFiles
                                 Log.d("UploadFiles", "Total files to upload: ${allFiles.size}")
-                                allFiles.forEach { (file, _, _) ->
-                                    startUploadWorker(file, vaultPassword, uniqueid, userID)
+                                allFiles.forEach { (file, name, _) ->
+                                    startUploadWorker(file, vaultPassword, uniqueid, userID,name)
                                 }
 
                                 finish()
@@ -361,13 +372,15 @@ class vaultCreationActivity : AppCompatActivity() {
         file: File,
         password: String,
         uniqueID: String,
-        currentuserid: String
+        currentuserid: String,
+        originalfile : String
     ) {
         val data = workDataOf(
             "filepath" to file.absolutePath,
             "password" to password,
             "USERID" to currentuserid,
-            "VAULTID" to uniqueID
+            "VAULTID" to uniqueID,
+            "ORIGINAL_NAME" to originalfile
         )
 
         val uploadwork = OneTimeWorkRequestBuilder<CloudinaryUploadWorker>()
@@ -460,10 +473,10 @@ class vaultCreationActivity : AppCompatActivity() {
                 calender.set(Calendar.SECOND,0)
                 calender.set(Calendar.MILLISECOND,0)
 
-                val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
-                val formattedDateTime = sdf.format(calender.time)
+                selectedDate = calender.time
 
-                binding.TvUnlockTime.text = formattedDateTime
+                val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+                binding.TvUnlockTime.text = selectedDate?.let { it1 -> sdf.format(it1) }
             }
 
         }

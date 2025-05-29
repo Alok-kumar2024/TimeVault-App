@@ -3,6 +3,7 @@ package com.example.timevault.View
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -12,7 +13,11 @@ import android.view.Window
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
@@ -25,6 +30,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.timevault.Model.DownloadUtils
 import com.example.timevault.R
 import com.example.timevault.ViewModel.BottomPopUp
 import com.google.firebase.auth.FirebaseAuth
@@ -33,8 +39,16 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.DexterBuilder
+import com.karumi.dexter.DexterBuilder.MultiPermissionListener
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,18 +60,23 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNavViewHolder: BottomPopUp
 
-    private lateinit var database : DatabaseReference
+    private lateinit var firebase: FirebaseAuth
+
+    private lateinit var database: DatabaseReference
 
     private val currentUserID = FirebaseAuth.getInstance().currentUser!!.uid
 
-    private var profileName : String? = null
-    private var profileEmail : String? = null
+    private var profileName: String? = null
+    private var profileEmail: String? = null
+
     companion object {
         const val Home_id = 1
         const val Vault_id = 2
     }
 
     private var currentFragment = Home_id
+
+//    private lateinit var permissionLaucnher : ActivityResultLauncher<Array<String>>
 
 
     @SuppressLint("SuspiciousIndentation")
@@ -75,16 +94,46 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+//        permissionLaucnher =
+//            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
+//            { result ->
+//                val allGranted = result.entries.all { it.value }
+//                if (allGranted) {
+//                    DownloadUtils.markPermissionDenied(this) // Reset denied flag
+//                    Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    DownloadUtils.markPermissionDenied(this)
+//                    Toast.makeText(this, "Permissions denied", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+
+//        if (!DownloadUtils.hasAllPermission(this) && !DownloadUtils.wasPermissionDenied(this)) {
+//            permissionLaucnher.launch(DownloadUtils.getNeededPermission().toTypedArray())
+//        }
+
+//        if (!currentUserID.isEmpty())
+//        {
+//            setContentView(R.layout.activity_main)
+//        }else{
+//            val intent = Intent(this,Sign_In_Up_Activity::class.java)
+//            startActivity(intent)
+//            finishAffinity()
+//        }
+
+
         database = FirebaseDatabase.getInstance().getReference("USERS")
+        firebase = FirebaseAuth.getInstance()
 
         if (savedInstanceState == null) {
 
-            Log.d("MainActivity","Accessing if (savedInstanceState == null) ")
+            Log.d("MainActivity", "Accessing if (savedInstanceState == null) ")
             supportFragmentManager.beginTransaction()
                 .replace(R.id.FrameLayoutMainActivity, Home_Fragment()).commit()
-        }else
-        {
-            Log.d("MainActivity","Accessing savedInstanceState.getInt(\"CURRENT_FRAGMENT\", Home_id) ")
+        } else {
+            Log.d(
+                "MainActivity",
+                "Accessing savedInstanceState.getInt(\"CURRENT_FRAGMENT\", Home_id) "
+            )
             currentFragment = savedInstanceState.getInt("CURRENT_FRAGMENT", Home_id)
 
             val fragment: Fragment = when (currentFragment) {
@@ -99,51 +148,50 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        val share =getSharedPreferences("DATA",
-            Context.MODE_PRIVATE)
+        val share = getSharedPreferences(
+            "DATA",
+            Context.MODE_PRIVATE
+        )
 
-        profileName = share.getString("name",null) ?: "Not Found"
+        profileName = share.getString("name", null) ?: "Not Found"
 
-        profileEmail = share.getString("email",null) ?: "Not Found"
+        profileEmail = share.getString("email", null) ?: "Not Found"
 
         bottomNavViewHolder.chosenBottom.observe(this@MainActivity)
         { nav ->
 
-                    when (nav) {
-                        Home_id -> {
-                            switchFragment(Home_id)
-                        }
-
-                        Vault_id -> {
-                            switchFragment(Vault_id)
-                        }
-
-                        else -> {
-                            switchFragment(Home_id)
-                        }
-                    }
-
-                    binding.bottomNavigation.show(nav)
+            when (nav) {
+                Home_id -> {
+                    switchFragment(Home_id)
                 }
+
+                Vault_id -> {
+                    switchFragment(Vault_id)
+                }
+
+                else -> {
+                    switchFragment(Home_id)
+                }
+            }
+
+            binding.bottomNavigation.show(nav)
+        }
 
 
         bottomNavViewHolder.isPopupShown.observe(this@MainActivity)
-        {visible ->
-                    Log.d("PopupObserver", "Popup visibility changed: $visible")
-                    if (visible) {
-                        if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-                            binding.root.post {
-                                ShowPopUp()
-                            }
-                        }
+        { visible ->
+            Log.d("PopupObserver", "Popup visibility changed: $visible")
+            if (visible) {
+                if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+                    binding.root.post {
+                        ShowPopUp()
                     }
-
-                    else HidePopUp()
-
                 }
+            } else HidePopUp()
 
-        if (bottomNavViewHolder.isPopupShown.value ==true)
-        {
+        }
+
+        if (bottomNavViewHolder.isPopupShown.value == true) {
             binding.root.post {
                 ShowPopUp()
             }
@@ -165,15 +213,15 @@ class MainActivity : AppCompatActivity() {
 
         profileimg = binding.CVOfMainActivityProfilePic
 
-            profileimg.setOnClickListener {
+        profileimg.setOnClickListener {
 
-                bottomNavViewHolder.togglePopup()
+            bottomNavViewHolder.togglePopup()
 
-            }
+        }
 
-        binding.FloatingButton.setOnClickListener{
+        binding.FloatingButton.setOnClickListener {
 
-            val intent =Intent(this,vaultCreationActivity::class.java)
+            val intent = Intent(this, vaultCreationActivity::class.java)
             startActivity(intent)
         }
 
@@ -204,6 +252,7 @@ class MainActivity : AppCompatActivity() {
                 val settingsbtn = popupview.findViewById<LinearLayout>(R.id.LLSettingsPopUp)
                 val tvprofilename = popupview.findViewById<TextView>(R.id.ProfileNamePopUp)
                 val tvprofileemail = popupview.findViewById<TextView>(R.id.ProfileEmailPopUp)
+                val logOutBtn = popupview.findViewById<LinearLayout>(R.id.LLLogOutPopUp)
 
                 popupwindow = PopupWindow(
                     popupview,
@@ -231,14 +280,15 @@ class MainActivity : AppCompatActivity() {
                     tvprofileemail.text = profileEmail
                 }
 
+
             }
 
             if (popupwindow!!.isShowing) return
 
             if (profileimg.isAttachedToWindow) {
                 popupwindow?.showAsDropDown(profileimg)
-            }else{
-                profileimg.post{
+            } else {
+                profileimg.post {
                     popupwindow?.showAsDropDown(profileimg)
                 }
             }
@@ -257,7 +307,6 @@ class MainActivity : AppCompatActivity() {
         popupwindow = null
 
     }
-
 
 
     @SuppressLint("CommitTransaction")
@@ -309,7 +358,46 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("CURRENT_FRAGMENT",currentFragment)
+        outState.putInt("CURRENT_FRAGMENT", currentFragment)
     }
+
+//    private fun requestPermission()
+//    {
+//        val permissionList = mutableListOf<String>()
+//
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+//        {
+//            permissionList.add(android.Manifest.permission.READ_MEDIA_IMAGES)
+//            permissionList.add(android.Manifest.permission.READ_MEDIA_VIDEO)
+//        }else
+//        {
+//            permissionList.add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+//
+//            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P)
+//            {
+//                permissionList.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//            }
+//        }
+//
+//        Dexter.withContext(this)
+//            .withPermissions(*permissionList.toTypedArray())
+//            .withListener(object : MultiplePermissionsListener {
+//                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+//                    if (report?.areAllPermissionsGranted() == true) {
+//                        Toast.makeText(applicationContext, "Permissions Granted!", Toast.LENGTH_SHORT).show()
+//                        // 🔓 You can access and download files including PDFs now
+//                    } else {
+//                        Toast.makeText(applicationContext, "Permissions Denied!", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//
+//                override fun onPermissionRationaleShouldBeShown(
+//                    permissions: List<PermissionRequest>,
+//                    token: PermissionToken
+//                ) {
+//                    token.continuePermissionRequest()
+//                }
+//            }).check()
+//    }
 }
 

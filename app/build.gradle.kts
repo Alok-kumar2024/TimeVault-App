@@ -82,5 +82,8 @@ dependencies {
     //Dependency of Date and Time Picker -> Material Date/Time Picker (Android's Material Design)
     implementation (libs.material.v190)
 
+    //Library for permission : Dexter
+    implementation (libs.dexter)
+
 
 }
