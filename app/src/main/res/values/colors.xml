@@ -152,4 +152,154 @@
     <color name="cloud_grey">#E4E8E8</color>
 
 
+    <!-- Basic Colors -->
+    <color name="white_darktheme">#E0E0E0</color>
+    <color name="white_New_darktheme">#FFFFFF</color>
+    <color name="black_darktheme">#000000</color>
+    <color name="transparent_darktheme">#00000000</color>
+
+    <!-- Primary Colors -->
+    <color name="primary_darktheme">#BB86FC</color>
+    <color name="primary_variant_darktheme">#985EFF</color>
+    <color name="secondary_darktheme">#03DAC5</color>
+    <color name="secondary_variant_darktheme">#03DAC5</color>
+
+    <!-- Accent Colors -->
+    <color name="accent_darktheme">#FF80AB</color>
+    <color name="accent_dark_darktheme">#F50057</color>
+    <color name="accent_light_darktheme">#FFB2DD</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary_darktheme">#FFFFFF</color>
+    <color name="text_secondary_darktheme">#B3B3B3</color>
+    <color name="text_on_primary_darktheme">#000000</color>
+    <color name="text_on_secondary_darktheme">#FFFFFF</color>
+
+    <!-- Background Colors -->
+    <color name="background_darktheme">#121212</color>
+    <color name="surface_darktheme">#1E1E1E</color>
+    <color name="error_darktheme">#CF6679</color>
+
+    <!-- Shades of Gray -->
+    <color name="gray_light_darktheme">#2C2C2C</color>
+    <color name="gray_darktheme">#3F3F3F</color>
+    <color name="gray_dark_darktheme">#4F4F4F</color>
+    <color name="gray_darker_darktheme">#5C5C5C</color>
+
+    <!-- Blue Tones -->
+    <color name="blue_light_darktheme">#4FC3F7</color>
+    <color name="blue_darktheme">#1976D2</color>
+    <color name="blue_dark_darktheme">#0D47A1</color>
+
+    <!-- Green Tones -->
+    <color name="green_light_darktheme">#81C784</color>
+    <color name="green_darktheme">#388E3C</color>
+    <color name="green_dark_darktheme">#1B5E20</color>
+
+    <!-- Red Tones -->
+    <color name="red_light_darktheme">#E57373</color>
+    <color name="red_darktheme">#D32F2F</color>
+    <color name="red_dark_darktheme">#B71C1C</color>
+
+    <!-- Yellow Tones -->
+    <color name="yellow_light_darktheme">#FFF176</color>
+    <color name="yellow_darktheme">#FBC02D</color>
+    <color name="yellow_dark_darktheme">#F9A825</color>
+
+    <!-- Purple Tones -->
+    <color name="purple_light_darktheme">#BA68C8</color>
+    <color name="purple_darktheme">#8E24AA</color>
+    <color name="purple_dark_darktheme">#6A1B9A</color>
+
+    <!-- Orange Tones -->
+    <color name="orange_light_darktheme">#FFB74D</color>
+    <color name="orange_darktheme">#FB8C00</color>
+    <color name="orange_dark_darktheme">#EF6C00</color>
+
+    <color name="black_transparent_darktheme">#80FFFFFF</color>
+
+    <!-- Palette 16 -->
+    <color name="soft_lavender_darktheme">#9B71B8</color>
+    <color name="dusty_purple_darktheme">#814E6E</color>
+    <color name="mint_cyan_darktheme">#4FB3B3</color>
+    <color name="teal_blue_darktheme">#027C81</color>
+    <color name="deep_teal_darktheme">#013E3E</color>
+
+    <!-- Palette 19 -->
+    <color name="aqua_blue_darktheme">#2BAFB6</color>
+    <color name="forest_green_darktheme">#1B3D38</color>
+    <color name="olive_green_darktheme">#507B4F</color>
+    <color name="lime_yellow_darktheme">#B0B046</color>
+    <color name="dark_moss_green_darktheme">#143100</color>
+
+    <!-- Palette 17 -->
+    <color name="pastel_teal_darktheme">#5CA8AE</color>
+    <color name="lime_pastel_darktheme">#B9C87A</color>
+    <color name="soft_yellow_darktheme">#FBC16D</color>
+    <color name="peach_pink_darktheme">#D26661</color>
+    <color name="lilac_purple_darktheme">#A383BA</color>
+
+    <!-- Blue Palette (18) -->
+    <color name="navy_blue_darktheme">#0C102C</color>
+    <color name="deep_sapphire_darktheme">#061A4F</color>
+    <color name="bright_cyan_darktheme">#028B99</color>
+    <color name="sky_blue_darktheme">#5AB7C7</color>
+    <color name="ice_blue_darktheme">#BBD8DE</color>
+
+    <!-- Palette 20 -->
+    <color name="coral_red_darktheme">#B84334</color>
+    <color name="pumpkin_orange_darktheme">#D56C3D</color>
+    <color name="sunset_yellow_darktheme">#F1A652</color>
+    <color name="seafoam_green_darktheme">#9BBEB3</color>
+    <color name="fresh_green_darktheme">#86B86B</color>
+
+    <!-- Palette 15 -->
+    <color name="blush_pink_darktheme">#94AAA7</color>
+    <color name="rosy_peach_darktheme">#C97A79</color>
+    <color name="pale_orange_darktheme">#DB9E96</color>
+    <color name="light_apricot_darktheme">#E7975C</color>
+    <color name="beige_tan_darktheme">#A18E79</color>
+
+    <!-- Palette 1 -->
+    <color name="muted_maroon_darktheme">#4E363F</color>
+    <color name="dusty_pink_darktheme">#964B5A</color>
+    <color name="rosy_mauve_darktheme">#B87C88</color>
+    <color name="blush_rose_darktheme">#BB8687</color>
+    <color name="creamy_white_darktheme">#BFB9B7</color>
+
+    <!-- Palette 2 -->
+    <color name="rich_indigo_darktheme">#1F1D42</color>
+    <color name="royal_blue_darktheme">#30397A</color>
+    <color name="sky_blue_vivid_darktheme">#5A84AD</color>
+    <color name="aqua_light_darktheme">#78AEB5</color>
+    <color name="light_mint_darktheme">#A7CBC6</color>
+
+    <!-- Palette 3 -->
+    <color name="burnt_orange_darktheme">#893F30</color>
+    <color name="terracotta_darktheme">#B95C3F</color>
+    <color name="soft_peach_darktheme">#D9A57B</color>
+    <color name="lemon_cream_darktheme">#D9C094</color>
+    <color name="pale_rose_darktheme">#D4C9C0</color>
+
+    <!-- Palette 4 -->
+    <color name="sage_green_darktheme">#2A4F4A</color>
+    <color name="green_leaf_darktheme">#567E6D</color>
+    <color name="mint_leaf_darktheme">#89A392</color>
+    <color name="light_olive_darktheme">#A1C2A7</color>
+    <color name="frosted_white_darktheme">#C6D5CF</color>
+
+    <!-- Palette 5 -->
+    <color name="charcoal_grey_darktheme">#E0E0E0</color>
+    <color name="dark_grey_darktheme">#C0C0C0</color>
+    <color name="grey_medium_darktheme">#AAAAAA</color>
+    <color name="light_grey_darktheme">#888888</color>
+    <color name="off_white_darktheme">#CCCCCC</color>
+
+    <!-- Palette 6 -->
+    <color name="midnight_blue_darktheme">#0E1220</color>
+    <color name="denim_blue_darktheme">#202E4A</color>
+    <color name="steel_blue_darktheme">#395A6E</color>
+    <color name="cool_grey_blue_darktheme">#6B9BA1</color>
+    <color name="cloud_grey_darktheme">#BAC0C0</color>
+
 </resources>

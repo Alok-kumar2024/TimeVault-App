@@ -50,10 +50,10 @@ class VaultItemShowHomeAdapter(
         holder.statusRv.text = items.status
 //        holder.unlockTimeRv.text = items.unlockTime.toString()
 
-        if (items.unlocked == true)
-        {
-            holder.ImageViewLockRv.setImageResource(R.drawable.lock_open_vector)
-        }
+//        if (items.unlocked == true)
+//        {
+//            holder.ImageViewLockRv.setImageResource(R.drawable.lock_open_vector)
+//        }
 
         val date = items.unlockTime?.toDate()
 

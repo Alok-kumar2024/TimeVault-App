@@ -1,18 +1,23 @@
 package com.example.timevault.View
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.airbnb.lottie.LottieDrawable
+import com.example.timevault.R
 import com.example.timevault.databinding.FragmentSignInBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -53,8 +58,12 @@ class SignIn : Fragment() {
             resetSignInState("Input changed")
         }
 
+        binding.TvForgotPasswordSignIn.setOnClickListener {
+            alertBoxForgotPassword()
+        }
 
-        binding.btnSignIp.setOnClickListener {
+
+        binding.btnSignIn.setOnClickListener {
 
             val email = binding.etEmailSignIn.text?.trim().toString()
             val password = binding.etPasswordSignIn.text?.trim().toString()
@@ -159,6 +168,7 @@ class SignIn : Fragment() {
                                                 val editor = share.edit()
                                                 editor.putString("name", fullname).apply()
                                                 editor.putString("email", emailD).apply()
+                                                editor.putBoolean("isSignIn", true).apply()
                                                 editor.putString("customuserID", UserID).apply()
 
                                                 val intent =
@@ -253,6 +263,89 @@ class SignIn : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         bindin_ = null
+    }
+
+    fun alertBoxForgotPassword() {
+        val auth = FirebaseAuth.getInstance()
+
+        val dialogView = layoutInflater.inflate(R.layout.alertbox_forgotpassword, null)
+
+        val email = dialogView.findViewById<EditText>(R.id.EtEmailAlertBox_ForgotPassword).text
+        val resetBtn = dialogView.findViewById<Button>(R.id.BtnResetPasswordAlertBoxForgotPassword)
+        val cancelBtn = dialogView.findViewById<Button>(R.id.BtnCancelAlertBoxForgotPassword)
+
+        val builder = AlertDialog.Builder(requireContext()).setView(dialogView).setCancelable(false).create()
+
+        resetBtn.setOnClickListener {
+            if (email.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "Email Cannot be Empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (!checkEmail(email.toString())) {
+                Toast.makeText(requireContext(), "Wrong Email Format.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            database.orderByChild("email").equalTo(email.toString())
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            auth.sendPasswordResetEmail(email.toString())
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Check Your Email",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        builder.dismiss()
+                                    } else {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Error : Couldn't Send Email.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        return@addOnCompleteListener
+                                    }
+                                }.addOnFailureListener {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "No User Found",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    return@addOnFailureListener
+                                }
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "No User of This Email Exists",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Error : Couldn't Verify To database,Try Again Later.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                })
+
+        }
+
+        cancelBtn.setOnClickListener {
+            builder.dismiss()
+        }
+
+        builder.show()
+    }
+
+    fun checkEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
 

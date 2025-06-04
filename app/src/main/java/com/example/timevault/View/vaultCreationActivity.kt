@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import java.io.File
 import java.text.Format
 import java.text.SimpleDateFormat
@@ -286,7 +287,7 @@ class vaultCreationActivity : AppCompatActivity() {
 
                     val time = mapOf("createdAt : " to Timestamp.now())
 
-                    firestore.collection("USERS").document(userID).set(time).addOnCompleteListener{
+                    firestore.collection("USERS").document(userID).set(time, SetOptions.merge()).addOnCompleteListener{
                         if (it.isSuccessful)
                         {
                             Log.d("FireStore Under USER","Added timestamp under USERS->$userID")

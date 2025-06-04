@@ -3,13 +3,18 @@ package com.example.timevault.View
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -20,6 +25,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -30,15 +37,27 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.timevault.Model.DownloadUtils
+import com.example.timevault.Model.Notification
 import com.example.timevault.R
 import com.example.timevault.ViewModel.BottomPopUp
+import com.example.timevault.ViewModel.NotificationShowAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDragHandleView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.messaging.FirebaseMessaging
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.DexterBuilder
 import com.karumi.dexter.DexterBuilder.MultiPermissionListener
@@ -58,16 +77,22 @@ class MainActivity : AppCompatActivity() {
     private var popupwindow: PopupWindow? = null
 //    private val ShiftDistanceX = 250f
 
+    private var bottomItem = mutableListOf<Notification>()
+    private lateinit var BottomAdapter : NotificationShowAdapter
+
     private lateinit var bottomNavViewHolder: BottomPopUp
+
+    private lateinit var uniqueKey: String
 
     private lateinit var firebase: FirebaseAuth
 
     private lateinit var database: DatabaseReference
 
-    private val currentUserID = FirebaseAuth.getInstance().currentUser!!.uid
+    private val currentUserID = FirebaseAuth.getInstance().currentUser?.uid
 
-    private var profileName: String? = null
-    private var profileEmail: String? = null
+    private var profileName: String? = "Loading"
+    private var profileEmail: String? = "Loading"
+    private lateinit var ImgProfile: String
 
     companion object {
         const val Home_id = 1
@@ -86,12 +111,50 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val sharedPref = getSharedPreferences("notification", MODE_PRIVATE)
+
         bottomNavViewHolder = ViewModelProvider(this)[BottomPopUp::class.java]
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                    1001
+                )
+            }else
+            {
+                sharedPref.edit().putBoolean("notifications_enabled", true).apply()
+            }
+        }else
+        {
+            sharedPref.edit().putBoolean("notifications_enabled", true).apply()
+        }
+
+        val isEnabled = sharedPref.getBoolean("notifications_enabled", true)
+        Log.d("NotificationStatus", "Is Enabled? $isEnabled")
+
+        val share = getSharedPreferences(
+            "DATA",
+            Context.MODE_PRIVATE
+        )
+
+        val isSignIn = share.getBoolean("isSignIn", false) ?: false
+
+        if (!isSignIn) {
+            val intent = Intent(this, Sign_In_Up_Activity::class.java)
+            startActivity(intent)
+            finishAffinity()
         }
 
 //        permissionLaucnher =
@@ -121,6 +184,27 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                    ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    FirebaseFirestore.getInstance().collection("USERS").document(uniqueKey)
+                        .set(mapOf("fcmToken" to token),SetOptions.merge()).addOnSuccessListener {
+                            Log.d("FCM", "Token uploaded To FireStore")
+                        }.addOnFailureListener {
+                            Log.d("FCM", "Token Not Uploaded To firestore")
+                        }
+                }
+            } else {
+                Log.e("FCM", "Failed To get Token")
+            }
+        }
         database = FirebaseDatabase.getInstance().getReference("USERS")
         firebase = FirebaseAuth.getInstance()
 
@@ -148,14 +232,39 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        val share = getSharedPreferences(
-            "DATA",
-            Context.MODE_PRIVATE
-        )
+        uniqueKey = share.getString("customuserID", null) ?: "Not Found"
 
-        profileName = share.getString("name", null) ?: "Not Found"
+        database.child(uniqueKey).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    profileName = snapshot.child("name").value.toString()
+                    profileEmail = snapshot.child("email").value.toString()
+                    ImgProfile = snapshot.child("ImgUrl").value.toString()
 
-        profileEmail = share.getString("email", null) ?: "Not Found"
+                    Log.d(
+                        "UserInfo", "The UserName : $profileName" +
+                                "\nThe UserEmail : $profileEmail" +
+                                "\nThe UserImage : $ImgProfile"
+                    )
+
+                    Glide.with(this@MainActivity)
+                        .load(ImgProfile)
+                        .placeholder(R.drawable.account_image_vector)
+                        .error(R.drawable.error_vector)
+                        .into(binding.IVOfMainActivityProfilePic)
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Database", "Error : ${error.message}")
+            }
+
+        })
+
+//        profileName = share.getString("name", null) ?: "Not Found"
+//
+//        profileEmail = share.getString("email", null) ?: "Not Found"
 
         bottomNavViewHolder.chosenBottom.observe(this@MainActivity)
         { nav ->
@@ -225,6 +334,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        checkForUnseenNotification()
+
+        binding.IbNotificationMainActivity.setOnClickListener {
+            showBottomDialog()
+        }
+
+
 
     }
 
@@ -273,6 +389,10 @@ class MainActivity : AppCompatActivity() {
                 settingsbtn.setOnClickListener {
                     val intent = Intent(this, SettingsActivity::class.java)
                     startActivity(intent)
+                }
+
+                logOutBtn.setOnClickListener {
+                    logOutAlertBox()
                 }
 
                 if (!profileName.isNullOrEmpty() && !profileEmail.isNullOrEmpty()) {
@@ -399,5 +519,187 @@ class MainActivity : AppCompatActivity() {
 //                }
 //            }).check()
 //    }
+
+    fun logOutAlertBox() {
+        val dialogBox = layoutInflater.inflate(R.layout.alertbox_logout, null)
+
+        val imgProfile = dialogBox.findViewById<ImageView>(R.id.IvProfileImageLogOut)
+        val name = dialogBox.findViewById<TextView>(R.id.TvUserNameLogout)
+        val logoutBtn = dialogBox.findViewById<Button>(R.id.BtnLogOutAlterBox)
+        val cancelBtn = dialogBox.findViewById<Button>(R.id.BtnCancelLogOutAlertBox)
+
+        val builder =
+            android.app.AlertDialog.Builder(this).setView(dialogBox).setCancelable(false).create()
+
+        database.child(uniqueKey).get().addOnSuccessListener { data ->
+
+            val username = (data.child("name").value ?: "Not Found").toString()
+            val imgurl = (data.child("ImgUrl").value ?: "Not Found").toString()
+
+            Log.d(
+                "LogoutInfo", "The name is $username.\n" +
+                        "The Url is $imgurl."
+            )
+            Glide.with(this)
+                .load(imgurl)
+                .placeholder(R.drawable.profile_image_vector)
+                .error(R.drawable.error_vector)
+                .into(imgProfile)
+
+            name.text = username
+        }
+
+        logoutBtn.setOnClickListener {
+            firebase.signOut()
+            Toast.makeText(this, "SuccessFully Logged Out.", Toast.LENGTH_SHORT).show()
+
+            val map = mapOf("fcmToken" to FieldValue.delete())
+            FirebaseFirestore.getInstance().collection("USERS")
+                .document(uniqueKey).update(map)
+                .addOnSuccessListener {
+                    Log.d("Logout","Token deleted from FireStore")
+                }
+            val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+            prefs.edit().clear().apply()
+            val share = getSharedPreferences(
+                "DATA",
+                Context.MODE_PRIVATE
+            )
+            val editor = share.edit()
+            editor.clear()
+            editor.apply()
+
+            val intent = Intent(this, Sign_In_Up_Activity::class.java)
+            startActivity(intent)
+            builder.dismiss()
+
+            finishAffinity()
+
+        }
+
+        cancelBtn.setOnClickListener {
+            builder.dismiss()
+        }
+
+        builder.show()
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        val sharedPref = getSharedPreferences("notification", MODE_PRIVATE)
+        if (requestCode == 1001) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+
+                sharedPref.edit().putBoolean("notifications_enabled", true).apply()
+                Log.d("permission", "Notification Permission granted")
+            } else {
+                sharedPref.edit().putBoolean("notifications_enabled", false).apply()
+                Log.d("permission", "Notification permission denied")
+            }
+        }
+    }
+
+    private fun showBottomDialog()
+    {
+        val dialog = BottomSheetDialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.notification_bottomsheet,null)
+
+        val RvBottom = view.findViewById<RecyclerView>(R.id.RvForBottomSheet)
+        val text = view.findViewById<TextView>(R.id.TvNoNotification_NotificationBottomSheet)
+        val drag = view.findViewById<BottomSheetDragHandleView>(R.id.BottomSheetDragHandler)
+
+        val bottomItem = mutableListOf<Notification>()
+        val BottomAdapter = NotificationShowAdapter(bottomItem, onDeleteClick = { notification->
+
+            Toast.makeText(this,"Clicked On Delete",Toast.LENGTH_SHORT).show()
+
+        })
+        RvBottom.layoutManager = LinearLayoutManager(this)
+        RvBottom.adapter = BottomAdapter
+
+        val notifyRef = FirebaseFirestore.getInstance()
+            .collection("USERS")
+            .document(uniqueKey)
+            .collection("Notifications")
+
+        notifyRef.orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .addSnapshotListener { query, error ->
+                if (error != null)
+                {
+                    Toast.makeText(
+                        this,
+                        "Error : Couldnt't Fetch Notification Info..",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@addSnapshotListener
+                }
+                bottomItem.clear()
+
+                if (query != null && !query.isEmpty)
+                {
+                    for (doc in query)
+                    {
+                        notifyRef.add(doc.toObject(Notification::class.java))
+                    }
+
+                    BottomAdapter.notifyDataSetChanged()
+
+                    query.documents.forEach { doc->
+                        if (doc.getBoolean("seen") == false)
+                        {
+                            doc.reference.update("seen",true)
+                        }
+                    }
+                    binding.ViewNotificationRedDotMainActivity.visibility = View.GONE
+                }
+            }
+
+        if (bottomItem.isEmpty())
+        {
+            text.visibility = View.VISIBLE
+        }else
+        {
+            text.visibility = View.VISIBLE
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
+
+
+    }
+
+    private fun checkForUnseenNotification()
+    {
+        val redDot : View = findViewById(R.id.ViewNotificationRedDotMainActivity)
+
+        FirebaseFirestore.getInstance().collection("USERS")
+            .document(uniqueKey)
+            .collection("Notifications")
+            .whereEqualTo("seen",false)
+            .addSnapshotListener { value, error ->
+                if (error != null)
+                {
+                    Toast.makeText(
+                        this,
+                        "Error : Couldnt't Fetch Notification Info..",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@addSnapshotListener
+                }
+
+                if (value != null && !value.isEmpty)
+                {
+                    redDot.visibility = View.VISIBLE
+                }else{
+                    redDot.visibility = View.GONE
+                }
+            }
+    }
 }
 

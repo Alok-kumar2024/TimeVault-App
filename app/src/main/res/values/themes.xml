@@ -6,4 +6,16 @@
     </style>
 
     <style name="Theme.TimeVault" parent="Base.Theme.TimeVault" />
+
+    <style name="vaultfileRv">
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AlertBoxAppVersion" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="background">@drawable/rounded_box_ll</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
+
 </resources>

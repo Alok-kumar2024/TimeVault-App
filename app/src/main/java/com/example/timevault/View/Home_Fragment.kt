@@ -10,10 +10,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.timevault.Model.VaultCretionFireStore
+import com.example.timevault.R
 import com.example.timevault.ViewModel.VaultItemShowHomeAdapter
 import com.example.timevault.databinding.FragmentHomeBinding
 import com.google.firebase.database.DatabaseReference
@@ -74,7 +78,9 @@ class Home_Fragment : Fragment() {
                 if (querysnapShot != null && !querysnapShot.isEmpty) {
                     for (doc in querysnapShot) {
                         val vaultlist = doc.toObject(VaultCretionFireStore::class.java)
-                        VaultLists.add(vaultlist)
+                        if (vaultlist.unlocked == false) {
+                            VaultLists.add(vaultlist)
+                        }
 
                         vaultShowAdapter.notifyDataSetChanged()
                     }
@@ -134,21 +140,30 @@ class Home_Fragment : Fragment() {
     }
 
     private fun showDialog(item: VaultCretionFireStore) {
-        val editText = EditText(requireContext()).apply {
-            hint = "Enter Your Password"
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-        }
-        val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Verify Vault Password")
-            .setView(editText)
-            .setPositiveButton("Verify") { _, _ ->
-                val enterpassword = editText.text.toString()
-                verifyPasswordVault(enterpassword, item)
-            }
-            .setNegativeButton("Cancel", null)
+
+        val dialogView = layoutInflater.inflate(R.layout.alert_dialog_vaultpassword, null)
+        val edittext = dialogView.findViewById<TextView>(R.id.EtPasswordVaultAlerBox)
+        val vaultname = dialogView.findViewById<TextView>(R.id.VaultNameAlertDialogVaultPasword)
+        val uploadBtn = dialogView.findViewById<Button>(R.id.BtnUnlockButtonAlertDialog)
+//        val BackIb = dialogView.findViewById<ImageButton>(R.id.IBBackButtonOfAlertBoxVaultPassword)
+
+        val builder = AlertDialog
+            .Builder(requireContext())
+            .setView(dialogView)
             .create()
 
-        dialog.show()
+        vaultname.text = item.vaultname
+        uploadBtn.setOnClickListener {
+            val eneterdPassword = edittext.text.trim().toString()
+            verifyPasswordVault(eneterdPassword, item)
+        }
+
+//        BackIb.setOnClickListener {
+//            builder.dismiss()
+//        }
+
+        builder.show()
+
     }
 
     private fun verifyPasswordVault(enterpassword: String, item: VaultCretionFireStore) {
@@ -161,38 +176,43 @@ class Home_Fragment : Fragment() {
         item.uniqueID?.let { ID ->
             firestore.collection("USERS").document(currentUserId).collection("Vaults").document(ID)
                 .get().addOnSuccessListener { document ->
-                if (document != null && document.exists()) {
-                    val storedPassword = document.getString("vaultpassword") ?: "Not Found"
+                    if (document != null && document.exists()) {
+                        val storedPassword = document.getString("vaultpassword") ?: "Not Found"
 
-                    if (enterpassword == storedPassword) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Password Matched , Entering The Vault",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (enterpassword == storedPassword) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Password Matched , Entering The Vault",
+                                Toast.LENGTH_SHORT
+                            ).show()
 
-                        val intent = Intent(requireContext(),VaultShow_Activity::class.java)
-                        intent.putExtra("password",enterpassword)
-                        intent.putExtra("vaultID",item.uniqueID)
-                        startActivity(intent)
+                            val intent = Intent(requireContext(), VaultShow_Activity::class.java)
+                            intent.putExtra("customuserID",currentUserId)
+                            intent.putExtra("password", enterpassword)
+                            intent.putExtra("vaultID", item.uniqueID)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Failure : Password Not Matched..",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            "Failure : Password Not Matched..",
+                            "Vaults Data Not Found",
                             Toast.LENGTH_SHORT
-                        ).show()
+                        )
+                            .show()
                     }
-                } else {
-                    Toast.makeText(requireContext(), "Vaults Data Not Found", Toast.LENGTH_SHORT)
-                        .show()
+                }.addOnFailureListener { error ->
+                    Toast.makeText(
+                        requireContext(),
+                        "Error Fetching Data : ${error.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            }.addOnFailureListener { error ->
-                Toast.makeText(
-                    requireContext(),
-                    "Error Fetching Data : ${error.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
         }
 
     }

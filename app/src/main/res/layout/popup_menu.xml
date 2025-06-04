@@ -42,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:minWidth="150dp"
             android:layout_gravity="end"
             android:orientation="vertical">
 
@@ -80,9 +81,10 @@
 
     <LinearLayout
         android:id="@+id/LLSettingsPopUp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:minWidth="150dp"
         android:padding="10dp"
         android:orientation="horizontal">
 
@@ -116,9 +118,10 @@
 
     <LinearLayout
         android:id="@+id/LLLogOutPopUp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:minWidth="200dp"
         android:background="@drawable/pop_up_background"
         android:backgroundTint="@color/red"
         android:orientation="horizontal"

@@ -26,12 +26,12 @@
         <TextView
             android:id="@+id/TvShowFileNameRv"
             android:layout_width="120dp"
-            android:inputType="textMultiLine"
             android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
             android:text="File Name"
-            android:textStyle="bold"
+            android:textColor="@color/black"
             android:textSize="18sp"
-            android:textColor="@color/black"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/TvShowUploadDateRv"

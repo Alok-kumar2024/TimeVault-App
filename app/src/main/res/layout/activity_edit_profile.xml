@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".View.EditProfile_Activity">
+
+    <LinearLayout
+        android:id="@+id/LLTitleEditProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:elevation="10dp"
+        android:background="@color/off_white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/IbBackButtonOfEditProfile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/arrow_back_vector"
+            android:backgroundTint="@color/transparent"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Account"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:layout_gravity="center"
+            android:layout_marginStart="50dp"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/FLEditProfile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LLTitleEditProfile">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardCornerRadius="50dp">
+
+            <ImageView
+                android:id="@+id/IvProfileImageEditProfile"
+                android:layout_width="match_parent"
+                android:layout_height="99dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/account_image_vector" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/CardViewClickCHoosePicEditPRofile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:cardCornerRadius="15dp"
+            android:backgroundTint="@color/gray_dark"
+            android:layout_gravity="bottom|end">
+
+            <ImageButton
+                android:layout_width="20dp"
+                android:layout_height="20sp"
+                android:src="@drawable/camera_vector"
+                app:tint="@color/white"
+                android:layout_gravity="center"
+                android:background="@color/transparent"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/LlShowInofEditProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FLEditProfile">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/textbox"
+            android:elevation="10dp"
+            android:hint="UserID"
+            android:textColorHint="@color/gray_dark">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/TIEUserIDEditProfile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:enabled="false"
+                android:drawableStart="@drawable/id_vector"
+                android:drawablePadding="10dp"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/textbox"
+            android:elevation="10dp"
+            android:hint="Name"
+            android:textColorHint="@color/gray_dark">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/TIEnameEditProfile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:drawableStart="@drawable/name_vector"
+                android:drawableEnd="@drawable/editt_square_vector"
+                android:drawablePadding="10dp"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/textbox"
+            android:elevation="10dp"
+            android:hint="Email"
+            android:textColorHint="@color/gray_dark">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/TIEEmailIDShowProfile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:enabled="false"
+                android:background="@color/transparent"
+                android:drawableStart="@drawable/email_vector"
+                android:drawablePadding="10dp"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/BtnSaveEditProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:background="@drawable/buttonbox_samlllrouned"
+        android:text="Save"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:backgroundTint="@color/purple"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LlShowInofEditProfile"
+        app:layout_constraintVertical_bias="0.451" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

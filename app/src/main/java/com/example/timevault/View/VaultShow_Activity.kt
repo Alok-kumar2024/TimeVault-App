@@ -90,7 +90,7 @@ class VaultShow_Activity : AppCompatActivity() {
 
         val getshare = getSharedPreferences("DATA", Context.MODE_PRIVATE)
 
-        currentUserId = getshare.getString("customuserID", null) ?: return
+        currentUserId = intent.getStringExtra("customuserID") ?: return
 
         Log.d("CustomUserIDInVaultShow", "The User ID gotten from sharedPreference $currentUserId")
 

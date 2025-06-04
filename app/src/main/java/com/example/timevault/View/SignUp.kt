@@ -116,6 +116,7 @@ class SignUp : Fragment() {
                                                 val editor = share.edit()
                                                 editor.putString("name", fullname).apply()
                                                 editor.putString("email", email).apply()
+                                                editor.putBoolean("isSignIn", true).apply()
                                                 editor.putString("customuserID",currentid).apply()
 
                                                 val intent =
