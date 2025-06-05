@@ -82,7 +82,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.LLOtherVersionSettings.setOnClickListener {
-            Toast.makeText(this,"App Version : ${binding.TvOtherVersionNumberSettings}",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"App Version : ${binding.TvOtherVersionNumberSettings.text}",Toast.LENGTH_SHORT).show()
         }
 
         binding.LLEditProfileSettings.setOnClickListener {

@@ -33,6 +33,7 @@ import androidx.fragment.app.Fragment
 import com.example.timevault.databinding.ActivityMainBinding
 import com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -42,6 +43,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.timevault.Model.DownloadUtils
 import com.example.timevault.Model.Notification
+import com.example.timevault.Model.SearchFragments
 import com.example.timevault.R
 import com.example.timevault.ViewModel.BottomPopUp
 import com.example.timevault.ViewModel.NotificationShowAdapter
@@ -56,6 +58,7 @@ import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.karumi.dexter.Dexter
@@ -268,6 +271,7 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavViewHolder.chosenBottom.observe(this@MainActivity)
         { nav ->
+            binding.EtSearchVaultMainActivity.text.clear()
 
             when (nav) {
                 Home_id -> {
@@ -334,13 +338,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        checkForUnseenNotification()
+        binding.EtSearchVaultMainActivity.addTextChangedListener { editable->
+            val searchText = editable.toString()
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.FrameLayoutMainActivity)
 
-        binding.IbNotificationMainActivity.setOnClickListener {
-            showBottomDialog()
+            if (currentFragment is SearchFragments)
+            {
+                currentFragment.filterVaults(searchText)
+            }
         }
-
-
 
     }
 
@@ -446,6 +452,8 @@ class MainActivity : AppCompatActivity() {
 
         currentFragment = itemId
     }
+
+
 
     @SuppressLint("CommitTransaction")
     @Deprecated("Deprecated in Java")
@@ -605,101 +613,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showBottomDialog()
-    {
-        val dialog = BottomSheetDialog(this)
-        val view = LayoutInflater.from(this).inflate(R.layout.notification_bottomsheet,null)
-
-        val RvBottom = view.findViewById<RecyclerView>(R.id.RvForBottomSheet)
-        val text = view.findViewById<TextView>(R.id.TvNoNotification_NotificationBottomSheet)
-        val drag = view.findViewById<BottomSheetDragHandleView>(R.id.BottomSheetDragHandler)
-
-        val bottomItem = mutableListOf<Notification>()
-        val BottomAdapter = NotificationShowAdapter(bottomItem, onDeleteClick = { notification->
-
-            Toast.makeText(this,"Clicked On Delete",Toast.LENGTH_SHORT).show()
-
-        })
-        RvBottom.layoutManager = LinearLayoutManager(this)
-        RvBottom.adapter = BottomAdapter
-
-        val notifyRef = FirebaseFirestore.getInstance()
-            .collection("USERS")
-            .document(uniqueKey)
-            .collection("Notifications")
-
-        notifyRef.orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
-            .addSnapshotListener { query, error ->
-                if (error != null)
-                {
-                    Toast.makeText(
-                        this,
-                        "Error : Couldnt't Fetch Notification Info..",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@addSnapshotListener
-                }
-                bottomItem.clear()
-
-                if (query != null && !query.isEmpty)
-                {
-                    for (doc in query)
-                    {
-                        notifyRef.add(doc.toObject(Notification::class.java))
-                    }
-
-                    BottomAdapter.notifyDataSetChanged()
-
-                    query.documents.forEach { doc->
-                        if (doc.getBoolean("seen") == false)
-                        {
-                            doc.reference.update("seen",true)
-                        }
-                    }
-                    binding.ViewNotificationRedDotMainActivity.visibility = View.GONE
-                }
-            }
-
-        if (bottomItem.isEmpty())
-        {
-            text.visibility = View.VISIBLE
-        }else
-        {
-            text.visibility = View.VISIBLE
-        }
-
-        dialog.setContentView(view)
-        dialog.show()
-
-
-    }
-
-    private fun checkForUnseenNotification()
-    {
-        val redDot : View = findViewById(R.id.ViewNotificationRedDotMainActivity)
-
-        FirebaseFirestore.getInstance().collection("USERS")
-            .document(uniqueKey)
-            .collection("Notifications")
-            .whereEqualTo("seen",false)
-            .addSnapshotListener { value, error ->
-                if (error != null)
-                {
-                    Toast.makeText(
-                        this,
-                        "Error : Couldnt't Fetch Notification Info..",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@addSnapshotListener
-                }
-
-                if (value != null && !value.isEmpty)
-                {
-                    redDot.visibility = View.VISIBLE
-                }else{
-                    redDot.visibility = View.GONE
-                }
-            }
-    }
 }
 

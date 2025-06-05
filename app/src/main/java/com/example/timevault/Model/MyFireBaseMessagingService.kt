@@ -16,27 +16,20 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.time.Instant
+import java.util.UUID
 
 class MyFireBaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
+
+        val notificationID =  message.data["notificationId"] ?: return
+
         val getdata = getSharedPreferences("DATA", MODE_PRIVATE)
         val userID = getdata.getString("customuserID", null) ?: "Not Received"
-
         Log.d("USERIDvault", "The Custom userid from sharedPreference is $userID")
 
-        val title = message.notification?.title ?: "vault Notification"
-        val body = message.notification?.body ?: "You have a new message"
+        val title = message.data["title"] ?: "vault Notification"
+        val body = message.data["body"] ?: "You have a new message"
 
-        val data = Notification(title,body, Timestamp.now(),false)
-        FirebaseFirestore.getInstance()
-            .collection("USERS")
-            .document(userID)
-            .collection("Notifications")
-            .add(data).addOnSuccessListener {
-                Log.d("Notification","SuccessFully added to Firestore")
-            }.addOnFailureListener { error->
-                Log.e("Notification","Couldn't Add to firestore , error : ${error.message}")
-            }
 
         val sharedPref = getSharedPreferences("prefs", MODE_PRIVATE)
         if (!sharedPref.getBoolean("notifications_enabled", true)) {

@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.timevault.Model.SearchFragments
 import com.example.timevault.Model.VaultCretionFireStore
 import com.example.timevault.R
 import com.example.timevault.ViewModel.VaultItemShowHomeAdapter
@@ -22,7 +23,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class VaultFragment : Fragment() {
+class VaultFragment : Fragment(), SearchFragments {
     private var _binding : FragmentVaultBinding? = null
     private val binding get() = _binding!!
 
@@ -31,6 +32,7 @@ class VaultFragment : Fragment() {
     private lateinit var database: DatabaseReference
     private lateinit var firestore: FirebaseFirestore
 
+    private var fullVaultLists = mutableListOf<VaultCretionFireStore>()
     private var VaultLists = mutableListOf<VaultCretionFireStore>()
 
     private lateinit var currentUserId: String
@@ -71,11 +73,13 @@ class VaultFragment : Fragment() {
                     return@addSnapshotListener
                 }
                 VaultLists.clear()
+                fullVaultLists.clear()
 
                 if (querysnapShot != null && !querysnapShot.isEmpty) {
                     for (doc in querysnapShot) {
                         val vaultlist = doc.toObject(VaultCretionFireStore::class.java)
 
+                        fullVaultLists.add(vaultlist)
                         VaultLists.add(vaultlist)
 
                         vaultShowAdapter.notifyDataSetChanged()
@@ -212,6 +216,31 @@ class VaultFragment : Fragment() {
                 }
         }
 
+    }
+
+    override fun filterVaults(query: String) {
+        val filterList = if (query.isBlank())
+        {
+            fullVaultLists
+        }else
+        {
+            fullVaultLists.filter {
+                it.uniqueID?.contains(query, ignoreCase = true) == true||
+                        it.vaultname?.contains(query, ignoreCase = true) == true
+            }
+        }
+
+        VaultLists.clear()
+        VaultLists.addAll(filterList)
+        vaultShowAdapter.notifyDataSetChanged()
+
+        if (VaultLists.isEmpty())
+        {
+            binding.TvNoResultFoundVaultFragment.visibility = View.VISIBLE
+        }else
+        {
+            binding.TvNoResultFoundVaultFragment.visibility = View.GONE
+        }
     }
 
 }

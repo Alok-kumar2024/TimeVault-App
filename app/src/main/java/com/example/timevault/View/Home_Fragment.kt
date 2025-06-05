@@ -16,6 +16,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.timevault.Model.SearchFragments
 import com.example.timevault.Model.VaultCretionFireStore
 import com.example.timevault.R
 import com.example.timevault.ViewModel.VaultItemShowHomeAdapter
@@ -24,7 +25,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class Home_Fragment : Fragment() {
+class Home_Fragment : Fragment(),SearchFragments {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -34,6 +35,7 @@ class Home_Fragment : Fragment() {
     private lateinit var database: DatabaseReference
     private lateinit var firestore: FirebaseFirestore
 
+    private var fullVaultLists = mutableListOf<VaultCretionFireStore>()
     private var VaultLists = mutableListOf<VaultCretionFireStore>()
 
     private lateinit var currentUserId: String
@@ -74,11 +76,13 @@ class Home_Fragment : Fragment() {
                     return@addSnapshotListener
                 }
                 VaultLists.clear()
+                fullVaultLists.clear()
 
                 if (querysnapShot != null && !querysnapShot.isEmpty) {
                     for (doc in querysnapShot) {
                         val vaultlist = doc.toObject(VaultCretionFireStore::class.java)
                         if (vaultlist.unlocked == false) {
+                            fullVaultLists.add(vaultlist)
                             VaultLists.add(vaultlist)
                         }
 
@@ -215,6 +219,42 @@ class Home_Fragment : Fragment() {
                 }
         }
 
+    }
+
+    override fun filterVaults(query: String) {
+        val filterList = if (query.isBlank())
+        {
+            fullVaultLists
+        }else
+        {
+            fullVaultLists.filter {
+                it.uniqueID?.contains(query, ignoreCase = true) == true||
+                        it.vaultname?.contains(query, ignoreCase = true) == true
+            }
+        }
+
+//        FirebaseFirestore.getInstance()
+//            .collection("USERS")
+//            .document(currentUserId)
+//            .collection("Vaults")
+//            .addSnapshotListener { value, error ->
+//                if (error != null)
+//                {
+//
+//                }
+//            }
+
+        VaultLists.clear()
+        VaultLists.addAll(filterList)
+        vaultShowAdapter.notifyDataSetChanged()
+
+        if (VaultLists.isEmpty())
+        {
+            binding.TvNoResultFoundHomeFragment.visibility = View.VISIBLE
+        }else
+        {
+            binding.TvNoResultFoundHomeFragment.visibility = View.GONE
+        }
     }
 
 }
