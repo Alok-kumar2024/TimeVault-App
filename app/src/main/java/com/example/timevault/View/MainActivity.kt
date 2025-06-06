@@ -80,8 +80,11 @@ class MainActivity : AppCompatActivity() {
     private var popupwindow: PopupWindow? = null
 //    private val ShiftDistanceX = 250f
 
+    private val notificationList = mutableListOf<Notification>()
+    private lateinit var notificationAdapter : NotificationShowAdapter
+
     private var bottomItem = mutableListOf<Notification>()
-    private lateinit var BottomAdapter : NotificationShowAdapter
+    private lateinit var BottomAdapter: NotificationShowAdapter
 
     private lateinit var bottomNavViewHolder: BottomPopUp
 
@@ -135,12 +138,10 @@ class MainActivity : AppCompatActivity() {
                     arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
                     1001
                 )
-            }else
-            {
+            } else {
                 sharedPref.edit().putBoolean("notifications_enabled", true).apply()
             }
-        }else
-        {
+        } else {
             sharedPref.edit().putBoolean("notifications_enabled", true).apply()
         }
 
@@ -151,6 +152,7 @@ class MainActivity : AppCompatActivity() {
             "DATA",
             Context.MODE_PRIVATE
         )
+        uniqueKey = share.getString("customuserID", null) ?: "Not Found"
 
         val isSignIn = share.getBoolean("isSignIn", false) ?: false
 
@@ -158,6 +160,20 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, Sign_In_Up_Activity::class.java)
             startActivity(intent)
             finishAffinity()
+        }
+
+        checkUnseenNotifications(uniqueKey) { hasSeen ->
+
+            if (hasSeen) {
+                binding.ViewNotificationRedDotMainActivity.visibility = View.VISIBLE
+            } else {
+                binding.ViewNotificationRedDotMainActivity.visibility = View.GONE
+            }
+
+        }
+
+        binding.IbNotificationMainActivity.setOnClickListener {
+            showBottomDialog()
         }
 
 //        permissionLaucnher =
@@ -198,7 +214,7 @@ class MainActivity : AppCompatActivity() {
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
                     FirebaseFirestore.getInstance().collection("USERS").document(uniqueKey)
-                        .set(mapOf("fcmToken" to token),SetOptions.merge()).addOnSuccessListener {
+                        .set(mapOf("fcmToken" to token), SetOptions.merge()).addOnSuccessListener {
                             Log.d("FCM", "Token uploaded To FireStore")
                         }.addOnFailureListener {
                             Log.d("FCM", "Token Not Uploaded To firestore")
@@ -235,7 +251,6 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        uniqueKey = share.getString("customuserID", null) ?: "Not Found"
 
         database.child(uniqueKey).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -338,12 +353,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.EtSearchVaultMainActivity.addTextChangedListener { editable->
+        binding.EtSearchVaultMainActivity.addTextChangedListener { editable ->
             val searchText = editable.toString()
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.FrameLayoutMainActivity)
+            val currentFragment =
+                supportFragmentManager.findFragmentById(R.id.FrameLayoutMainActivity)
 
-            if (currentFragment is SearchFragments)
-            {
+            if (currentFragment is SearchFragments) {
                 currentFragment.filterVaults(searchText)
             }
         }
@@ -452,7 +467,6 @@ class MainActivity : AppCompatActivity() {
 
         currentFragment = itemId
     }
-
 
 
     @SuppressLint("CommitTransaction")
@@ -565,7 +579,7 @@ class MainActivity : AppCompatActivity() {
             FirebaseFirestore.getInstance().collection("USERS")
                 .document(uniqueKey).update(map)
                 .addOnSuccessListener {
-                    Log.d("Logout","Token deleted from FireStore")
+                    Log.d("Logout", "Token deleted from FireStore")
                 }
             val prefs = getSharedPreferences("settings", MODE_PRIVATE)
             prefs.edit().clear().apply()
@@ -611,6 +625,125 @@ class MainActivity : AppCompatActivity() {
                 Log.d("permission", "Notification permission denied")
             }
         }
+    }
+
+    private fun showBottomDialog() {
+        val dialog = BottomSheetDialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.notification_bottomsheet, null)
+
+        val text: TextView = view.findViewById(R.id.TvNoNotification_NotificationBottomSheet)
+        val RvNotification: RecyclerView = view.findViewById(R.id.RvForBottomSheet)
+
+        dialog.setContentView(view)
+
+        RvNotification.layoutManager = LinearLayoutManager(this)
+
+        notificationAdapter =
+            NotificationShowAdapter(notificationList, onDeleteClick = { notify ->
+                deleteNotification(notify)
+            })
+
+        RvNotification.adapter = notificationAdapter
+
+        database.child(uniqueKey).child("Notification").orderByChild("timestamp")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        notificationList.clear()
+
+                        for (notification in snapshot.children) {
+                            val notify = notification.getValue(Notification::class.java)
+
+                            notify?.let {
+                                notificationList.add(notify)
+                            }
+
+                            if (notify?.seen == false) {
+                                val updateData = mapOf(
+                                    "seen" to true
+                                )
+                                notify.notificationId?.let {
+                                    database.child(uniqueKey).child("Notification").child(it)
+                                        .updateChildren(updateData)
+                                        .addOnSuccessListener {
+                                            Log.d("Notification", "Updated Seen to true")
+                                        }.addOnFailureListener {
+                                            Log.e(
+                                                "Notification",
+                                                "Couldn't update seen to true , error : ${it.message}"
+                                            )
+                                        }
+                                }
+                            }
+                        }
+
+                        val sortList = notificationList
+                            .sortedWith(compareBy<Notification> { !(it.seen) }
+                                .thenByDescending { it.timestamp }).toMutableList()
+
+                        notificationList.clear()
+                        notificationList.addAll(sortList)
+                        notificationAdapter.notifyDataSetChanged()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Notification", "Error Fetching Data , error ${error.message}")
+                }
+
+            })
+
+        checkUnseenNotifications(uniqueKey) { hasSeen ->
+
+            if (hasSeen) {
+                binding.ViewNotificationRedDotMainActivity.visibility = View.VISIBLE
+            } else {
+                binding.ViewNotificationRedDotMainActivity.visibility = View.GONE
+            }
+
+        }
+
+        if (notificationList.isEmpty()) {
+            text.visibility = View.VISIBLE
+        } else {
+            text.visibility = View.GONE
+        }
+
+        dialog.show()
+
+    }
+
+    private fun deleteNotification(notify: Notification) {
+        notify.notificationId?.let {
+            database.child(uniqueKey)
+                .child("Notification")
+                .child(it).removeValue().addOnSuccessListener {
+                    notificationList.remove(notify)
+                    notificationAdapter.notifyDataSetChanged()
+                    Toast.makeText(this,"SuccessFully Deleted The Notification",Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener {
+                    Toast.makeText(this,"Error : Couldn't Delete the Notification",Toast.LENGTH_SHORT).show()
+                }
+
+        }
+
+    }
+
+    private fun checkUnseenNotifications(userID: String, callback: (Boolean) -> Unit) {
+
+        val ref =
+            FirebaseDatabase.getInstance().getReference("USERS").child(userID).child("Notification")
+        ref.orderByChild("seen").equalTo(false)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    callback(snapshot.exists()) // if there's any unseen notification
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("DB", "Error checking unseen notifications: ${error.message}")
+                    callback(false)
+                }
+            })
     }
 
 }

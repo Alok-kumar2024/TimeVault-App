@@ -4,16 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.timevault.Model.FileITems
 import com.example.timevault.Model.vaultFilesDecrypt
 import com.example.timevault.R
-import okhttp3.internal.format
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 class VaultShowAdapter(
@@ -26,7 +23,7 @@ class VaultShowAdapter(
         val filename = itemview.findViewById<TextView>(R.id.TvShowFileNameRv)
         val icon = itemview.findViewById<ImageView>(R.id.IvShowImageOfFileType)
         val uploadedDate = itemview.findViewById<TextView>(R.id.TvShowUploadDateRv)
-        val downloadBtn = itemview.findViewById<Button>(R.id.BtnDownloadFilesRv)
+        val downloadBtn = itemview.findViewById<ImageButton>(R.id.IbDownloadFilesRv)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HolderVaultShowInVaultShow {

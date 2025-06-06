@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/buttonbox_samlllrouned"
+    android:layout_margin="5dp"
+    android:elevation="5dp"
+    android:backgroundTint="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Vault"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        android:layout_marginVertical="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vault Information"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="5dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TILvaultNameVaultSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Vault Name"
+        android:textColorHint="@color/gray_darker"
+        app:passwordToggleTint="@color/black"
+        android:layout_marginHorizontal="25dp"
+        app:errorEnabled="true"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxStrokeWidth="3dp"
+        app:boxCornerRadiusTopEnd="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/TIEVaultNameVaultSettings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableStart="@drawable/vault_name_vector"
+            android:padding="15dp"
+            android:drawablePadding="5dp"
+            android:textSize="18sp"
+            android:textColor="@color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TILPasswordVaultSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="New Password"
+        android:textColorHint="@color/gray_darker"
+        app:passwordToggleTint="@color/black"
+        android:layout_marginHorizontal="25dp"
+        app:errorEnabled="true"
+        app:passwordToggleEnabled="true"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxStrokeWidth="3dp"
+        app:boxCornerRadiusTopEnd="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/TIEPasswordVaultSettings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableStart="@drawable/password_vector"
+            android:padding="15dp"
+            android:inputType="textPassword"
+            android:drawablePadding="5dp"
+            android:textSize="18sp"
+            android:textColor="@color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TILConfirmPasswordVaultSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm New Password"
+        android:textColorHint="@color/gray_darker"
+        app:passwordToggleTint="@color/black"
+        android:layout_marginHorizontal="25dp"
+        app:errorEnabled="true"
+        app:passwordToggleEnabled="true"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxStrokeWidth="3dp"
+        app:boxCornerRadiusTopEnd="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/TIEConfirmPasswordVaultSettings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableStart="@drawable/confirm_password_vector"
+            android:padding="15dp"
+            android:inputType="textPassword"
+            android:drawablePadding="5dp"
+            android:textSize="18sp"
+            android:textColor="@color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TILDescriptionVaultSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        android:textColorHint="@color/gray_darker"
+        app:passwordToggleTint="@color/black"
+        android:layout_marginHorizontal="25dp"
+        app:errorEnabled="true"
+        app:passwordToggleEnabled="true"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxStrokeWidth="3dp"
+        app:boxCornerRadiusTopEnd="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/TIEDescriptionVaultSettings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableStart="@drawable/confirm_password_vector"
+            android:padding="15dp"
+            android:inputType="textPassword"
+            android:drawablePadding="5dp"
+            android:textSize="18sp"
+            android:textColor="@color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+</LinearLayout>

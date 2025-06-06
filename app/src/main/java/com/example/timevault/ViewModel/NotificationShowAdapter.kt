@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.timevault.Model.Notification
 import com.example.timevault.R
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class NotificationShowAdapter(
@@ -39,11 +40,11 @@ class NotificationShowAdapter(
         holder.titleRv.text = item.title
         holder.bodyRv.text = item.body
 
-        val date = item.timestamp?.toDate()
+        val date = item.timestamp
 
         val sdf = SimpleDateFormat("dd MMM yyyy HH:mm a", Locale.getDefault())
 
-        holder.timeRv.text = sdf.format(date)
+        holder.timeRv.text = sdf.format(Date(date))
 
         holder.deleteBtn.setOnClickListener {
             onDeleteClick(item)

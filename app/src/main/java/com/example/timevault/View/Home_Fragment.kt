@@ -58,8 +58,6 @@ class Home_Fragment : Fragment(),SearchFragments {
 
         vaultShowAdapter = VaultItemShowHomeAdapter(VaultLists, onVaultClick = { item ->
             VaultClick(item)
-        }, onSettingsClick = {
-            Toast.makeText(requireContext(), "Clicking for Settings", Toast.LENGTH_SHORT).show()
         })
         binding.RVShowingVaultListsHomeFragment.layoutManager =
             LinearLayoutManager(requireContext())
@@ -170,7 +168,7 @@ class Home_Fragment : Fragment(),SearchFragments {
 
     }
 
-    private fun verifyPasswordVault(enterpassword: String, item: VaultCretionFireStore) {
+    private fun verifyPasswordVault(enterpassword: String, item: VaultCretionFireStore ) {
 
         if (enterpassword.isEmpty()) {
             Toast.makeText(requireContext(), "Field Cannot be Empty..", Toast.LENGTH_SHORT).show()

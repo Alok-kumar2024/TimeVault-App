@@ -17,7 +17,7 @@ import java.util.Locale
 class VaultItemShowHomeAdapter(
     private val vaultInfo: MutableList<VaultCretionFireStore>,
     private val onVaultClick : (item : VaultCretionFireStore) -> Unit ,
-    private val onSettingsClick : () -> Unit
+//    private val onSettingsClick : () -> Unit
 ) :
     RecyclerView.Adapter<VaultItemShowHomeAdapter.VaultFileHolder>() {
 
@@ -26,7 +26,7 @@ class VaultItemShowHomeAdapter(
         val vaultTitleRv : TextView = itemView.findViewById(R.id.TvShowVaultTitleRv)
         val statusRv : TextView = itemView.findViewById(R.id.TvShowStatusRv)
         val unlockTimeRv : TextView = itemView.findViewById(R.id.TvShowUnlockTimeRv)
-        val settingsBtn : ImageButton = itemView.findViewById(R.id.IbSettingsRv)
+//        val settingsBtn : ImageButton = itemView.findViewById(R.id.IbSettingsRv)
         val ImageViewLockRv : ImageView = itemView.findViewById(R.id.IvLockRv)
         val fullVaultRv : LinearLayout = itemView.findViewById(R.id.LLWholeRv)
 
@@ -66,8 +66,8 @@ class VaultItemShowHomeAdapter(
             onVaultClick(items)
         }
 
-        holder.settingsBtn.setOnClickListener {
-            onSettingsClick()
-        }
+//        holder.settingsBtn.setOnClickListener {
+//            onSettingsClick()
+//        }
     }
 }

@@ -10,4 +10,36 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <!-- Title text like "Settings" -->
+<!--    <style name="SettingsTitleText">-->
+<!--        <item name="android:textColor">#F5F5F5</item>-->
+<!--&lt;!&ndash;        <item name="android:textSize">24sp</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:textStyle">bold</item>&ndash;&gt;-->
+<!--    </style>-->
+
+<!--    &lt;!&ndash; Sub-item text like "Theme", "Notifications" &ndash;&gt;-->
+<!--    <style name="SettingsItemText">-->
+<!--        <item name="android:textColor">#CCCCCC</item>-->
+<!--&lt;!&ndash;        <item name="android:textSize">16sp</item>&ndash;&gt;-->
+<!--    </style>-->
+
+<!--    &lt;!&ndash; Card background &ndash;&gt;-->
+<!--    <style name="SettingsLinearLayout" >-->
+<!--        <item name="background">#1E1E1E</item>-->
+<!--&lt;!&ndash;        <item name="cardCornerRadius">16dp</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="cardElevation">4dp</item>&ndash;&gt;-->
+<!--    </style>-->
+
+<!--    &lt;!&ndash; Optional: Divider style &ndash;&gt;-->
+<!--    <style name="SettingsDivider">-->
+<!--        <item name="android:background">#333333</item>-->
+<!--    </style>-->
+
+<!--    &lt;!&ndash; Root layout background &ndash;&gt;-->
+<!--    <style name="SettingsContainer">-->
+<!--        <item name="backgroundColor">#121212</item>-->
+<!--&lt;!&ndash;        <item name="android:padding">16dp</item>&ndash;&gt;-->
+<!--    </style>-->
+
+
 </resources>

@@ -73,22 +73,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/IbSettingsRv"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="start"
-                android:layout_margin="10dp"
-                android:background="@color/transparent"
-                android:src="@drawable/settings_vector" />
+<!--            <ImageButton-->
+<!--                android:id="@+id/IbSettingsRv"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_gravity="start"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:background="@color/transparent"-->
+<!--                android:src="@drawable/settings_vector" />-->
 
             <ImageView
                 android:id="@+id/IvLockRv"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_gravity="start"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
                 android:backgroundTint="@color/black"
                 android:src="@drawable/lock"
                 app:tint="@color/black" />

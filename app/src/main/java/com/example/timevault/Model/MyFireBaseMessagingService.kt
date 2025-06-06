@@ -8,9 +8,11 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.work.Data
 import com.example.timevault.R
 import com.example.timevault.View.MainActivity
 import com.google.firebase.Timestamp
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -30,8 +32,25 @@ class MyFireBaseMessagingService : FirebaseMessagingService() {
         val title = message.data["title"] ?: "vault Notification"
         val body = message.data["body"] ?: "You have a new message"
 
+        val data = Notification(notificationID,title,body,System.currentTimeMillis(),false)
+
+        val database = FirebaseDatabase.getInstance()
+
+       val notifyRef =  database.getReference("USERS")
+            .child(userID)
+           .child("Notification")
+            .child(notificationID)
+
+        notifyRef.setValue(data)
+            .addOnSuccessListener {
+                Log.d("FCM", "Notification saved to Realtime DB")
+            }.addOnFailureListener {
+                Log.e("FCM", "Failed to save notification: ${it.message}")
+            }
+
 
         val sharedPref = getSharedPreferences("prefs", MODE_PRIVATE)
+
         if (!sharedPref.getBoolean("notifications_enabled", true)) {
             Log.d("FCM", "Notification blocked by user settings")
 

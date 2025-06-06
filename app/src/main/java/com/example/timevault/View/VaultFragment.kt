@@ -54,8 +54,6 @@ class VaultFragment : Fragment(), SearchFragments {
 
         vaultShowAdapter = VaultItemShowHomeAdapter(VaultLists, onVaultClick = { item ->
             VaultClick(item)
-        }, onSettingsClick = {
-            Toast.makeText(requireContext(), "Clicking for Settings", Toast.LENGTH_SHORT).show()
         })
         binding.RVShowingVaultListsVaultFragment.layoutManager =
             LinearLayoutManager(requireContext())

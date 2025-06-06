@@ -49,19 +49,16 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/BtnDownloadFilesRv"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="10dp"
+        <ImageButton
+            android:id="@+id/IbDownloadFilesRv"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:src="@drawable/cloud_download_vector"
             android:background="@drawable/buttonbox_samlllrouned"
-            android:elevation="50dp"
-            android:text="Download"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:backgroundTint="@color/gray_light" />
+            android:backgroundTint="@color/blue"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="20dp"/>
 
 
     </LinearLayout>
