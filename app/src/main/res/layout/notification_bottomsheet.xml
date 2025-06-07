@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    style="@style/Notification_BottomSheetLL"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/top_both_rounded"
     android:padding="10dp"
+    android:clipToOutline="true"
     android:orientation="vertical">
     
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
@@ -13,11 +15,11 @@
         android:layout_gravity="center"/>
 
     <TextView
+        style="@style/Notification_BottomSheetPrimaryText"
         android:id="@+id/TvNoNotification_NotificationBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="No Notification"
-        android:textColor="@color/black"
         android:textSize="24sp"
         android:textAlignment="center"
         android:visibility="gone"
@@ -25,6 +27,7 @@
         android:textStyle="bold"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        style="@style/Notification_BottomSheetRvBackground"
         android:id="@+id/RvForBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

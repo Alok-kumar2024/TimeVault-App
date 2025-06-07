@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    style="@style/Notification_Item_RvLL"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/buttonbox_samlllrouned"
-    android:backgroundTint="@color/white"
     android:layout_margin="5dp"
-    android:elevation="5dp"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -39,31 +38,31 @@
         android:orientation="vertical">
 
         <TextView
+            style="@style/Notification_Item_RvPrimaryText"
             android:id="@+id/TvTitleNotificationRv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Title"
             android:inputType="textMultiLine"
             android:textStyle="bold"
-            android:layout_marginVertical="5dp"
-            android:textColor="@color/black"
+            android:layout_marginVertical="10dp"
             android:textSize="24sp"/>
 
         <TextView
+            style="@style/Notification_Item_RvSecondaryText"
             android:id="@+id/TvBodyNotificationRv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:inputType="textMultiLine"
-            android:textColor="@color/gray_darker"
             android:text="body"/>
 
         <TextView
+            style="@style/Notification_Item_RvSecondaryText"
             android:id="@+id/TvTimeNotificationRv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="@color/gray_darker"
             android:text="Time"
             android:textAlignment="textEnd"
             android:inputType="textMultiLine"
@@ -80,11 +79,11 @@
         android:orientation="vertical">
 
         <ImageButton
+            style="@style/Notification_Item_RvImageDelete"
             android:id="@+id/IbDeleteNotificationRv"
             android:layout_width="40dp"
             android:layout_height="30dp"
             android:layout_gravity="start|center"
-            android:background="@drawable/buttonbox_samlllrouned"
             android:layout_marginTop="20dp"
             android:src="@drawable/delete_vector"/>
 

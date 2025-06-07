@@ -58,10 +58,10 @@ class MyFireBaseMessagingService : FirebaseMessagingService() {
         }
 
         val intent = Intent(this,MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
         val pendingIntent = PendingIntent.getActivity(
-            this,0,intent,PendingIntent.FLAG_IMMUTABLE
+            this,notificationID.hashCode(),intent,PendingIntent.FLAG_IMMUTABLE
         )
 
         val notificationBuilder = NotificationCompat.Builder(this,"vault_channel")
@@ -82,7 +82,7 @@ class MyFireBaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0,notificationBuilder.build())
+        notificationManager.notify(notificationID.hashCode(),notificationBuilder.build())
 
     }
 }

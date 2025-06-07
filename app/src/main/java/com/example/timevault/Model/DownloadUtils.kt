@@ -21,6 +21,10 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import java.io.File
 import android.provider.MediaStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.io.FileOutputStream
 
 object DownloadUtils {
@@ -78,10 +82,10 @@ object DownloadUtils {
                     STORAGE_PERMISSION_CODE
                 )
             } else {
-                downloadToDevice(context, file, mimeType)
+                CoroutineScope(Dispatchers.IO).launch { downloadToDevice(context, file, mimeType) }
             }
         } else {
-            downloadToDevice(context, file, mimeType)
+            CoroutineScope(Dispatchers.IO).launch { downloadToDevice(context, file, mimeType) }
         }
     }
 
@@ -100,7 +104,7 @@ object DownloadUtils {
 //        }
 //    }
 
-    fun downloadToDevice(context: Context, file: vaultFilesDecrypt, mimeType: String) {
+    suspend fun downloadToDevice(context: Context, file: vaultFilesDecrypt, mimeType: String) {
         val fileName = file.file
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

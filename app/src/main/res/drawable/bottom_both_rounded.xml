@@ -1,17 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#05043B"
+                android:endColor="#1A0548"
+                android:angle="45" />
 
-    <corners android:bottomRightRadius="50dp"
-        android:bottomLeftRadius="50dp"/>
+            <corners android:bottomLeftRadius="50dp"
+                android:bottomRightRadius="50dp"/>
+        </shape>
+    </item>
 
-    <gradient
-        android:type="linear"
-        android:angle="0"
-        android:startColor="#00B7FF"
-        android:centerColor="#00F7FF"
-        android:endColor="#0090FF"
-        android:centerX="0.5"
-        android:centerY="0.5" />
+    <!-- Optional overlay stripes -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#000D11C9"
+                android:endColor="#22DFCDCD"
+                android:angle="45"
+                android:type="linear" />
 
-</shape>
+            <corners android:bottomLeftRadius="50dp"
+                android:bottomRightRadius="50dp"/>
+        </shape>
+    </item>
+</layer-list>
+
+
+    <!--    <?xml version="1.0" encoding="utf-8"?>-->
+<!--<shape xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:shape="rectangle">-->
+
+<!--<corners android:bottomRightRadius="50dp"-->
+<!--    android:bottomLeftRadius="50dp"/>-->
+
+<!--<gradient-->
+<!--    android:type="linear"-->
+<!--    android:angle="0"-->
+<!--    android:startColor="#7874F1"-->
+<!--    android:endColor="#120532"-->
+<!--    android:centerX="0.5"-->
+<!--    android:centerY="0.5" />-->
+
+
+<!--</shape>-->

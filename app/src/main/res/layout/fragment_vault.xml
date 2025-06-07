@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    style="@style/Fragment_Vault_HomeRvBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,12 +13,12 @@
         android:layout_height="match_parent">
 
         <TextView
+            style="@style/Fragment_Vault_HomePrimaryText"
             android:id="@+id/TvNoResultFoundVaultFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No Result Found"
             android:textSize="24sp"
-            android:textColor="@color/red"
             android:textAlignment="center"
             android:textStyle="bold"
             android:visibility="gone"
@@ -27,6 +29,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            style="@style/Fragment_Vault_HomeRvBackground"
             android:id="@+id/RVShowingVaultLists_VaultFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

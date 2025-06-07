@@ -12,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.R
 import com.example.timevault.databinding.ActivityChangePasswordBinding
 import com.google.firebase.auth.EmailAuthProvider
@@ -33,6 +34,10 @@ class ChangePassword_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val sharetheme = getSharedPreferences("theme", MODE_PRIVATE)
+        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        ThemeHelper.applyTheme(savedTheme)
 
         binding = ActivityChangePasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)

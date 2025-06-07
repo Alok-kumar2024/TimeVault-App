@@ -15,8 +15,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.core.widget.addTextChangedListener
 import com.airbnb.lottie.LottieDrawable
+import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.R
 import com.example.timevault.databinding.FragmentSignInBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -45,6 +47,11 @@ class SignIn : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val sharetheme = requireActivity().getSharedPreferences("theme", MODE_PRIVATE)
+        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        ThemeHelper.applyTheme(savedTheme)
+
         bindin_ = FragmentSignInBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()

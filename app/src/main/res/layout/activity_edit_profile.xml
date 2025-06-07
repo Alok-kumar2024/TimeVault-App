@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/SettingsBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".View.EditProfile_Activity">
 
     <LinearLayout
+        style="@style/SettingsTopTitleLL"
         android:id="@+id/LLTitleEditProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:elevation="10dp"
-        android:background="@color/off_white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            style="@style/SettingsImageButton"
             android:id="@+id/IbBackButtonOfEditProfile"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -28,11 +29,11 @@
             android:layout_margin="10dp"/>
 
         <TextView
+            style="@style/SettingsTextPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Account"
             android:textStyle="bold"
-            android:textColor="@color/black"
             android:textSize="30sp"
             android:layout_gravity="center"
             android:layout_marginStart="50dp"/>
@@ -57,7 +58,7 @@
             <ImageView
                 android:id="@+id/IvProfileImageEditProfile"
                 android:layout_width="match_parent"
-                android:layout_height="99dp"
+                android:layout_height="100dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/account_image_vector" />
 
@@ -84,6 +85,7 @@
     </FrameLayout>
 
     <LinearLayout
+        style="@style/SettingsBackground"
         android:id="@+id/LlShowInofEditProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -95,16 +97,15 @@
         app:layout_constraintTop_toBottomOf="@+id/FLEditProfile">
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/EditProfileTIL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="10dp"
-            android:background="@drawable/textbox"
-            android:elevation="10dp"
-            android:hint="UserID"
-            android:textColorHint="@color/gray_dark">
+            android:hint="UserID">
 
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/EditProfileTIE"
                 android:id="@+id/TIEUserIDEditProfile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -112,22 +113,20 @@
                 android:enabled="false"
                 android:drawableStart="@drawable/id_vector"
                 android:drawablePadding="10dp"
-                android:textColor="@color/black"
                 android:textSize="24sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/EditProfileTIL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="10dp"
-            android:background="@drawable/textbox"
-            android:elevation="10dp"
-            android:hint="Name"
-            android:textColorHint="@color/gray_dark">
+            android:hint="Name">
 
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/EditProfileTIE"
                 android:id="@+id/TIEnameEditProfile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -135,22 +134,20 @@
                 android:drawableStart="@drawable/name_vector"
                 android:drawableEnd="@drawable/editt_square_vector"
                 android:drawablePadding="10dp"
-                android:textColor="@color/black"
                 android:textSize="24sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/EditProfileTIL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="10dp"
-            android:background="@drawable/textbox"
-            android:elevation="10dp"
-            android:hint="Email"
-            android:textColorHint="@color/gray_dark">
+            android:hint="Email">
 
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/EditProfileTIE"
                 android:id="@+id/TIEEmailIDShowProfile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -158,7 +155,6 @@
                 android:background="@color/transparent"
                 android:drawableStart="@drawable/email_vector"
                 android:drawablePadding="10dp"
-                android:textColor="@color/black"
                 android:textSize="24sp" />
 
         </com.google.android.material.textfield.TextInputLayout>

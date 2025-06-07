@@ -42,10 +42,10 @@ class VaultShowAdapter(
 //        holder.icon.setImageResource()
 
         val mimeType = when {
-            item.file?.endsWith(".pdf") == true -> R.drawable.pdf_icon
-            item.file?.endsWith(".jpg") == true || item.file?.endsWith(".jpeg") == true ->R.drawable.image_icon
-            item.file?.endsWith(".png") == true -> R.drawable.image_icon
-            item.file?.endsWith(".mp4") == true -> R.drawable.video_icon
+            item.file?.endsWith(".pdf") == true -> R.drawable.stylish_pdf
+            item.file?.endsWith(".jpg") == true || item.file?.endsWith(".jpeg") == true ->R.drawable.gallery
+            item.file?.endsWith(".png") == true -> R.drawable.gallery
+            item.file?.endsWith(".mp4") == true -> R.drawable.stylish_video
             else -> R.drawable.vault_unknow_vector
         }
 

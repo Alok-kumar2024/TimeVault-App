@@ -44,6 +44,7 @@ import com.bumptech.glide.Glide
 import com.example.timevault.Model.DownloadUtils
 import com.example.timevault.Model.Notification
 import com.example.timevault.Model.SearchFragments
+import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.R
 import com.example.timevault.ViewModel.BottomPopUp
 import com.example.timevault.ViewModel.NotificationShowAdapter
@@ -114,6 +115,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val sharetheme = getSharedPreferences("theme", MODE_PRIVATE)
+        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        ThemeHelper.applyTheme(savedTheme)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -265,11 +271,13 @@ class MainActivity : AppCompatActivity() {
                                 "\nThe UserImage : $ImgProfile"
                     )
 
-                    Glide.with(this@MainActivity)
-                        .load(ImgProfile)
-                        .placeholder(R.drawable.account_image_vector)
-                        .error(R.drawable.error_vector)
-                        .into(binding.IVOfMainActivityProfilePic)
+                    if (!isFinishing && !isDestroyed) {
+                        Glide.with(this@MainActivity)
+                            .load(ImgProfile)
+                            .placeholder(R.drawable.account_image_vector)
+                            .error(R.drawable.error_vector)
+                            .into(binding.IVOfMainActivityProfilePic)
+                    }
 
                 }
             }

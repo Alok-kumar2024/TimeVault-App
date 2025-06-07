@@ -11,6 +11,7 @@
     tools:context=".View.Sign_In_Up_Activity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/SignInUp_Activity_background"
         android:id="@+id/ConstraintLayoutOfScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -28,11 +29,12 @@
                 android:id="@+id/TopImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/enhanced_image"
+                android:src="@drawable/sign_in_up_top_background"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/BottomRoundedImageView"/>
 
             <Button
+                style="@style/SignInUp_Activity_topChoice"
                 android:id="@+id/SignInLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,6 +49,7 @@
                 android:layout_marginStart="65dp"/>
 
             <Button
+                style="@style/SignInUp_Activity_topChoice"
                 android:id="@+id/SignUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,7 +87,7 @@
             android:layout_height="80dp"
             android:scaleType="centerCrop"
             android:layout_marginTop="30dp"
-            android:src="@drawable/enhanced_image"
+            android:src="@drawable/sign_in_up_top_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

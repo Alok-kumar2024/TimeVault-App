@@ -18,6 +18,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.example.timevault.Model.CloudinaryUploadWorker
+import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.Model.VaultCretionFireStore
 import com.example.timevault.Model.fileType
 import com.example.timevault.Model.useGenerateID
@@ -174,6 +175,11 @@ class vaultCreationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val sharetheme = getSharedPreferences("theme", MODE_PRIVATE)
+        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        ThemeHelper.applyTheme(savedTheme)
+
         binding = ActivityVaultCreationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

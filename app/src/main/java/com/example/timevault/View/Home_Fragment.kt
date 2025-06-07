@@ -15,8 +15,12 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.timevault.Model.SearchFragments
+import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.Model.VaultCretionFireStore
 import com.example.timevault.R
 import com.example.timevault.ViewModel.VaultItemShowHomeAdapter
@@ -44,6 +48,11 @@ class Home_Fragment : Fragment(),SearchFragments {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val sharetheme = requireActivity().getSharedPreferences("theme", MODE_PRIVATE)
+        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        ThemeHelper.applyTheme(savedTheme)
+
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
@@ -163,6 +172,8 @@ class Home_Fragment : Fragment(),SearchFragments {
 //        BackIb.setOnClickListener {
 //            builder.dismiss()
 //        }
+
+        builder.window?.setBackgroundDrawable(ContextCompat.getColor(requireContext(),R.color.transparent).toDrawable())
 
         builder.show()
 

@@ -8,6 +8,7 @@
     android:background="@color/white">
 
     <LinearLayout
+        style="@style/SignInUp_Activity_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -25,66 +26,65 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Vault_Creation_ActivityEditText"
             android:id="@+id/FullNameInputLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="Full Name"
-            app:hintTextColor="@color/black"
             android:layout_gravity="center"
             android:elevation="30dp"
-            android:textColorHint="@color/gray"
             android:background="@drawable/textbox"
             android:layout_marginTop="30dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/Vault_Creation_ActivityEditTextTIE"
                 android:id="@+id/etFullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
+                android:drawableStart="@drawable/name_vector"
+                android:drawablePadding="10dp"
                 android:background="@color/transparent"
-                android:textColor="@color/black"
                 android:padding="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Vault_Creation_ActivityEditText"
             android:id="@+id/EmailInputLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="Email"
-            app:hintTextColor="@color/black"
             android:elevation="30dp"
-            android:textColorHint="@color/gray"
             android:background="@drawable/textbox"
             android:layout_marginTop="30dp"
             android:layout_gravity="center">
 
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/Vault_Creation_ActivityEditTextTIE"
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:background="@color/transparent"
-                android:textColor="@color/black"
                 android:drawableStart="@drawable/email_vector"
                 android:drawablePadding="10dp"
                 android:padding="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Vault_Creation_ActivityEditTextPassword"
             android:id="@+id/PasswordInputLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="Password"
-            app:hintTextColor="@color/black"
             android:elevation="30dp"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/black"
-            android:textColorHint="@color/gray"
+            app:passwordToggleEnabled="true"
             android:background="@drawable/textbox"
             android:layout_marginTop="30dp"
             android:layout_gravity="center">
 
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/Vault_Creation_ActivityEditTextTIE"
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -92,32 +92,29 @@
                 android:background="@color/transparent"
                 android:drawableStart="@drawable/password_vector"
                 android:drawablePadding="10dp"
-                android:textColor="@color/black"
                 android:padding="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Vault_Creation_ActivityEditTextPassword"
             android:id="@+id/ConfirmPasswordInputLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="Confirm Password"
-            android:textColorHint="@color/gray"
-            app:hintTextColor="@color/black"
             android:elevation="30dp"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/black"
+            app:passwordToggleEnabled="true"
             android:background="@drawable/textbox"
             android:layout_marginTop="30dp"
             android:layout_gravity="center">
 
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/Vault_Creation_ActivityEditTextTIE"
                 android:id="@+id/etPasswordConfirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:background="@color/transparent"
                 android:drawableStart="@drawable/confirm_password_vector"
-                android:textColor="@color/black"
                 android:drawablePadding="10dp"
                 android:padding="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -131,6 +128,7 @@
             android:backgroundTint="@color/black"
             android:text="Sign Up"
             android:textColor="@color/white"
+            android:layout_marginBottom="15dp"
             android:textSize="25sp" />
 
 <!--        <LinearLayout-->

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieDrawable
 import com.example.timevault.Model.DownloadUtils
 import com.example.timevault.Model.StoreUploadedFiles
+import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.Model.VaultCretionFireStore
 import com.example.timevault.Model.downloadandDecrypt
 import com.example.timevault.Model.vaultFilesDecrypt
@@ -53,6 +54,11 @@ class VaultShow_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val sharetheme = getSharedPreferences("theme", MODE_PRIVATE)
+        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        ThemeHelper.applyTheme(savedTheme)
+
         binding = ActivityVaultShowBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

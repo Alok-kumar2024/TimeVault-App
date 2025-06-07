@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    style="@style/SettingsBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@color/white"
     tools:context=".View.SettingsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,17 +16,17 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            style="@style/SettingsTopTitleLL"
             android:id="@+id/LLTitleSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:elevation="10dp"
-            android:background="@color/off_white"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
+                style="@style/SettingsImageButton"
                 android:id="@+id/IbBackButtonOfSettings"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -35,11 +36,11 @@
 
 
             <TextView
+                style="@style/SettingsTextPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Settings"
                 android:textStyle="bold"
-                android:textColor="@color/black"
                 android:textSize="30sp"
                 android:layout_gravity="center"
                 android:layout_marginStart="50dp"/>
@@ -47,28 +48,26 @@
         </LinearLayout>
 
         <LinearLayout
+            style="@style/SettingsItemsLL"
             android:id="@+id/LLGeneralsettins"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:backgroundTint="@color/white"
-            android:background="@drawable/pop_up_background"
             android:layout_marginHorizontal="20sp"
             android:layout_marginTop="30dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LLTitleSettings"
-            android:elevation="5dp">
+            app:layout_constraintTop_toBottomOf="@+id/LLTitleSettings">
 
              <TextView
+                 style="@style/SettingsTextPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="General"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"/>
+                android:layout_marginTop="10dp" />
 
             <LinearLayout
                 android:id="@+id/LLThemeOptionSettings"
@@ -78,6 +77,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    style="@style/SettingsImageButton"
                     android:id="@+id/IVThemeSettings"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -86,11 +86,11 @@
                     android:backgroundTint="@color/transparent"/>
 
                 <TextView
+                    style="@style/SettingsTextPrimary"
                     android:id="@+id/TVThemeSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Theme"
-                    android:textColor="@color/black"
                     android:textSize="20sp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"/>
@@ -101,15 +101,16 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    style="@style/SettingsTextSecondary"
                     android:id="@+id/TVChoosenOptionSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="light/dark"
                     android:textSize="18sp"
-                    android:textColor="@color/gray_dark"
                     android:layout_gravity="center"/>
 
                 <ImageButton
+                    style="@style/SettingsImageButton"
                     android:id="@+id/IBThemeSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -121,11 +122,11 @@
             </LinearLayout>
 
             <View
+                style="@style/SettingsDivider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_weight="5"
                 android:layout_gravity="center"
-                android:background="@color/black"
                 android:layout_marginStart="40dp"
                 android:layout_marginEnd="30dp"/>
 
@@ -137,6 +138,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    style="@style/SettingsImageButton"
                     android:id="@+id/IVAppVersionSettings"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -145,11 +147,11 @@
                     android:backgroundTint="@color/transparent"/>
 
                 <TextView
+                    style="@style/SettingsTextPrimary"
                     android:id="@+id/TVAppVersionSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="App Version"
-                    android:textColor="@color/black"
                     android:textSize="20sp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"/>
@@ -160,16 +162,16 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    style="@style/SettingsTextSecondary"
                     android:id="@+id/TVVersionSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="1.0.0"
-
-                    android:textColor="@color/gray_dark"
                     android:textSize="18sp" />
 
                 <ImageButton
+                    style="@style/SettingsImageButton"
                     android:id="@+id/IBAppVersionSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -182,29 +184,26 @@
 
 
         <LinearLayout
+            style="@style/SettingsItemsLL"
             android:id="@+id/LLAccountsettins"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginHorizontal="20sp"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/white"
-            android:background="@drawable/pop_up_background"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LLGeneralsettins"
-            android:elevation="5dp">
+            app:layout_constraintTop_toBottomOf="@+id/LLGeneralsettins">
 
             <TextView
-
+                style="@style/SettingsTextPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Account"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"/>
+                android:layout_marginTop="10dp" />
 
             <LinearLayout
                 android:id="@+id/LLEditProfileSettings"
@@ -214,6 +213,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    style="@style/SettingsImageButton"
                     android:id="@+id/IVEditProfileSettings"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -222,11 +222,11 @@
                     android:backgroundTint="@color/transparent"/>
 
                 <TextView
+                    style="@style/SettingsTextPrimary"
                     android:id="@+id/TVEditProfileSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Edit Profile"
-                    android:textColor="@color/black"
                     android:textSize="20sp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"/>
@@ -238,6 +238,7 @@
 
 
                 <ImageButton
+                    style="@style/SettingsImageButton"
                     android:id="@+id/IBEditProfileSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -263,19 +264,20 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    style="@style/SettingsImageButton"
                     android:id="@+id/IVChangePasswordSettings"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/notification_sound_vector"
+                    android:src="@drawable/password_vector"
                     android:layout_gravity="center"
                     android:backgroundTint="@color/transparent"/>
 
                 <TextView
+                    style="@style/SettingsTextPrimary"
                     android:id="@+id/TVChangePasswordSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Change Pasword"
-                    android:textColor="@color/black"
                     android:textSize="20sp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"/>
@@ -286,6 +288,7 @@
                     android:layout_weight="1"/>
 
                 <ImageButton
+                    style="@style/SettingsImageButton"
                     android:id="@+id/IBChangePasswordSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -312,6 +315,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    style="@style/SettingsImageButton"
                     android:id="@+id/IVLogOutSettings"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -320,11 +324,11 @@
                     android:backgroundTint="@color/transparent"/>
 
                 <TextView
+                    style="@style/SettingsTextPrimary"
                     android:id="@+id/TVLogOutSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Log Out"
-                    android:textColor="@color/black"
                     android:textSize="20sp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"/>
@@ -335,6 +339,7 @@
                     android:layout_weight="1"/>
 
                 <ImageButton
+                    style="@style/SettingsImageButton"
                     android:id="@+id/IBLogOutSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -372,10 +377,10 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/SettingsTextSecondary"
                 android:id="@+id/TVHelpCenterSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray_dark"
                 android:text="Help Center"
                 android:layout_gravity="start"
                 android:layout_marginTop="10dp"
@@ -384,13 +389,13 @@
                 android:textSize="18sp"/>
 
             <TextView
+                style="@style/SettingsTextSecondary"
                 android:id="@+id/TVPrivacyPolicySettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Privacy Policy"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/gray_dark"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="5dp"
                 android:layout_gravity="start"/>
@@ -404,23 +409,23 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginStart="25dp">
                 <TextView
+                    style="@style/SettingsTextSecondary"
                     android:id="@+id/TvOtherVersionSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Version :"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/gray_dark"
                     android:layout_gravity="start"/>
 
                 <TextView
+                    style="@style/SettingsTextSecondary"
                     android:id="@+id/TvOtherVersionNumberSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1.0.0"
                     android:layout_marginStart="5dp"
                     android:textSize="18sp"
-                    android:textColor="@color/gray_dark"
                     android:textStyle="bold"/>
 
             </LinearLayout>

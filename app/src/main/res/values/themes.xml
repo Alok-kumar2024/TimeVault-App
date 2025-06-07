@@ -18,41 +18,537 @@
     </style>
 
     <style name="AlertBoxAppVersion" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="background">@drawable/rounded_box_ll</item>
-        <item name="backgroundTint">@color/red</item>
-        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:background">@drawable/rounded_box_ll</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">10dp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+<!-- Settings Activity Style
+            START-->
+    <style name="SettingsBackground" >
+        <item name="android:background">@color/white</item>
+
+    </style>
+
+    <style name="SettingsTopTitleLL" >
+        <item name="android:background">@color/white</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <style name="SettingsItemsLL">
+        <item name="android:background">@drawable/pop_up_background</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">5dp</item>
+    </style>
+
+    <style name="SettingsDivider">
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="SettingsTextPrimary">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="SettingsTextSecondary">
+        <item name="android:textColor">@color/gray_dark</item>
+    </style>
+
+    <style name="SettingsImageButton">
+        <item name="android:tint">@color/black</item>
+    </style>
+<!-- Settings Activity Style
+            END-->
+
+<!--    Change Passsword Activity Style
+        START-->
+<!--    For Background and text used Settings only-->
+
+    <style name="ChangePasswordTIL">
+        <item name="android:textColorHint">@color/gray_darker</item>
+        <item name="passwordToggleTint">@color/black</item>
+    </style>
+
+    <style name="ChangePasswordTIE">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+<!--    Change Passsword Activity Style
+                END-->
+
+<!-- Edit Profile Activity Style
+               START-->
+
+    <style name="EditProfileTIL">
+        <item name="android:background">@drawable/textbox</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">10dp</item>
+        <item name="android:textColorHint">@color/gray_darker</item>
+    </style>
+
+    <style name="EditProfileTIE">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:drawableTint">@color/black</item>
+    </style>
+<!-- Edit Profile Activity Style
+                   END-->
+
+<!-- Main Activity Style
+                       START-->
+
+    <style name="MainActivityTopLL">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="MainActivityTopConstraint">
+        <item name="android:background">@drawable/bottom_left_rounded</item>
+    </style>
+
+    <style name="MainActivityBottomLL">
+        <item name="android:background">@color/midnight_blue</item>
+    </style>
+
+    <style name="MainActivityBottomConstraint">
+        <item name="android:background">@drawable/top_right_rounded</item>
+    </style>
+
+    <style name="MainActivityFloatingBtn">
+        <item name="tint">@color/black</item>
+        <item name="android:backgroundTint">@color/blue</item>
+    </style>
+
+    <style name="MainActivitySearchFrameLayout">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <style name="MainActivitySearchEditText">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColorHint">@color/gray_dark</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <style name="MainActivitySearchImageView">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:backgroundTint">@color/blue</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <style name="MainActivityNotificationBtn">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:tint">@color/red</item>
     </style>
 
 
-    <!-- Title text like "Settings" -->
-<!--    <style name="SettingsTitleText">-->
-<!--        <item name="android:textColor">@color/black</item>-->
-<!--&lt;!&ndash;        <item name="android:textSize">24sp</item>&ndash;&gt;-->
-<!--&lt;!&ndash;        <item name="android:textStyle">bold</item>&ndash;&gt;-->
-<!--    </style>-->
+    <style name="MainActivityBottomNavigator">
+        <item name="cbn_fabColor">@color/blue</item>
+        <item name="cbn_iconColor">@color/black</item>
+        <item name="cbn_selectedIconColor">@color/red_dark</item>
+        <item name="cbn_titleColor">@color/black</item>
+        <item name="cbn_background">@color/white</item>
 
-<!--    &lt;!&ndash; Sub-item text like "Theme", "Notifications" &ndash;&gt;-->
-<!--    <style name="SettingsItemText">-->
-<!--        <item name="android:textColor">@color/black</item>-->
-<!--&lt;!&ndash;        <item name="android:textSize">16sp</item>&ndash;&gt;-->
-<!--    </style>-->
+    </style>
+<!-- MAin Activity Style
+                   END-->
 
-<!--    &lt;!&ndash; Card background &ndash;&gt;-->
-<!--    <style name="SettingsLinearLayout">-->
-<!--        <item name="cardBackgroundColor">@color/white</item>-->
-<!--&lt;!&ndash;        <item name="cardCornerRadius">16dp</item>&ndash;&gt;-->
-<!--&lt;!&ndash;        <item name="cardElevation">4dp</item>&ndash;&gt;-->
-<!--    </style>-->
+<!-- Vault_lists_rv Style
+        START-->
 
-<!--    &lt;!&ndash; Optional: Divider style &ndash;&gt;-->
-<!--    <style name="SettingsDivider">-->
-<!--        <item name="android:background">@color/black</item>-->
-<!--    </style>-->
+    <style name="VaultListRvLL">
+        <item name="android:background">@drawable/vault_shape_rv</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">5dp</item>
+    </style>
 
-<!--    &lt;!&ndash; Root layout background &ndash;&gt;-->
-<!--    <style name="SettingsContainer">-->
-<!--        <item name="android:background">@color/white</item>-->
-<!--&lt;!&ndash;        <item name="android:padding">16dp</item>&ndash;&gt;-->
-<!--    </style>-->
+    <style name="VaultListRvLocImg">
+        <item name="android:tint">@color/black</item>
+    </style>
+
+    <style name="VaultListRvName">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="VaultListRvNameUnderLine">
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="VaultListRvSecondaryText">
+        <item name="android:textColor">#2D2C2C</item>
+    </style>
+
+    <style name="VaultListRvStatus">
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+<!-- Vault_lists_rv Style
+        END-->
+
+
+<!-- Vault_items_rv Style
+            START-->
+    <style name="VaultItemsRvBackground">
+        <item name="android:background">@drawable/vault_shape_rv</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">20dp</item>
+    </style>
+
+    <style name="VaultItemsRvName">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="VaultItemsRvImgCross">
+        <item name="android:tint">@color/black</item>
+    </style>
+
+<!-- Vault_items_rv Style
+           END-->
+
+
+<!--Popup_menu Style
+               START-->
+    <style name="Popup_menuLL">
+        <item name="android:background">@drawable/pop_up_background</item>
+        <item name="android:backgroundTint">@color/white_darktheme</item>
+    </style>
+
+    <style name="Popup_menuPrimaryText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Popup_menuSecondaryText">
+        <item name="android:textColor">@color/gray_darker</item>
+    </style>
+
+    <style name="Popup_menuImageTint">
+        <item name="android:tint">@color/black</item>
+    </style>
+
+    <style name="Popup_menuLogoutLL">
+        <item name="android:background">@drawable/rounded_box_ll</item>
+        <item name="android:backgroundTint">@color/red</item>
+    </style>
+
+    <style name="Popup_menuDivder">
+        <item name="android:background">@color/black</item>
+    </style>
+<!-- Popup_menu Style
+               END-->
+
+<!--Notification_Item_Rv Style
+            START-->
+    <style name="Notification_Item_RvLL">
+        <item name="android:background">@drawable/rounded_box_ll</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">5dp</item>
+    </style>
+
+    <style name="Notification_Item_RvPrimaryText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Notification_Item_RvSecondaryText">
+        <item name="android:textColor">@color/gray_darker</item>
+    </style>
+
+    <style name="Notification_Item_RvImageDelete">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:backgroundTint">@color/gray_light</item>
+        <item name="android:tint">@color/black</item>
+    </style>
+
+<!--Notification_Item_Rv Style
+            END-->
+
+<!--Notification_BottomSheet Style
+            START-->
+    <style name="Notification_BottomSheetLL">
+        <item name="android:background">@drawable/top_both_rounded</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+    <style name="Notification_BottomSheetPrimaryText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Notification_BottomSheetRvBackground">
+        <item name="android:background">@color/white</item>
+    </style>
+
+<!--Notification_BottomSheet Style
+            END-->
+
+<!--Fragment_Vault Style
+        START-->
+
+    <style name="Fragment_Vault_HomePrimaryText">
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="Fragment_Vault_HomeRvBackground">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+<!--Fragment_Vault Style
+        END-->
+
+<!-- AlertDialogLogout Style
+            START-->
+
+    <style name="AlertDialogLogoutLL">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">5dp</item>
+    </style>
+
+    <style name="AlertDialogLogoutPrimaryText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AlertDialogLogoutSecondaryText">
+        <item name="android:textColor">@color/gray_darker</item>
+    </style>
+
+    <style name="AlertDialogLogoutProfileImg">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+    <style name="AlertDialogLogoutBtnLogOut">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="backgroundTint">@color/red</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AlertDialogLogoutBtnCancel">
+        <item name="android:background">@drawable/textbox_alertbox_password</item>
+        <item name="backgroundTint">@color/gray</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+<!-- AlertDialogLogout Style
+            END-->
+
+<!--    AlertForgotPassword Style
+            START-->
+
+    <style name="AlertForgotPasswordLL">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">5dp</item>
+    </style>
+
+    <style name="AlertForgotPasswordPrimaryText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AlertForgotPasswordSecondaryText">
+        <item name="android:textColor">@color/gray_dark</item>
+    </style>
+
+    <style name="AlertForgotPasswordEditEmail">
+        <item name="android:background">@drawable/textbox_alertbox_password</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/gray_dark</item>
+    </style>
+
+    <style name="AlertForgotPasswordBtnReset">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="backgroundTint">@color/blue</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AlertForgotPasswordBtnCancel">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="backgroundTint">@color/red</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AlertForgotPasswordCard">
+        <item name="cardBackgroundColor">#EFECEC</item>
+    </style>
+
+    <style name="AlertForgotPasswordImgLock">
+        <item name="android:background">#EFECEC</item>
+        <item name="android:tint">@color/black</item>
+    </style>
+
+<!--    AlertForgotPassword Style
+            END-->
+
+<!--    AlertDialogVaultPassword Style
+            START-->
+
+    <style name="AlertDialogVaultPasswordLL">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <style name="AlertDialogVaultPasswordPrimaryText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AlertDialogVaultPasswordSecondaryText">
+        <item name="android:textColor">@color/gray_dark</item>
+    </style>
+
+    <style name="AlertDialogVaultPasswordEditPassword">
+        <item name="android:background">@drawable/textbox_alertbox_password</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/gray_dark</item>
+
+    </style>
+
+    <style name="AlertDialogVaultPasswordBtnUnlock">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/blue</item>
+    </style>
+
+<!--    AlertDialogVaultPassword Style
+                END-->
+
+<!--    Vault Creation Activity Style
+                START-->
+
+    <style name="Vault_Creation_ActivityBackground">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="Vault_Creation_Activity_TopLL">
+        <item name="android:background">@color/white</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <style name="Vault_Creation_ActivityPrimaryText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Vault_Creation_ActivityEditText">
+        <item name="android:background">@drawable/textbox</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColorHint">@color/gray_dark</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:drawableTint">@color/black</item>
+        <item name="android:elevation">5dp</item>
+    </style>
+
+    <style name="Vault_Creation_ActivityEditTextPassword">
+        <item name="android:background">@drawable/textbox</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColorHint">@color/gray_dark</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:drawableTint">@color/black</item>
+        <item name="passwordToggleTint">@color/black</item>
+        <item name="android:elevation">5dp</item>
+    </style>
+
+    <style name="Vault_Creation_ActivityBtnUpload">
+        <item name="android:background">@drawable/rounded_box_ll</item>
+        <item name="backgroundTint">@color/blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:drawableTint">@color/white</item>
+    </style>
+    
+    <style name="Vault_Creation_ActivityBtnCreate">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="backgroundTint">@color/red</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Vault_Creation_ActivityRv">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">5dp</item>
+    </style>
+
+<!--    Vault Creation Activity Style
+                END-->
+
+<!--    SignInUp Activity Style
+                START-->
+    <style name="SignInUp_Activity_topChoice">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="SignInUp_Activity_background">
+        <item name="android:background">@color/white</item>
+    </style>
+
+<!--    SignInUp Activity Style
+                END-->
+
+<!--    Vault ShowActivity Style
+                    START-->
+    <style name="Vault_ShowActivityBackground">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+    <style name="Vault_ShowActivityRv">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+<!--    Vault ShowActivity Style
+                    END-->
+
+<!--    VaultFileRv Style
+                START-->
+
+    <style name="VaultFileRvBackground">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <style name="VaultFileRvPrimaryText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="VaultFileRvSecondaryText">
+        <item name="android:textColor">@color/gray_dark</item>
+    </style>
+
+    <style name="VaultFileRvBtnDownload">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="backgroundTint">@color/blue</item>
+        <item name="tint">@color/black_darktheme</item>
+    </style>
+
+<!--    VaultFileRv Style
+                END-->
+
+<!--    theme_alertDialog Style
+                START-->
+    <style name="theme_alertDialogBackground">
+        <item name="android:background">@drawable/rounded_box_ll</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <style name="theme_alertDialogTopText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="theme_alertDialogRadialButton">
+        <item name="buttonTint">@color/green_dark</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="theme_alertDialogBtnCancel">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="backgroundTint">@color/red</item>
+    </style>
+
+    <style name="theme_alertDialogBtnOk">
+        <item name="android:background">@drawable/buttonbox_samlllrouned</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="backgroundTint">@color/red</item>
+    </style>
+
+<!--    theme_alertDialog Style
+                END-->
 
 </resources>

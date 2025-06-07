@@ -12,9 +12,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.core.widget.addTextChangedListener
 import com.airbnb.lottie.LottieDrawable
 import com.example.timevault.Model.DatabaseSignUp
+import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.Model.useGenerateID
 import com.example.timevault.databinding.FragmentSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -41,6 +43,11 @@ class SignUp : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val sharetheme = requireActivity().getSharedPreferences("theme", MODE_PRIVATE)
+        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        ThemeHelper.applyTheme(savedTheme)
+
         binding_ = FragmentSignUpBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()

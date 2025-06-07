@@ -15,6 +15,7 @@ import com.cloudinary.Cloudinary
 import com.cloudinary.utils.ObjectUtils
 import com.example.timevault.Model.DatabaseSignUp
 import com.example.timevault.Model.StoreUploadedFiles
+import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.R
 import com.example.timevault.databinding.ActivityEditProfileBinding
 import com.google.firebase.Timestamp
@@ -67,6 +68,11 @@ class EditProfile_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val sharetheme = getSharedPreferences("theme", MODE_PRIVATE)
+        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        ThemeHelper.applyTheme(savedTheme)
+
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -102,11 +108,13 @@ class EditProfile_Activity : AppCompatActivity() {
                     binding.TIEUserIDEditProfile.setText(currentID)
                     binding.TIEEmailIDShowProfile.setText(data?.email)
 
-                    Glide.with(this@EditProfile_Activity)
-                        .load(data?.ImgUrl)
-                        .placeholder(R.drawable.account_image_vector)
-                        .error(R.drawable.error_vector)
-                        .into(binding.IvProfileImageEditProfile)
+                    if (!isDestroyed && !isFinishing) {
+                        Glide.with(this@EditProfile_Activity)
+                            .load(data?.ImgUrl)
+                            .placeholder(R.drawable.account_image_vector)
+                            .error(R.drawable.error_vector)
+                            .into(binding.IvProfileImageEditProfile)
+                    }
                 } else {
 
                     binding.TIEnameEditProfile.setText("Not Found")

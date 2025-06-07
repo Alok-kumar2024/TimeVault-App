@@ -4,23 +4,28 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.R
 import com.example.timevault.databinding.ActivitySettingsBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +33,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.type.Color
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -40,13 +46,21 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val sharetheme = getSharedPreferences("theme", MODE_PRIVATE)
+        val savedTheme =
+            sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        ThemeHelper.applyTheme(savedTheme)
+
+
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.aqua_blue)
 
         // 2. Optional: Set icon color based on background
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
+            false
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -102,6 +116,9 @@ class SettingsActivity : AppCompatActivity() {
         binding.LLLogOutOptionSettings.setOnClickListener {
             logOutAlertBox()
         }
+        binding.IBLogOutSettings.setOnClickListener {
+            logOutAlertBox()
+        }
 
         binding.LLAppVersionOptionSettings.setOnClickListener {
             showAppVersionDialog()
@@ -117,6 +134,14 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.TVHelpCenterSettings.setOnClickListener {
             showDialogHelpCenter()
+        }
+        binding.TVChoosenOptionSettings.text = savedTheme
+
+        binding.LLThemeOptionSettings.setOnClickListener {
+            showAlertDialogTheme()
+        }
+        binding.IBThemeSettings.setOnClickListener {
+            showAlertDialogTheme()
         }
 
     }
@@ -144,8 +169,13 @@ class SettingsActivity : AppCompatActivity() {
             Log.d(
                 "LogoutInfo", "The name is $username.\n" + "The Url is $imgurl."
             )
-            Glide.with(this).load(imgurl).placeholder(R.drawable.profile_image_vector)
-                .error(R.drawable.error_vector).into(imgProfile)
+            if (!isDestroyed && !isFinishing) {
+                Glide.with(this)
+                    .load(imgurl)
+                    .placeholder(R.drawable.profile_image_vector)
+                    .error(R.drawable.error_vector)
+                    .into(imgProfile)
+            }
 
             name.text = username
         }
@@ -179,6 +209,8 @@ class SettingsActivity : AppCompatActivity() {
         cancelBtn.setOnClickListener {
             builder.dismiss()
         }
+
+        builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
 
         builder.show()
 
@@ -259,6 +291,8 @@ class SettingsActivity : AppCompatActivity() {
             AlertDialog.Builder(this, R.style.AlertBoxAppVersion).setTitle("About TimeVault")
                 .setMessage(message).setPositiveButton("OK", null).create()
 
+//        builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
+
         builder.show()
 
         builder.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -338,6 +372,8 @@ class SettingsActivity : AppCompatActivity() {
                 )
                 .setPositiveButton("OK", null).create()
 
+//        builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
+
         builder.show()
 
         builder.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -385,6 +421,8 @@ class SettingsActivity : AppCompatActivity() {
                 )
                 .setPositiveButton("OK", null).create()
 
+//        builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
+
         builder.show()
 
         builder.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -393,6 +431,79 @@ class SettingsActivity : AppCompatActivity() {
         val helpMessage = builder.findViewById<TextView>(android.R.id.message)
         helpMessage?.movementMethod = LinkMovementMethod.getInstance()
 
+    }
+
+    private fun showAlertDialogTheme() {
+        val view = layoutInflater.inflate(R.layout.theme_alertdalog, null)
+
+        val radioGroup = view.findViewById<RadioGroup>(R.id.RGOptionsTheme)
+        val btnCancel = view.findViewById<Button>(R.id.BtnCancelTheme)
+        val btnOk = view.findViewById<Button>(R.id.BtnOkTheme)
+
+        val sharedPref = getSharedPreferences("theme", MODE_PRIVATE)
+        val savedTheme = sharedPref.getString("themeOption", ThemeHelper.SYSTEM)
+
+        when (savedTheme) {
+            ThemeHelper.LIGHT -> radioGroup.check(R.id.light)
+            ThemeHelper.DARK -> radioGroup.check(R.id.dark)
+            ThemeHelper.SYSTEM -> radioGroup.check(R.id.system)
+        }
+
+        val builder = AlertDialog.Builder(this).setView(view).create()
+
+
+        btnCancel.setOnClickListener {
+            builder.dismiss()
+        }
+
+        btnOk.setOnClickListener {
+            val radioID = radioGroup.checkedRadioButtonId
+            if (radioID == -1) {
+                Toast.makeText(this, "Select An Option", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val selectedBtn = view.findViewById<RadioButton>(radioID)
+            val theme = selectedBtn.text.toString().lowercase().trim()
+            actionApplyTheme(theme)
+            builder.dismiss()
+        }
+
+        builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
+
+        builder.show()
+
+    }
+
+    private fun actionApplyTheme(option: String) {
+        val share = getSharedPreferences("theme", MODE_PRIVATE)
+
+        Log.d("Theme", "Option Choosen $option")
+
+        when (option) {
+            "light" -> {
+                share.edit().putString("themeOption", ThemeHelper.LIGHT).apply()
+                ThemeHelper.applyTheme(ThemeHelper.LIGHT)
+                recreate()
+            }
+
+            "dark" -> {
+                share.edit().putString("themeOption", ThemeHelper.DARK).apply()
+                ThemeHelper.applyTheme(ThemeHelper.DARK)
+                recreate()
+            }
+
+            "system" -> {
+                share.edit().putString("themeOption", ThemeHelper.SYSTEM).apply()
+                ThemeHelper.applyTheme(ThemeHelper.SYSTEM)
+                recreate()
+            }
+
+            else -> {
+                share.edit().putString("themeOption", ThemeHelper.SYSTEM).apply()
+                ThemeHelper.applyTheme(ThemeHelper.SYSTEM)
+                recreate()
+            }
+        }
     }
 
 }
