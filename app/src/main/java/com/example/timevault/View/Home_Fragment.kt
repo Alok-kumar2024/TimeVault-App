@@ -166,7 +166,7 @@ class Home_Fragment : Fragment(),SearchFragments {
         vaultname.text = item.vaultname
         uploadBtn.setOnClickListener {
             val eneterdPassword = edittext.text.trim().toString()
-            verifyPasswordVault(eneterdPassword, item)
+            verifyPasswordVault(eneterdPassword, item,builder)
         }
 
 //        BackIb.setOnClickListener {
@@ -179,7 +179,7 @@ class Home_Fragment : Fragment(),SearchFragments {
 
     }
 
-    private fun verifyPasswordVault(enterpassword: String, item: VaultCretionFireStore ) {
+    private fun verifyPasswordVault(enterpassword: String, item: VaultCretionFireStore ,builder: AlertDialog) {
 
         if (enterpassword.isEmpty()) {
             Toast.makeText(requireContext(), "Field Cannot be Empty..", Toast.LENGTH_SHORT).show()
@@ -199,11 +199,14 @@ class Home_Fragment : Fragment(),SearchFragments {
                                 Toast.LENGTH_SHORT
                             ).show()
 
+                            builder.dismiss()
                             val intent = Intent(requireContext(), VaultShow_Activity::class.java)
                             intent.putExtra("customuserID",currentUserId)
                             intent.putExtra("password", enterpassword)
                             intent.putExtra("vaultID", item.uniqueID)
                             startActivity(intent)
+
+
                         } else {
                             Toast.makeText(
                                 requireContext(),

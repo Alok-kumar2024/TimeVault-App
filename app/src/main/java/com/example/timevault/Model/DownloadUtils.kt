@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.FileOutputStream
 
 object DownloadUtils {
@@ -128,9 +129,15 @@ object DownloadUtils {
                 contentValues.put(MediaStore.Downloads.IS_PENDING, 0)
                 resolver.update(uri, contentValues, null, null)
 
-                Toast.makeText(context, "Saved to Downloads", Toast.LENGTH_SHORT).show()
+                withContext(Dispatchers.Main)
+                {
+                    Toast.makeText(context, "Saved to Downloads", Toast.LENGTH_SHORT).show()
+                }
             } ?: run {
-                Toast.makeText(context, "Failed to save file", Toast.LENGTH_SHORT).show()
+                withContext(Dispatchers.Main)
+                {
+                    Toast.makeText(context, "Failed to save file", Toast.LENGTH_SHORT).show()
+                }
             }
 
         } else {
@@ -140,9 +147,17 @@ object DownloadUtils {
 
             try {
                 FileOutputStream(outFile).use { it.write(file.decryptedByte) }
-                Toast.makeText(context, "Saved to Downloads", Toast.LENGTH_SHORT).show()
+
+                withContext(Dispatchers.Main)
+                {
+                    Toast.makeText(context, "Saved to Downloads", Toast.LENGTH_SHORT).show()
+                }
+
             } catch (e: Exception) {
-                Toast.makeText(context, "Error saving file", Toast.LENGTH_SHORT).show()
+                withContext(Dispatchers.Main)
+                {
+                    Toast.makeText(context, "Error saving file", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

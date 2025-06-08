@@ -43,15 +43,16 @@
             android:exported="false" />
         <activity
             android:name=".View.SplashScreen"
-            android:exported="false" />
-        <activity
-            android:name=".View.MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".View.MainActivity"
+            android:exported="false">
         </activity>
 
         <activity android:name=".Model.VaultDeepLink"

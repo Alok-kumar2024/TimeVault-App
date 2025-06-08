@@ -86,7 +86,7 @@ class vaultCreationActivity : AppCompatActivity() {
                         else -> null
                     }
 
-                    if (file != null && name != null && fileType != null) {
+                    if ( fileType != null) {
                         if (isFileSizeAllowed(file)) {
                             selectedFiles.add(vaultFileItem(file, name, fileType))
                             Toast.makeText(
@@ -112,65 +112,6 @@ class vaultCreationActivity : AppCompatActivity() {
             selectedAdapter.notifyDataSetChanged()
         }
 
-//    private val imagePicker =
-//        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments())
-//        { uris ->
-//
-//            uris?.forEach { uri ->
-//                uriToFile(uri)?.let { file ->
-//                    val name = getFileName(uri)
-//                    val item = vaultFileItem(file, name)
-//
-//                    imageFiles.add(item)
-//                }
-//
-//            }
-//            imageAdapter.notifyDataSetChanged()
-//
-////        val selectedImages = imageFiles
-////        val names = selectedImages.joinToString("\n"){it.name}
-////        findViewById<TextView>(R.id.TVShowImage).text = "Selected Images : \n$names"
-//
-//        }
-//
-//    private val videoPicker =
-//        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments())
-//        { uris ->
-//            uris?.forEach { uri ->
-//                uriToFile(uri)?.let { file ->
-//                    val name = getFileName(uri)
-//                    val item = vaultFileItem(file, name)
-//                    videoFiles.add(item)
-//                }
-//            }
-//            videoAdapter.notifyDataSetChanged()
-//
-////        val selectedVideos = videoFiles
-////        val names = selectedVideos.joinToString("\n"){it.name}
-////        findViewById<TextView>(R.id.TVShowVideo).text = "Selected Videos : \n$names"
-//
-//        }
-//
-//
-//
-//    private val pdfPicker =
-//        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments())
-//        { uris ->
-//            uris?.forEach { uri ->
-//                uriToFile(uri)?.let { file ->
-//                    val name = getFileName(uri)
-//                    val item = vaultFileItem(file, name)
-//
-//                    PDFFiles.add(item)
-//                }
-//            }
-//            pdfAdapter.notifyDataSetChanged()
-//
-////        val selectedPDFs = PDFFiles
-////        val names = selectedPDFs.joinToString("\n"){it.name}
-////        findViewById<TextView>(R.id.TVShowPdf).text = "Selected PDF's : \n$names"
-//
-//        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -14,13 +14,13 @@
         android:orientation="vertical">
 
         <TextView
+            style="@style/SignInUp_Activity_topText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/sharetech_regular"
             android:text="Welcome Back !"
             android:layout_marginTop="20dp"
-            android:textColor="#870FA3"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -145,6 +145,7 @@
 <!--            android:backgroundTint="#F4EFEF"/>-->
 
         <com.airbnb.lottie.LottieAnimationView
+            style="@style/VaultShowActivityLottieAnimation"
             android:id="@+id/ProgressbarAnimation"
             android:layout_width="70dp"
             android:layout_height="70dp"

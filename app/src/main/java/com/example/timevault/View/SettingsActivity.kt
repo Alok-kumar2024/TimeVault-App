@@ -24,6 +24,7 @@ import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.bumptech.glide.Glide
 import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.R
@@ -47,6 +48,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+
         val sharetheme = getSharedPreferences("theme", MODE_PRIVATE)
         val savedTheme =
             sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
@@ -56,11 +58,15 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.aqua_blue)
+        if (savedTheme == ThemeHelper.LIGHT)
+        {
+            // This line allows your layout to draw behind system
+            WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // 2. Optional: Set icon color based on background
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
-            false
+            // Make status bar icons dark (good for light backgrounds)
+            WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
+        }
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

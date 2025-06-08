@@ -477,6 +477,10 @@
         <item name="android:background">#121111</item>
     </style>
 
+    <style name="SignInUp_Activity_topText">
+        <item name="android:textColor">#DB61EF</item>
+    </style>
+
 <!--    SignInUp Activity Style
                     END-->
 

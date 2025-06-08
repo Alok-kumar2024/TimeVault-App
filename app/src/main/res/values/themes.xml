@@ -20,7 +20,6 @@
     <style name="AlertBoxAppVersion" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:background">@drawable/rounded_box_ll</item>
         <item name="android:backgroundTint">@color/white</item>
-        <item name="android:elevation">10dp</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
@@ -476,6 +475,10 @@
 
     <style name="SignInUp_Activity_background">
         <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="SignInUp_Activity_topText">
+        <item name="android:textColor">@color/purple_dark</item>
     </style>
 
 <!--    SignInUp Activity Style

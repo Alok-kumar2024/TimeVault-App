@@ -611,6 +611,8 @@ class MainActivity : AppCompatActivity() {
             builder.dismiss()
         }
 
+        builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
+
         builder.show()
 
     }
