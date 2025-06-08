@@ -113,20 +113,20 @@
 
 ## 🖼️ Screenshots
 
-![Splash_Screen_Activity](App-TimeVault-SS/SplashScreenActivity.jpg)
-![SignIn_Fragment](App-TimeVault-SS/SignInFragment.jpg)
-![SignUp_Fragment](App-TimeVault-SS/SigbnUpFragment.jpg)
-![Home_Fragment](App-TimeVault-SS/Home_Fragment.jpg)
-![Vault_Fragment](App-TimeVault-SS/VaultFragment.jpg)
-![PopUp_Menu](App-TimeVault-SS/PopUpMenu.jpg)
-![Notification_BottomSheetDialog](App-TimeVault-SS/Notification_BottomSheetDialog.jpg)
-![Vault_Creation_Activity](App-TimeVault-SS/VaultCreationActivity.jpg)
-![Settings_Activity](App-TimeVault-SS/SettingsActivity.jpg)
-![Theme_AlertDialog](App-TimeVault-SS/Theme_AlertDialog.jpg)
-![EditProfile_Activity](App-TimeVault-SS/EditProfileActivity.jpg)
-![ChangePassword_Activity](App-TimeVault-SS/ChangePasswordActivity.jpg)
-![ForgotPassword_AlertDialog](App-TimeVault-SS/ForgotPasswordAlertDialog.jpg)
-![LogOut_AlertDialog](App-TimeVault-SS/LogOutAlertDialog.jpg)
+<img src="App-TimeVault-SS/SplashScreenActivity.jpg" alt="Splash Screen Activity" width="300"/>
+<img src="App-TimeVault-SS/SignInFragment.jpg" alt="Sign In Fragment" width="300"/>
+<img src="App-TimeVault-SS/SigbnUpFragment.jpg" alt="Sign Up Fragment" width="300"/>
+<img src="App-TimeVault-SS/Home_Fragment.jpg" alt="Home Fragment" width="300"/>
+<img src="App-TimeVault-SS/VaultFragment.jpg" alt="Vault Fragment" width="300"/>
+<img src="App-TimeVault-SS/PopUpMenu.jpg" alt="Pop Up Menu" width="300"/>
+<img src="App-TimeVault-SS/Notification_BottomSheetDialog.jpg" alt="Notification Bottom Sheet Dialog" width="300"/>
+<img src="App-TimeVault-SS/VaultCreationActivity.jpg" alt="Vault Creation Activity" width="300"/>
+<img src="App-TimeVault-SS/SettingsActivity.jpg" alt="Settings Activity" width="300"/>
+<img src="App-TimeVault-SS/Theme_AlertDialog.jpg" alt="Theme Alert Dialog" width="300"/>
+<img src="App-TimeVault-SS/EditProfileActivity.jpg" alt="Edit Profile Activity" width="300"/>
+<img src="App-TimeVault-SS/ChangePasswordActivity.jpg" alt="Change Password Activity" width="300"/>
+<img src="App-TimeVault-SS/ForgotPasswordAlertDialog.jpg" alt="Forgot Password Alert Dialog" width="300"/>
+<img src="App-TimeVault-SS/LogOutAlertDialog.jpg" alt="Log Out Alert Dialog" width="300"/>
 
 ---
 
@@ -144,19 +144,19 @@ We welcome all contributions! 🛠️✨
 
 ---
 
+## 📄 License
+
+A license for this project has not been chosen yet.
+
+Until a license is added, contributions are welcome. Assume to be open sourced.
+
+---
+
 ## 👨‍💻 Developer
 
 **Alok Kumar**  
 📧 Email: [02kumaralok@gmail.com](mailto:02kumaralok@gmail.com)  
 🔗 LinkedIn: [linkedin.com/in/alok-kumar-3953a1321](https://www.linkedin.com/in/alok-kumar-3953a1321)  
 💻 Project Repository: [TimeVault on GitHub](https://github.com/Alok-kumar2024/TimeVault-App)
-
----
-
-## 📄 License
-
-A license for this project has not been chosen yet.
-
-Until a license is added, contributions are welcome. Assume to be open sourced.
 
 ---
