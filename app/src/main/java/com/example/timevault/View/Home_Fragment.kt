@@ -36,6 +36,9 @@ class Home_Fragment : Fragment(),SearchFragments {
 
     private lateinit var vaultShowAdapter: VaultItemShowHomeAdapter
 
+    private lateinit var builderShowPassword : AlertDialog
+    private var isDialogShowing = false
+
     private lateinit var database: DatabaseReference
     private lateinit var firestore: FirebaseFirestore
 
@@ -152,34 +155,42 @@ class Home_Fragment : Fragment(),SearchFragments {
 
     private fun showDialog(item: VaultCretionFireStore) {
 
+        if (isDialogShowing) return
+
         val dialogView = layoutInflater.inflate(R.layout.alert_dialog_vaultpassword, null)
         val edittext = dialogView.findViewById<TextView>(R.id.EtPasswordVaultAlerBox)
         val vaultname = dialogView.findViewById<TextView>(R.id.VaultNameAlertDialogVaultPasword)
         val uploadBtn = dialogView.findViewById<Button>(R.id.BtnUnlockButtonAlertDialog)
 //        val BackIb = dialogView.findViewById<ImageButton>(R.id.IBBackButtonOfAlertBoxVaultPassword)
 
-        val builder = AlertDialog
+        builderShowPassword = AlertDialog
             .Builder(requireContext())
             .setView(dialogView)
             .create()
 
+
         vaultname.text = item.vaultname
         uploadBtn.setOnClickListener {
             val eneterdPassword = edittext.text.trim().toString()
-            verifyPasswordVault(eneterdPassword, item,builder)
+            verifyPasswordVault(eneterdPassword, item)
         }
 
 //        BackIb.setOnClickListener {
 //            builder.dismiss()
 //        }
 
-        builder.window?.setBackgroundDrawable(ContextCompat.getColor(requireContext(),R.color.transparent).toDrawable())
+        builderShowPassword.setOnDismissListener {
+            isDialogShowing = false
+        }
+        isDialogShowing = true
 
-        builder.show()
+        builderShowPassword.window?.setBackgroundDrawable(ContextCompat.getColor(requireContext(),R.color.transparent).toDrawable())
+
+        builderShowPassword.show()
 
     }
 
-    private fun verifyPasswordVault(enterpassword: String, item: VaultCretionFireStore ,builder: AlertDialog) {
+    private fun verifyPasswordVault(enterpassword: String, item: VaultCretionFireStore ) {
 
         if (enterpassword.isEmpty()) {
             Toast.makeText(requireContext(), "Field Cannot be Empty..", Toast.LENGTH_SHORT).show()
@@ -199,7 +210,10 @@ class Home_Fragment : Fragment(),SearchFragments {
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            builder.dismiss()
+                            activity?.runOnUiThread{
+                                builderShowPassword.dismiss()
+                            }
+
                             val intent = Intent(requireContext(), VaultShow_Activity::class.java)
                             intent.putExtra("customuserID",currentUserId)
                             intent.putExtra("password", enterpassword)

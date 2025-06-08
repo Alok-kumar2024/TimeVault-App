@@ -33,6 +33,9 @@ class VaultFragment : Fragment(), SearchFragments {
 
     private lateinit var vaultShowAdapter: VaultItemShowHomeAdapter
 
+    private lateinit var builderShowPassword : AlertDialog
+    private var isDialogShowing = false
+
     private lateinit var database: DatabaseReference
     private lateinit var firestore: FirebaseFirestore
 
@@ -149,13 +152,15 @@ class VaultFragment : Fragment(), SearchFragments {
 
     private fun showDialog(item: VaultCretionFireStore) {
 
+        if (isDialogShowing) return
+
         val dialogView = layoutInflater.inflate(R.layout.alert_dialog_vaultpassword, null)
         val edittext = dialogView.findViewById<TextView>(R.id.EtPasswordVaultAlerBox)
         val vaultname = dialogView.findViewById<TextView>(R.id.VaultNameAlertDialogVaultPasword)
         val uploadBtn = dialogView.findViewById<Button>(R.id.BtnUnlockButtonAlertDialog)
 //        val BackIb = dialogView.findViewById<ImageButton>(R.id.IBBackButtonOfAlertBoxVaultPassword)
 
-        val builder = AlertDialog
+        builderShowPassword = AlertDialog
             .Builder(requireContext())
             .setView(dialogView)
             .create()
@@ -169,10 +174,14 @@ class VaultFragment : Fragment(), SearchFragments {
 //        BackIb.setOnClickListener {
 //            builder.dismiss()
 //        }
+        builderShowPassword.setOnDismissListener {
+            isDialogShowing = false
+        }
+        isDialogShowing = true
 
-        builder.window?.setBackgroundDrawable(ContextCompat.getColor(requireContext(),R.color.transparent).toDrawable())
+        builderShowPassword.window?.setBackgroundDrawable(ContextCompat.getColor(requireContext(),R.color.transparent).toDrawable())
 
-        builder.show()
+        builderShowPassword.show()
 
     }
 
@@ -195,6 +204,10 @@ class VaultFragment : Fragment(), SearchFragments {
                                 "Password Matched , Entering The Vault",
                                 Toast.LENGTH_SHORT
                             ).show()
+
+                            activity?.runOnUiThread{
+                                builderShowPassword.dismiss()
+                            }
 
                             val intent = Intent(requireContext(), VaultShow_Activity::class.java)
                             intent.putExtra("customuserID",currentUserId)

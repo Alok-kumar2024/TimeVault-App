@@ -31,6 +31,8 @@ class ChangePassword_Activity : AppCompatActivity() {
 
     private lateinit var currentID: String
 
+    private var isForgotDialogShowing = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -134,6 +136,8 @@ class ChangePassword_Activity : AppCompatActivity() {
     }
 
     fun alertBoxForgotPassword() {
+
+        if (isForgotDialogShowing) return
         val auth = FirebaseAuth.getInstance()
 
         val dialogView = layoutInflater.inflate(R.layout.alertbox_forgotpassword, null)
@@ -208,6 +212,12 @@ class ChangePassword_Activity : AppCompatActivity() {
         cancelBtn.setOnClickListener {
             builder.dismiss()
         }
+
+        builder.setOnDismissListener {
+            isForgotDialogShowing = false
+        }
+
+        isForgotDialogShowing = true
 
         builder.show()
     }

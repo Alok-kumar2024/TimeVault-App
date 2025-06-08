@@ -37,6 +37,8 @@ class SignIn : Fragment() {
 
     private lateinit var database: DatabaseReference
 
+    private var isForgotDialogShowing = false
+
     private val signInTimeOutMills = 15000L
     private val timeoutHandler = Handler(Looper.getMainLooper())
     private var timeoutRunnable: Runnable? = null
@@ -273,6 +275,9 @@ class SignIn : Fragment() {
     }
 
     fun alertBoxForgotPassword() {
+
+        if (isForgotDialogShowing) return
+
         val auth = FirebaseAuth.getInstance()
 
         val dialogView = layoutInflater.inflate(R.layout.alertbox_forgotpassword, null)
@@ -343,6 +348,12 @@ class SignIn : Fragment() {
                 })
 
         }
+
+        builder.setOnDismissListener {
+            isForgotDialogShowing = false
+        }
+
+        isForgotDialogShowing = true
 
         cancelBtn.setOnClickListener {
             builder.dismiss()

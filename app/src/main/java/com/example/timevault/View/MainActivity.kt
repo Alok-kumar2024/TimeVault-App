@@ -95,6 +95,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var database: DatabaseReference
 
+    private var isLogOutDialogShowing = false
+    private var isNotificationBottomDialogShowing = false
+
     private val currentUserID = FirebaseAuth.getInstance().currentUser?.uid
 
     private var profileName: String? = "Loading"
@@ -551,6 +554,9 @@ class MainActivity : AppCompatActivity() {
 //    }
 
     fun logOutAlertBox() {
+
+        if (isLogOutDialogShowing) return
+
         val dialogBox = layoutInflater.inflate(R.layout.alertbox_logout, null)
 
         val imgProfile = dialogBox.findViewById<ImageView>(R.id.IvProfileImageLogOut)
@@ -611,6 +617,12 @@ class MainActivity : AppCompatActivity() {
             builder.dismiss()
         }
 
+        builder.setOnDismissListener {
+            isLogOutDialogShowing = false
+        }
+
+        isLogOutDialogShowing = true
+
         builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
 
         builder.show()
@@ -638,6 +650,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBottomDialog() {
+
+        if (isNotificationBottomDialogShowing) return
+
         val dialog = BottomSheetDialog(this)
         val view = LayoutInflater.from(this).inflate(R.layout.notification_bottomsheet, null)
 
@@ -718,6 +733,12 @@ class MainActivity : AppCompatActivity() {
         } else {
             text.visibility = View.GONE
         }
+
+        dialog.setOnDismissListener {
+            isNotificationBottomDialogShowing =false
+        }
+
+        isNotificationBottomDialogShowing = true
 
         dialog.show()
 

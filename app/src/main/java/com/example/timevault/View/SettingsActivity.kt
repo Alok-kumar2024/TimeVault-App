@@ -43,6 +43,13 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var firebase: FirebaseAuth
 
+    private var isAppVersionDialogShowing = false
+    private var isDarkThemeDialogShowing = false
+    private var isHelpCenterDialogShowing = false
+    private var isPrivacyPolicyDialogShowing = false
+    private var isLogOutDialogShowing = false
+
+
     private lateinit var currentID: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -158,6 +165,9 @@ class SettingsActivity : AppCompatActivity() {
 //    }
 
     fun logOutAlertBox() {
+
+        if (isLogOutDialogShowing) return
+
         val dialogBox = layoutInflater.inflate(R.layout.alertbox_logout, null)
 
         val imgProfile = dialogBox.findViewById<ImageView>(R.id.IvProfileImageLogOut)
@@ -216,13 +226,22 @@ class SettingsActivity : AppCompatActivity() {
             builder.dismiss()
         }
 
+        builder.setOnDismissListener {
+            isLogOutDialogShowing = false
+        }
+
+        isLogOutDialogShowing = true
+
         builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
 
         builder.show()
 
     }
 
-    fun showAppVersionDialog() {
+    private fun showAppVersionDialog() {
+
+        if (isAppVersionDialogShowing) return
+
         val versionName = packageManager.getPackageInfo(packageName, 0).versionName
         val versionCode = packageManager.getPackageInfo(packageName, 0).versionCode
 
@@ -299,6 +318,11 @@ class SettingsActivity : AppCompatActivity() {
 
 //        builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
 
+        builder.setOnDismissListener {
+            isAppVersionDialogShowing = false
+        }
+        isAppVersionDialogShowing = true
+
         builder.show()
 
         builder.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -308,6 +332,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun showDialogPrivacyPlicy() {
+
+        if (isPrivacyPolicyDialogShowing) return
 
         val privacyPolicyHtml = """
     <b>🔐 Privacy Policy</b><br><br>
@@ -380,6 +406,13 @@ class SettingsActivity : AppCompatActivity() {
 
 //        builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
 
+        builder.setOnDismissListener {
+            isPrivacyPolicyDialogShowing = false
+
+        }
+
+        isPrivacyPolicyDialogShowing = true
+
         builder.show()
 
         builder.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -391,6 +424,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun showDialogHelpCenter() {
+
+        if (isHelpCenterDialogShowing) return
 
         val helpCenterMessageHtml = """
     <b>📞 Help & Support – TimeVault</b><br><br>
@@ -429,6 +464,12 @@ class SettingsActivity : AppCompatActivity() {
 
 //        builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
 
+        builder.setOnDismissListener {
+            isHelpCenterDialogShowing = false
+        }
+
+        isHelpCenterDialogShowing = true
+
         builder.show()
 
         builder.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -440,6 +481,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun showAlertDialogTheme() {
+
+        if (isDarkThemeDialogShowing) return
+
         val view = layoutInflater.inflate(R.layout.theme_alertdalog, null)
 
         val radioGroup = view.findViewById<RadioGroup>(R.id.RGOptionsTheme)
@@ -473,6 +517,12 @@ class SettingsActivity : AppCompatActivity() {
             actionApplyTheme(theme)
             builder.dismiss()
         }
+
+        builder.setOnDismissListener {
+            isDarkThemeDialogShowing = false
+        }
+
+        isDarkThemeDialogShowing = true
 
         builder.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
 
