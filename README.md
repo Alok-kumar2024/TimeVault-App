@@ -47,7 +47,7 @@
 
 | Layer         | Tools & Technologies |
 |---------------|-----------------------|
-| **Frontend**  | Android (Kotlin + XML), MaterialDatePicker, Lottie |
+| **Frontend**  | Android (Kotlin + XML), MaterialDatePicker, Lottie Animation, Animated Bottom Navigator github Link [github](https://github.com/qamarelsafadi/CurvedBottomNavigation)|
 | **Architecture** | MVVM (Model-View-ViewModel) |
 | **Backend**   | Firebase Auth, Firestore, Realtime DB, Node.js (GitHub Actions) |
 | **Storage**   | Firestore (Vaults), Realtime DB (Users/Notifications), SharedPreferences, Cloudinary (media) |
