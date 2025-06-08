@@ -1,5 +1,6 @@
 package com.example.timevault.View
 
+import android.content.res.Configuration
 import android.graphics.Paint
 import android.os.Bundle
 import android.widget.Button
@@ -7,7 +8,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -34,7 +37,8 @@ class Sign_In_Up_Activity : AppCompatActivity() {
         binding = ActivitySignInUpBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[SignViewModel::class.java]
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.black)
+        WindowCompat.setDecorFitsSystemWindows(window,false)
+        WindowInsetsControllerCompat(window,window.decorView).isAppearanceLightStatusBars = false
 
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -42,6 +46,7 @@ class Sign_In_Up_Activity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         if (savedInstanceState == null)
         {
             switch(SignIn())

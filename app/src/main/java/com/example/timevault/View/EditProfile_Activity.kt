@@ -45,7 +45,7 @@ class EditProfile_Activity : AppCompatActivity() {
 
     private lateinit var currentID: String
     private var ImageURI: Uri? = null
-//    private var Editable = false
+    private var isEditableClicked = false
 
 
     private val imagePciker = registerForActivityResult(ActivityResultContracts.GetContent())
@@ -110,7 +110,7 @@ class EditProfile_Activity : AppCompatActivity() {
 
                     if (!isDestroyed && !isFinishing) {
                         Glide.with(this@EditProfile_Activity)
-                            .load(data?.ImgUrl)
+                            .load(data?.imgUrl)
                             .placeholder(R.drawable.account_image_vector)
                             .error(R.drawable.error_vector)
                             .into(binding.IvProfileImageEditProfile)
@@ -132,6 +132,11 @@ class EditProfile_Activity : AppCompatActivity() {
 
         binding.BtnSaveEditProfile.setOnClickListener {
 
+            if (isEditableClicked) {
+                Toast.makeText(this,"Currently In Progress, Please Wait Before Clicking Again",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val name = binding.TIEnameEditProfile.text.toString().trim()
 
 //            if (Editable)
@@ -146,6 +151,7 @@ class EditProfile_Activity : AppCompatActivity() {
             val imageURi = ImageURI
             if (name.isNullOrBlank()) {
                 Toast.makeText(this, "Name Field cannot be empty", Toast.LENGTH_SHORT).show()
+                isEditableClicked = false
                 return@setOnClickListener
             }
             if (imageURi != null)
@@ -153,7 +159,7 @@ class EditProfile_Activity : AppCompatActivity() {
                 uploadToCloudinary(image = imageURi,this, onSuccess = {uploadedUrl->
                     val data = mapOf(
                         "name" to name,
-                        "ImgUrl" to uploadedUrl
+                        "imgUrl" to uploadedUrl
                     )
 
                     database.child(currentID).updateChildren(data).addOnSuccessListener {
@@ -166,12 +172,13 @@ class EditProfile_Activity : AppCompatActivity() {
                         )
                         val editor = share.edit()
                         editor.putString("name", name.toString()).apply()
-
+                        isEditableClicked = false
                         finish()
                     }.addOnFailureListener {
                         Log.d("EditProfile", "In failure Database")
                         Toast.makeText(this, "Error : Couldn't Update Information", Toast.LENGTH_SHORT)
                             .show()
+                        isEditableClicked = false
                     }
 
                 }, onError = {
@@ -198,10 +205,12 @@ class EditProfile_Activity : AppCompatActivity() {
                     Log.d("EditProfile", "In failure Database")
                     Toast.makeText(this, "Error : Couldn't Update Information", Toast.LENGTH_SHORT)
                         .show()
+                    isEditableClicked = false
                 }
 
             }
 
+            isEditableClicked = true
 
 //            val data = mapOf(
 //                "name" to name

@@ -1,5 +1,6 @@
 package com.example.timevault.View
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -15,9 +16,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieDrawable
+import com.example.timevault.Model.GoogleSignInUtils
 import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.R
 import com.example.timevault.databinding.FragmentSignInBinding
@@ -37,6 +43,8 @@ class SignIn : Fragment() {
 
     private lateinit var database: DatabaseReference
 
+    private lateinit var addGoogleAccountLauncher: ActivityResultLauncher<Intent>
+
     private var isForgotDialogShowing = false
 
     private val signInTimeOutMills = 15000L
@@ -51,7 +59,8 @@ class SignIn : Fragment() {
     ): View? {
 
         val sharetheme = requireActivity().getSharedPreferences("theme", MODE_PRIVATE)
-        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        val savedTheme =
+            sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
         ThemeHelper.applyTheme(savedTheme)
 
         bindin_ = FragmentSignInBinding.inflate(inflater, container, false)
@@ -70,6 +79,31 @@ class SignIn : Fragment() {
         binding.TvForgotPasswordSignIn.setOnClickListener {
             alertBoxForgotPassword()
         }
+
+//        addGoogleAccountLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+//        {result->
+//            if (result.resultCode == Activity.RESULT_OK || result.resultCode == Activity.RESULT_CANCELED)
+//            {
+//                GoogleSignInUtils.googleSignIn(
+//                    requireContext(), lifecycleScope, addGoogleAccountLauncher, onLogin =
+//                        {
+//                            val intent = Intent(requireContext(),MainActivity::class.java)
+//                            startActivity(intent)
+//                            requireActivity().finishAffinity()
+//                        })
+//            }
+//
+//        }
+//
+//        binding.BtnGoogleSignIp.setOnClickListener {
+//            GoogleSignInUtils.googleSignIn(
+//                requireContext(), lifecycleScope, addGoogleAccountLauncher, onLogin =
+//                    {
+//                        val intent = Intent(requireContext(),MainActivity::class.java)
+//                        startActivity(intent)
+//                        requireActivity().finishAffinity()
+//                    })
+//        }
 
 
         binding.btnSignIn.setOnClickListener {
@@ -286,7 +320,8 @@ class SignIn : Fragment() {
         val resetBtn = dialogView.findViewById<Button>(R.id.BtnResetPasswordAlertBoxForgotPassword)
         val cancelBtn = dialogView.findViewById<Button>(R.id.BtnCancelAlertBoxForgotPassword)
 
-        val builder = AlertDialog.Builder(requireContext()).setView(dialogView).setCancelable(false).create()
+        val builder =
+            AlertDialog.Builder(requireContext()).setView(dialogView).setCancelable(false).create()
 
         resetBtn.setOnClickListener {
             if (email.isNullOrEmpty()) {
@@ -358,6 +393,11 @@ class SignIn : Fragment() {
         cancelBtn.setOnClickListener {
             builder.dismiss()
         }
+
+        builder.window?.setBackgroundDrawable(
+            requireActivity().getColor(R.color.transparent).toDrawable()
+        )
+
 
         builder.show()
     }

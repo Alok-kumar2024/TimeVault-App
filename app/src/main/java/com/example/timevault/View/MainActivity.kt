@@ -34,6 +34,8 @@ import com.example.timevault.databinding.ActivityMainBinding
 import com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.widget.addTextChangedListener
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -163,6 +165,8 @@ class MainActivity : AppCompatActivity() {
         )
         uniqueKey = share.getString("customuserID", null) ?: "Not Found"
 
+        Log.d("UniqueKey","The uniquekey is $uniqueKey")
+
         val isSignIn = share.getBoolean("isSignIn", false) ?: false
 
         if (!isSignIn) {
@@ -216,19 +220,16 @@ class MainActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 val token = task.result
 
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-                    ContextCompat.checkSelfPermission(
-                        this,
-                        android.Manifest.permission.POST_NOTIFICATIONS
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
+                Log.d("Notification","Notification Token $token")
+
+
                     FirebaseFirestore.getInstance().collection("USERS").document(uniqueKey)
                         .set(mapOf("fcmToken" to token), SetOptions.merge()).addOnSuccessListener {
                             Log.d("FCM", "Token uploaded To FireStore")
                         }.addOnFailureListener {
                             Log.d("FCM", "Token Not Uploaded To firestore")
                         }
-                }
+
             } else {
                 Log.e("FCM", "Failed To get Token")
             }
@@ -266,7 +267,7 @@ class MainActivity : AppCompatActivity() {
                 if (snapshot.exists()) {
                     profileName = snapshot.child("name").value.toString()
                     profileEmail = snapshot.child("email").value.toString()
-                    ImgProfile = snapshot.child("ImgUrl").value.toString()
+                    ImgProfile = snapshot.child("imgUrl").value.toString()
 
                     Log.d(
                         "UserInfo", "The UserName : $profileName" +
@@ -567,25 +568,51 @@ class MainActivity : AppCompatActivity() {
         val builder =
             android.app.AlertDialog.Builder(this).setView(dialogBox).setCancelable(false).create()
 
-        database.child(uniqueKey).get().addOnSuccessListener { data ->
+        database.child(uniqueKey).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists())
+                {
+                    val username = (snapshot.child("name").value ?: "Not Found").toString()
+                    val imgurl = (snapshot.child("imgUrl").value ?: "Not Found").toString()
 
-            val username = (data.child("name").value ?: "Not Found").toString()
-            val imgurl = (data.child("ImgUrl").value ?: "Not Found").toString()
+                    Log.d(
+                        "LogoutInfo", "The name is $username.\n" +
+                                "The Url is $imgurl."
+                    )
+                    if (!isDestroyed && !isFinishing)
+                    {
+                        Glide.with(this@MainActivity)
+                            .load(imgurl)
+                            .placeholder(R.drawable.profile_image_vector)
+                            .error(R.drawable.error_vector)
+                            .into(imgProfile)
+                    }
 
-            Log.d(
-                "LogoutInfo", "The name is $username.\n" +
-                        "The Url is $imgurl."
-            )
-            Glide.with(this)
-                .load(imgurl)
-                .placeholder(R.drawable.profile_image_vector)
-                .error(R.drawable.error_vector)
-                .into(imgProfile)
+                    name.text = username
+                }
+            }
 
-            name.text = username
-        }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("LogOut","Cant Fetch from Database : error -> ${error.message}")
+            }
+
+        })
+
 
         logoutBtn.setOnClickListener {
+
+            val credentialManager = CredentialManager.create(this)
+
+            lifecycleScope.launch {
+                try {
+                    val clearStateRequest = ClearCredentialStateRequest()
+                    credentialManager.clearCredentialState(clearStateRequest)
+                    Log.d("Logout", "CredentialManager cleared")
+                }catch (e: Exception) {
+                    Log.e("Logout", "Error clearing CredentialManager", e)
+                }
+            }
+
             firebase.signOut()
             Toast.makeText(this, "SuccessFully Logged Out.", Toast.LENGTH_SHORT).show()
 

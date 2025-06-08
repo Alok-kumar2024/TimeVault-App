@@ -169,7 +169,6 @@
 <!--            android:layout_width="250dp"-->
 <!--            android:layout_height="60dp"-->
 <!--            android:layout_marginTop="20sp"-->
-<!--            android:drawableLeft="@drawable/googlebtnimage48x"-->
 <!--            android:text="Google"-->
 <!--            android:gravity="left"-->
 <!--            android:layout_gravity="center"-->

@@ -25,16 +25,23 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.R
 import com.example.timevault.databinding.ActivitySettingsBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.type.Color
+import kotlinx.coroutines.launch
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -177,26 +184,50 @@ class SettingsActivity : AppCompatActivity() {
 
         val builder = AlertDialog.Builder(this).setView(dialogBox).setCancelable(false).create()
 
-        database.child(currentID).get().addOnSuccessListener { data ->
+        database.child(currentID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists())
+                {
+                    val username = (snapshot.child("name").value ?: "Not Found").toString()
+                    val imgurl = (snapshot.child("imgUrl").value ?: "Not Found").toString()
 
-            val username = (data.child("name").value ?: "Not Found").toString()
-            val imgurl = (data.child("ImgUrl").value ?: "Not Found").toString()
+                    Log.d(
+                        "LogoutInfo", "The name is $username.\n" +
+                                "The Url is $imgurl."
+                    )
+                    if (!isDestroyed && !isFinishing)
+                    {
+                        Glide.with(this@SettingsActivity)
+                            .load(imgurl)
+                            .placeholder(R.drawable.profile_image_vector)
+                            .error(R.drawable.error_vector)
+                            .into(imgProfile)
+                    }
 
-            Log.d(
-                "LogoutInfo", "The name is $username.\n" + "The Url is $imgurl."
-            )
-            if (!isDestroyed && !isFinishing) {
-                Glide.with(this)
-                    .load(imgurl)
-                    .placeholder(R.drawable.profile_image_vector)
-                    .error(R.drawable.error_vector)
-                    .into(imgProfile)
+                    name.text = username
+                }
             }
 
-            name.text = username
-        }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("LogOut","Cant Fetch from Database : error -> ${error.message}")
+            }
+
+        })
 
         logoutBtn.setOnClickListener {
+
+            val credentialManager = CredentialManager.create(this)
+
+            lifecycleScope.launch {
+                try {
+                    val clearStateRequest = ClearCredentialStateRequest()
+                    credentialManager.clearCredentialState(clearStateRequest)
+                    Log.d("Logout", "CredentialManager cleared")
+                }catch (e: Exception) {
+                    Log.e("Logout", "Error clearing CredentialManager", e)
+                }
+            }
+
             firebase.signOut()
             Toast.makeText(this, "SuccessFully Logged Out.", Toast.LENGTH_SHORT).show()
 

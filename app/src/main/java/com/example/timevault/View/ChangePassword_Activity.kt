@@ -33,6 +33,9 @@ class ChangePassword_Activity : AppCompatActivity() {
 
     private var isForgotDialogShowing = false
 
+    private var isChangePasswordClicked = false
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -72,6 +75,13 @@ class ChangePassword_Activity : AppCompatActivity() {
         }
 
         binding.BtnChanegPasswordButton.setOnClickListener {
+
+            if (isChangePasswordClicked)
+            {
+                Toast.makeText(this,"Currently In Progress, Please Wait Before Clicking Again",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val user = FirebaseAuth.getInstance().currentUser
             val oldPass = binding.TIEcurrentPasswordChangePassword.text?.trim()
             val newPass = binding.TIENewPasswordChangePassword.text?.trim()
@@ -79,21 +89,25 @@ class ChangePassword_Activity : AppCompatActivity() {
 
             if (user == null) {
                 Toast.makeText(this, "User Not Found.", Toast.LENGTH_SHORT).show()
+                isChangePasswordClicked = false
                 return@setOnClickListener
             }
             if (oldPass.isNullOrEmpty()) {
 //                binding.TIEcurrentPasswordChangePassword.error = "This is an Required Field."
                 Toast.makeText(this, "Current Password Cannot be Empty.", Toast.LENGTH_SHORT).show()
+                isChangePasswordClicked = false
                 return@setOnClickListener
             }
             if (newPass.isNullOrEmpty()) {
                 Toast.makeText(this, "New Password Cannot be Empty.", Toast.LENGTH_SHORT).show()
+                isChangePasswordClicked = false
                 return@setOnClickListener
             }
 
             if (newConfirmPass.isNullOrEmpty()) {
                 Toast.makeText(this, "Confirm Password cannot be Empty. ", Toast.LENGTH_SHORT)
                     .show()
+                isChangePasswordClicked = false
                 return@setOnClickListener
             }
             if (newPass.toString() == newConfirmPass.toString()) {
@@ -109,6 +123,7 @@ class ChangePassword_Activity : AppCompatActivity() {
                                         "SuccessFully Changed Password.",
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    isChangePasswordClicked = false
                                     finish()
                                 } else {
                                     Toast.makeText(
@@ -116,11 +131,13 @@ class ChangePassword_Activity : AppCompatActivity() {
                                         "Error : Couldn't Update Password.",
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    isChangePasswordClicked = false
                                 }
                             }
                     } else {
                         Toast.makeText(this, "Incorrect Current Password.", Toast.LENGTH_SHORT)
                             .show()
+                        isChangePasswordClicked = false
                     }
                 }
 
@@ -130,8 +147,11 @@ class ChangePassword_Activity : AppCompatActivity() {
                     "New Password and Confirm Password Not Matched",
                     Toast.LENGTH_SHORT
                 ).show()
+                isChangePasswordClicked = false
                 return@setOnClickListener
             }
+
+            isChangePasswordClicked = true
         }
     }
 
