@@ -60,6 +60,8 @@ class vaultCreationActivity : AppCompatActivity() {
 
     private var selectedDate: Date? = null
 
+    private var isCreateBtnClicked = false
+
     val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
 
@@ -208,6 +210,14 @@ class vaultCreationActivity : AppCompatActivity() {
 
         binding.BtnCreateVault.setOnClickListener {
 
+            if (isCreateBtnClicked)
+            {
+                Toast.makeText(this,"In Progress , Wait Before Trying Again.",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            isCreateBtnClicked = true
+
             val vaultName = binding.TIEvaultName.text.toString()
             val vaultPassword = binding.TIEvaultPassword.text.toString()
             val vaultConfirmPassword = binding.TIEvaultConfirmPassword.text.toString()
@@ -215,9 +225,40 @@ class vaultCreationActivity : AppCompatActivity() {
             val vaultEmailRecipent = binding.TIEvaultEmailRecipent.text.toString()
             val vaultUnlockTime = binding.TvUnlockTime.text.toString()
 
-            if (vaultName.isEmpty() || vaultPassword.isEmpty() || vaultDescription.isEmpty()) {
-                Toast.makeText(this, "Star Fields Cannto be Empty", Toast.LENGTH_SHORT).show()
-            } else {
+            if (vaultName.isEmpty()) {
+                Toast.makeText(this, "Vault Name Cannot Be Empty.", Toast.LENGTH_SHORT).show()
+                isCreateBtnClicked = false
+                return@setOnClickListener
+            }
+
+            if (vaultPassword.isEmpty())
+            {
+                Toast.makeText(this, "Vault Password Cannot Be Empty.", Toast.LENGTH_SHORT).show()
+                isCreateBtnClicked = false
+                return@setOnClickListener
+            }
+
+            if (vaultConfirmPassword.isEmpty())
+            {
+                Toast.makeText(this, "Vault Confirm Password Cannot Be Empty", Toast.LENGTH_SHORT).show()
+                isCreateBtnClicked = false
+                return@setOnClickListener
+            }
+
+            if (vaultDescription.isEmpty())
+            {
+                Toast.makeText(this, "Vault Description Password Cannot Be Empty", Toast.LENGTH_SHORT).show()
+                isCreateBtnClicked = false
+                return@setOnClickListener
+            }
+
+            if (vaultUnlockTime.isEmpty())
+            {
+                Toast.makeText(this, "Vault Unlock Time Cannot Be Empty", Toast.LENGTH_SHORT).show()
+                isCreateBtnClicked = false
+                return@setOnClickListener
+            }
+
                 if (vaultPassword == vaultConfirmPassword) {
 
                     val uniqueid = useGenerateID(vaultName)
@@ -259,6 +300,7 @@ class vaultCreationActivity : AppCompatActivity() {
                                     startUploadWorker(file, vaultPassword, uniqueid, userID,name)
                                 }
 
+                                isCreateBtnClicked = false
                                 finish()
 
                             } else {
@@ -267,6 +309,7 @@ class vaultCreationActivity : AppCompatActivity() {
                                     "Error : Couldn't Uploaded to FireStore",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                isCreateBtnClicked = false
                                 // will Write
                             }
                         }
@@ -278,8 +321,10 @@ class vaultCreationActivity : AppCompatActivity() {
                         "Password and Confirm password Not Matching",
                         Toast.LENGTH_SHORT
                     ).show()
+                    isCreateBtnClicked = false
                 }
-            }
+
+
         }
 
     }
@@ -393,20 +438,10 @@ class vaultCreationActivity : AppCompatActivity() {
 
         datePicker.addOnPositiveButtonClickListener { selection ->
 
-            val now = Calendar.getInstance()
-            now.set(Calendar.HOUR_OF_DAY,0)
-            now.set(Calendar.MINUTE,0)
-            now.set(Calendar.SECOND,0)
-            now.set(Calendar.MILLISECOND,0)
 
             val calender = Calendar.getInstance()
             calender.timeInMillis = selection
 
-            if (calender.before(now))
-            {
-                Toast.makeText(this, "Please select a future time", Toast.LENGTH_SHORT).show()
-                return@addOnPositiveButtonClickListener
-            }
 
             val timePicker =
                 MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H).setHour(12)
@@ -420,6 +455,15 @@ class vaultCreationActivity : AppCompatActivity() {
                 calender.set(Calendar.MINUTE,timePicker.minute)
                 calender.set(Calendar.SECOND,0)
                 calender.set(Calendar.MILLISECOND,0)
+
+                val now = Calendar.getInstance()
+
+                if (calender.before(now))
+                {
+                    Toast.makeText(this, "Please select a future time", Toast.LENGTH_SHORT).show()
+                    return@addOnPositiveButtonClickListener
+                }
+
 
                 selectedDate = calender.time
 

@@ -55,11 +55,16 @@ class VaultItemShowHomeAdapter(
 //            holder.ImageViewLockRv.setImageResource(R.drawable.lock_open_vector)
 //        }
 
-        val date = items.unlockTime?.toDate()
 
-        val sdf = SimpleDateFormat("dd MMM yyyy HH:mm a", Locale.getDefault())
+        if (items.unlockTime != null) {
+            val date = items.unlockTime?.toDate()
 
-        holder.unlockTimeRv.text = sdf.format(date)
+            val sdf = SimpleDateFormat("dd MMM yyyy HH:mm a", Locale.getDefault())
+
+            holder.unlockTimeRv.text = sdf.format(date)
+        }else{
+            holder.unlockTimeRv.text = "No Date Found"
+        }
 
 
         holder.fullVaultRv.setOnClickListener {

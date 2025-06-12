@@ -128,6 +128,12 @@ class Home_Fragment : Fragment(),SearchFragments {
 
                             val datalist = query.toObject(VaultCretionFireStore::class.java)
 
+                            if (datalist?.unlockTime == null)
+                            {
+                                Toast.makeText(requireContext(),"Vault Locked Forever, Contact Admin For more Detail",Toast.LENGTH_SHORT).show()
+                                return@addSnapshotListener
+                            }
+
                             if (datalist?.unlocked == false) {
                                 Toast.makeText(
                                     requireContext(),
@@ -254,21 +260,11 @@ class Home_Fragment : Fragment(),SearchFragments {
         }else
         {
             fullVaultLists.filter {
-                it.uniqueID?.contains(query, ignoreCase = true) == true||
-                        it.vaultname?.contains(query, ignoreCase = true) == true
+                        it.uniqueID?.contains(query, ignoreCase = true) == true||
+                        it.vaultname?.contains(query, ignoreCase = true) == true||
+                        it.status?.contains(query, ignoreCase = true) == true
             }
         }
-
-//        FirebaseFirestore.getInstance()
-//            .collection("USERS")
-//            .document(currentUserId)
-//            .collection("Vaults")
-//            .addSnapshotListener { value, error ->
-//                if (error != null)
-//                {
-//
-//                }
-//            }
 
         VaultLists.clear()
         VaultLists.addAll(filterList)

@@ -105,15 +105,15 @@
             android:hint="UserID">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/EditProfileTIE"
                 android:id="@+id/TIEUserIDEditProfile"
+                style="@style/EditProfileTIE"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/transparent"
-                android:enabled="false"
                 android:drawableStart="@drawable/id_vector"
                 android:drawablePadding="10dp"
-                android:textSize="24sp" />
+                android:enabled="false"
+                android:textSize="20sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,7 +134,7 @@
                 android:drawableStart="@drawable/name_vector"
                 android:drawableEnd="@drawable/editt_square_vector"
                 android:drawablePadding="10dp"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -155,7 +155,7 @@
                 android:background="@color/transparent"
                 android:drawableStart="@drawable/email_vector"
                 android:drawablePadding="10dp"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

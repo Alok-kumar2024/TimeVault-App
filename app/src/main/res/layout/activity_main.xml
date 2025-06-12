@@ -140,40 +140,53 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="5dp"
-                app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+                app:layout_constraintBottom_toTopOf="@id/CoordinatorLayout"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/FLSearchMainActivity"
                 app:layout_constraintVertical_bias="0.0" />
-
-
-            <com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
-                style="@style/MainActivityBottomNavigator"
-                android:id="@+id/bottomNavigation"
+            
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/CoordinatorLayout"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
-                app:cbn_curve_radius="26dp"
-                app:cbn_height="76dp"
-                app:cbn_icon_size="24dp"
-                app:cbn_selected_icon_size="48dp"
-                app:cbn_titleFont="@font/sharetech_regular"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                style="@style/MainActivityFloatingBtn"
-                android:id="@+id/FloatingButton"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:contentDescription="@string/vault_button_des"
-                android:src="@drawable/add_vault_vector"
-                app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
+                    style="@style/MainActivityBottomNavigator"
+                    android:id="@+id/bottomNavigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    app:cbn_curve_radius="26dp"
+                    app:cbn_height="76dp"
+                    app:cbn_icon_size="24dp"
+                    app:cbn_selected_icon_size="48dp"
+                    app:cbn_titleFont="@font/sharetech_regular"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/FloatingButton"
+                    style="@style/MainActivityFloatingBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:contentDescription="@string/vault_button_des"
+                    android:src="@drawable/add_vault_vector"
+                    app:layout_anchor="@+id/bottomNavigation"
+                    app:layout_anchorGravity="center"
+                    app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

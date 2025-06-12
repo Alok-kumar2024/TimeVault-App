@@ -187,7 +187,7 @@
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
                 android:padding="10dp"
-                android:text="Set Unlock Time"
+                android:hint="Set Unlock Time"
                 android:textSize="20sp"
                 app:drawableStartCompat="@drawable/calender_vector" />
 
@@ -226,6 +226,7 @@
                 android:id="@+id/RvShowFiles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="100dp"
                 android:padding="8dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="10dp"/>

@@ -12,4 +12,6 @@
     <string name="vault_button_des">Create Vault For Storage</string>
 
     <string name="server_clientID">469002913284-70r32gsj5eqmblp45bok59tr287m1g8t.apps.googleusercontent.com</string>
+    <string name="help_center"><u>Help Center</u></string>
+    <string name="privacy_policy"><u>Privacy Policy</u></string>
 </resources>

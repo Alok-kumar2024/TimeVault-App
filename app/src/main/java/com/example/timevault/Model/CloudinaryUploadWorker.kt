@@ -10,9 +10,12 @@ import com.cloudinary.utils.ObjectUtils
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
+import org.cloudinary.json.JSONObject
 import java.io.File
 
 
@@ -40,40 +43,81 @@ class CloudinaryUploadWorker(
 
         val originalName = inputData.getString("ORIGINAL_NAME") ?: originalfile.name
 
+
         return try {
             val encrypted = EncryptionUtils.encryption(originalfile, applicationContext, password)
 
-            val cloudinary = Cloudinary(
-                ObjectUtils.asMap(
-                    "cloud_name", "dxn2fhb7h",
-                    "api_key", "475188521866227",
-                    "api_secret", "zplVYyRoP9Cn43Z6JnaOicg53G8"
-                )
-            )
+//            val cloudinary = Cloudinary(
+//                ObjectUtils.asMap(
+//                    "cloud_name", "dxn2fhb7h",
+//                    "api_key", "475188521866227",
+//                    "api_secret", "zplVYyRoP9Cn43Z6JnaOicg53G8"
+//                )
+//            )
+//
+//            val uploadResult = cloudinary.uploader().upload(
+//                encrypted, ObjectUtils.asMap(
+//                    "folder", folderPath,
+//                    "use_filename", true,
+//                    "unique_filename", false,
+//                    "overwrite", true,
+//                    "resource_type", "raw",
+//                    "public_id",File(originalName).nameWithoutExtension
+//                )
+//            )
 
-            val uploadResult = cloudinary.uploader().upload(
-                encrypted, ObjectUtils.asMap(
-                    "folder", folderPath,
-                    "use_filename", true,
-                    "unique_filename", false,
-                    "overwrite", true,
-                    "resource_type", "raw",
-                    "public_id",File(originalName).nameWithoutExtension
-                )
-            )
+            val requestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(
+                    "file",
+                    encrypted.name,
+                    encrypted.asRequestBody("application/octet-stream".toMediaTypeOrNull()))
+                .addFormDataPart("upload_preset","Time_Vault_App")
+                .addFormDataPart("asset_folder", folderPath)
+                .addFormDataPart("public_id",File(originalName).nameWithoutExtension)
+                .addFormDataPart("resource_type","raw")
+                .build()
 
-            Log.d("Cloudinary", "Upload success: ${uploadResult["secure_url"]}")
+            val request = Request.Builder()
+                .url("https://api.cloudinary.com/v1_1/dxn2fhb7h/raw/upload")
+                .post(requestBody)
+                .build()
+
+            val client = OkHttpClient()
+
+            val response = client.newCall(request).execute()
+
+            if (!response.isSuccessful)
+            {
+                Log.e("CloudinaryUploadWorker", "Upload failed with code: ${response.code}")
+                return Result.failure()
+            }
+
+            val responseBody = response.body?.string()
+            val json = JSONObject(responseBody ?: "{}")
+            val secureUrl = json.getString("secure_url") ?: "Not Got"
+
+
+            Log.d("Cloudinary",
+                    "Upload success: $secureUrl"
+                )
 
             val data = StoreUploadedFiles(
                 originalName,
-                uploadResult["secure_url"].toString(), Timestamp.now()
+                secureUrl, Timestamp.now()
             )
 
             firestore.collection("USERS").document(userId).collection("Vaults").document(vaultID)
                 .collection("Files").add(data).addOnSuccessListener {
-                    Log.d("FireStoreCloudinary","SuccessFully Uploaded Cloudinary URL in Firestore" )
+                    Log.d(
+                        "FireStoreCloudinary",
+                        "SuccessFully Uploaded Cloudinary URL in Firestore"
+                    )
                 }.addOnFailureListener {
-                    Log.d("FireStoreCloudinary","Failure : Couldn't Upload Cloudinary URL in Firestore" )
+                    Log.d(
+                        "FireStoreCloudinary",
+                        "Failure : Couldn't Upload Cloudinary URL in Firestore"
+                    )
                 }
 
             Result.success()

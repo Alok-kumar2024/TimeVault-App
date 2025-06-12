@@ -24,6 +24,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -156,34 +161,36 @@ class EditProfile_Activity : AppCompatActivity() {
             }
             if (imageURi != null)
             {
-                uploadToCloudinary(image = imageURi,this, onSuccess = {uploadedUrl->
-                    val data = mapOf(
-                        "name" to name,
-                        "imgUrl" to uploadedUrl
-                    )
-
-                    database.child(currentID).updateChildren(data).addOnSuccessListener {
-                        Log.d("EditProfile", "In Success Database")
-                        Toast.makeText(this, "SuccessFully Update information", Toast.LENGTH_SHORT).show()
-
-                        val share = getSharedPreferences(
-                            "DATA",
-                            Context.MODE_PRIVATE
+                CoroutineScope(Dispatchers.IO).launch {
+                    uploadToCloudinary(image = imageURi,this@EditProfile_Activity, onSuccess = {uploadedUrl->
+                        val data = mapOf(
+                            "name" to name,
+                            "imgUrl" to uploadedUrl
                         )
-                        val editor = share.edit()
-                        editor.putString("name", name.toString()).apply()
-                        isEditableClicked = false
-                        finish()
-                    }.addOnFailureListener {
-                        Log.d("EditProfile", "In failure Database")
-                        Toast.makeText(this, "Error : Couldn't Update Information", Toast.LENGTH_SHORT)
-                            .show()
-                        isEditableClicked = false
-                    }
 
-                }, onError = {
-                    Toast.makeText(this,it,Toast.LENGTH_SHORT).show()
-                })
+                        database.child(currentID).updateChildren(data).addOnSuccessListener {
+                            Log.d("EditProfile", "In Success Database")
+                            Toast.makeText(this@EditProfile_Activity, "SuccessFully Update information", Toast.LENGTH_SHORT).show()
+
+                            val share = getSharedPreferences(
+                                "DATA",
+                                Context.MODE_PRIVATE
+                            )
+                            val editor = share.edit()
+                            editor.putString("name", name.toString()).apply()
+                            isEditableClicked = false
+                            finish()
+                        }.addOnFailureListener {
+                            Log.d("EditProfile", "In failure Database")
+                            Toast.makeText(this@EditProfile_Activity, "Error : Couldn't Update Information", Toast.LENGTH_SHORT)
+                                .show()
+                            isEditableClicked = false
+                        }
+
+                    }, onError = {
+                        Toast.makeText(this@EditProfile_Activity,it,Toast.LENGTH_SHORT).show()
+                    })
+                }
             }else{
                 val data = mapOf(
                     "name" to name,
@@ -220,56 +227,104 @@ class EditProfile_Activity : AppCompatActivity() {
 
     }
 
-    private fun uploadToCloudinary(
+    private suspend fun uploadToCloudinary(
         image: Uri,
         context: Context,
         onSuccess: (String) -> Unit,
         onError: (String) -> Unit
     ) {
-        val cloudName = "dxn2fhb7h"
-        val apiKey = "475188521866227"
-        val apiSecret = "zplVYyRoP9Cn43Z6JnaOicg53G8"
+//        val cloudName = "dxn2fhb7h"
+//        val apiKey = "475188521866227"
+//        val apiSecret = "zplVYyRoP9Cn43Z6JnaOicg53G8"
 
-        val fileStream = context.contentResolver.openInputStream(image)
-        val imageByte = fileStream?.readBytes()
-        fileStream?.close()
+//        val fileStream = context.contentResolver.openInputStream(image)
+//        val imageByte = fileStream?.readBytes()
+//        fileStream?.close()
+//
+//        val timestamp = (System.currentTimeMillis() / 1000).toString()
+//        val toSign = "timestamp=$timestamp$apiSecret"
+//        val signature = MessageDigest.getInstance("SHA-1")
+//            .digest(toSign.toByteArray())
+//            .joinToString (""){ "%02x".format(it)  }
+//
+//        val requestBody = MultipartBody.Builder()
+//            .setType(MultipartBody.FORM)
+//            .addFormDataPart("file","image.jpg",RequestBody.create("image/*".toMediaTypeOrNull(),imageByte!!))
+//            .addFormDataPart("api_key",apiKey)
+//            .addFormDataPart("timestamp",timestamp)
+//            .addFormDataPart("signature",signature)
+//            .build()
+//
+//        val request = Request.Builder()
+//            .url("https://api.cloudinary.com/v1_1/$cloudName/image/upload")
+//            .post(requestBody)
+//            .build()
+//
+//        OkHttpClient().newCall(request).enqueue( object : Callback{
+//            override fun onFailure(call: Call, e: IOException) {
+//                onError("Upload failed : ${e.message}")
+//            }
+//
+//            override fun onResponse(call: Call, response: Response) {
+//                if (response.isSuccessful)
+//                {
+//                    val body = JSONObject(response.body?.string() ?: "")
+//                    val imageUrl = body.getString("secure_url")
+//                    onSuccess(imageUrl)
+//                }else{
+//                    onError("Error : ${response.code}")
+//                }
+//            }
+//
+//        })
 
-        val timestamp = (System.currentTimeMillis() / 1000).toString()
-        val toSign = "timestamp=$timestamp$apiSecret"
-        val signature = MessageDigest.getInstance("SHA-1")
-            .digest(toSign.toByteArray())
-            .joinToString (""){ "%02x".format(it)  }
+        try {
 
-        val requestBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("file","image.jpg",RequestBody.create("image/*".toMediaTypeOrNull(),imageByte!!))
-            .addFormDataPart("api_key",apiKey)
-            .addFormDataPart("timestamp",timestamp)
-            .addFormDataPart("signature",signature)
-            .build()
-
-        val request = Request.Builder()
-            .url("https://api.cloudinary.com/v1_1/$cloudName/image/upload")
-            .post(requestBody)
-            .build()
-
-        OkHttpClient().newCall(request).enqueue( object : Callback{
-            override fun onFailure(call: Call, e: IOException) {
-                onError("Upload failed : ${e.message}")
+            val fileStream = context.contentResolver.openInputStream(image).use {
+                it?.readBytes()
             }
+            val folder = "USERS/$currentID"
 
-            override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful)
-                {
-                    val body = JSONObject(response.body?.string() ?: "")
-                    val imageUrl = body.getString("secure_url")
-                    onSuccess(imageUrl)
-                }else{
-                    onError("Error : ${response.code}")
+            val requestBuilder =
+                fileStream?.let { RequestBody.create("image/*".toMediaTypeOrNull(), it) }?.let {
+                    MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("file","image.jpg",
+                            it
+                        ).addFormDataPart("upload_preset","Time_Vault_App")
+                        .addFormDataPart("asset_folder", folder)
+                        .build()
+
                 }
+
+            val request = requestBuilder?.let {
+                Request.Builder()
+                    .url("https://api.cloudinary.com/v1_1/dxn2fhb7h/image/upload")
+                    .post(it)
+                    .build()
             }
 
-        })
+            val client = OkHttpClient()
+
+            val response = request?.let { client.newCall(it).execute() }
+
+            if (!response?.isSuccessful!!)
+            {
+                Log.e("uploadToCloudinary_EditProfile", "Upload failed with code: ${response.code}")
+                onError(response.message)
+                return
+            }
+
+            val body = JSONObject(response.body?.string() ?: "{}")
+            val imageurl = body.getString("secure_url")
+            onSuccess(imageurl)
+
+        }catch (e : Exception)
+        {
+            e.printStackTrace()
+            Log.e("CloudinaryUploadWorker", "Upload failed", e)
+            e.message?.let { onError(it) }
+        }
 
     }
 }

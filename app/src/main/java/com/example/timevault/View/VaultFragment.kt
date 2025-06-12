@@ -125,6 +125,12 @@ class VaultFragment : Fragment(), SearchFragments {
 
                             val datalist = query.toObject(VaultCretionFireStore::class.java)
 
+                            if (datalist?.unlockTime == null)
+                            {
+                                Toast.makeText(requireContext(),"Vault Locked Forever, Contact Admin For more Detail",Toast.LENGTH_SHORT).show()
+                                return@addSnapshotListener
+                            }
+
                             if (datalist?.unlocked == false) {
                                 Toast.makeText(
                                     requireContext(),
