@@ -4,12 +4,14 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
 import com.cloudinary.Cloudinary
 import com.cloudinary.utils.ObjectUtils
@@ -117,7 +119,6 @@ class EditProfile_Activity : AppCompatActivity() {
                         Glide.with(this@EditProfile_Activity)
                             .load(data?.imgUrl)
                             .placeholder(R.drawable.account_image_vector)
-                            .error(R.drawable.error_vector)
                             .into(binding.IvProfileImageEditProfile)
                     }
                 } else {
@@ -137,8 +138,14 @@ class EditProfile_Activity : AppCompatActivity() {
 
         binding.BtnSaveEditProfile.setOnClickListener {
 
+            binding.ProgressbarAnimationEditProfile.visibility = View.VISIBLE
+            binding.ProgressbarAnimationEditProfile.repeatCount = LottieDrawable.INFINITE
+            binding.ProgressbarAnimationEditProfile.playAnimation()
+
             if (isEditableClicked) {
                 Toast.makeText(this,"Currently In Progress, Please Wait Before Clicking Again",Toast.LENGTH_SHORT).show()
+                binding.ProgressbarAnimationEditProfile.visibility = View.GONE
+                binding.ProgressbarAnimationEditProfile.cancelAnimation()
                 return@setOnClickListener
             }
 
@@ -157,6 +164,8 @@ class EditProfile_Activity : AppCompatActivity() {
             if (name.isNullOrBlank()) {
                 Toast.makeText(this, "Name Field cannot be empty", Toast.LENGTH_SHORT).show()
                 isEditableClicked = false
+                binding.ProgressbarAnimationEditProfile.visibility = View.GONE
+                binding.ProgressbarAnimationEditProfile.cancelAnimation()
                 return@setOnClickListener
             }
             if (imageURi != null)
@@ -179,16 +188,23 @@ class EditProfile_Activity : AppCompatActivity() {
                             val editor = share.edit()
                             editor.putString("name", name.toString()).apply()
                             isEditableClicked = false
+                            binding.ProgressbarAnimationEditProfile.visibility = View.GONE
+                            binding.ProgressbarAnimationEditProfile.cancelAnimation()
                             finish()
                         }.addOnFailureListener {
                             Log.d("EditProfile", "In failure Database")
                             Toast.makeText(this@EditProfile_Activity, "Error : Couldn't Update Information", Toast.LENGTH_SHORT)
                                 .show()
                             isEditableClicked = false
+                            binding.ProgressbarAnimationEditProfile.visibility = View.GONE
+                            binding.ProgressbarAnimationEditProfile.cancelAnimation()
                         }
 
                     }, onError = {
                         Toast.makeText(this@EditProfile_Activity,it,Toast.LENGTH_SHORT).show()
+                        isEditableClicked= false
+                        binding.ProgressbarAnimationEditProfile.visibility = View.GONE
+                        binding.ProgressbarAnimationEditProfile.cancelAnimation()
                     })
                 }
             }else{
@@ -207,12 +223,17 @@ class EditProfile_Activity : AppCompatActivity() {
                     val editor = share.edit()
                     editor.putString("name", name.toString()).apply()
 
+                    binding.ProgressbarAnimationEditProfile.visibility = View.GONE
+                    binding.ProgressbarAnimationEditProfile.cancelAnimation()
+
                     finish()
                 }.addOnFailureListener {
                     Log.d("EditProfile", "In failure Database")
                     Toast.makeText(this, "Error : Couldn't Update Information", Toast.LENGTH_SHORT)
                         .show()
                     isEditableClicked = false
+                    binding.ProgressbarAnimationEditProfile.visibility = View.GONE
+                    binding.ProgressbarAnimationEditProfile.cancelAnimation()
                 }
 
             }
@@ -233,51 +254,6 @@ class EditProfile_Activity : AppCompatActivity() {
         onSuccess: (String) -> Unit,
         onError: (String) -> Unit
     ) {
-//        val cloudName = "dxn2fhb7h"
-//        val apiKey = "475188521866227"
-//        val apiSecret = "zplVYyRoP9Cn43Z6JnaOicg53G8"
-
-//        val fileStream = context.contentResolver.openInputStream(image)
-//        val imageByte = fileStream?.readBytes()
-//        fileStream?.close()
-//
-//        val timestamp = (System.currentTimeMillis() / 1000).toString()
-//        val toSign = "timestamp=$timestamp$apiSecret"
-//        val signature = MessageDigest.getInstance("SHA-1")
-//            .digest(toSign.toByteArray())
-//            .joinToString (""){ "%02x".format(it)  }
-//
-//        val requestBody = MultipartBody.Builder()
-//            .setType(MultipartBody.FORM)
-//            .addFormDataPart("file","image.jpg",RequestBody.create("image/*".toMediaTypeOrNull(),imageByte!!))
-//            .addFormDataPart("api_key",apiKey)
-//            .addFormDataPart("timestamp",timestamp)
-//            .addFormDataPart("signature",signature)
-//            .build()
-//
-//        val request = Request.Builder()
-//            .url("https://api.cloudinary.com/v1_1/$cloudName/image/upload")
-//            .post(requestBody)
-//            .build()
-//
-//        OkHttpClient().newCall(request).enqueue( object : Callback{
-//            override fun onFailure(call: Call, e: IOException) {
-//                onError("Upload failed : ${e.message}")
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                if (response.isSuccessful)
-//                {
-//                    val body = JSONObject(response.body?.string() ?: "")
-//                    val imageUrl = body.getString("secure_url")
-//                    onSuccess(imageUrl)
-//                }else{
-//                    onError("Error : ${response.code}")
-//                }
-//            }
-//
-//        })
-
         try {
 
             val fileStream = context.contentResolver.openInputStream(image).use {

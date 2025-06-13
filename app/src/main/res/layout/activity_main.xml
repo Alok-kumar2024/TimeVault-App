@@ -11,7 +11,7 @@
         style="@style/MainActivityTopLL"
         android:id="@+id/LinearLayoutOfTopDesign"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -90,7 +90,7 @@
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-       app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LinearLayoutOfTopDesign">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,40 +100,47 @@
 
             <!--And for down one , will writ here-->
 
-            <FrameLayout
-                style="@style/MainActivitySearchFrameLayout"
-                android:id="@+id/FLSearchMainActivity"
+            <!--            <FrameLayout-->
+            <!--                style="@style/MainActivitySearchFrameLayout"-->
+            <!--                android:id="@+id/FLSearchMainActivity"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginHorizontal="30dp"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:clipToOutline="true"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent">-->
+
+            <EditText
+                android:id="@+id/EtSearchVaultMainActivity"
+                style="@style/MainActivitySearchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
-                android:clipToOutline="true"
+                android:hint="Enter Vault Name "
+                android:padding="10dp"
+                android:drawableStart="@drawable/search_vecctor"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/white"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"/>
 
-                <EditText
-                    android:id="@+id/EtSearchVaultMainActivity"
-                    style="@style/MainActivitySearchEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Enter Vault Name "
-                    android:padding="10dp"
-                    android:paddingStart="60dp"
-                    android:textSize="20sp" />
-
-                <ImageView
-                    style="@style/MainActivitySearchImageView"
-                    android:id="@+id/IbSearchButtonMainActivity"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:padding="5dp"
-                    android:layout_gravity="start|center"
-                    android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/search_vecctor" />
+            <!--                <ImageView-->
+            <!--                    style="@style/MainActivitySearchImageView"-->
+            <!--                    android:id="@+id/IbSearchButtonMainActivity"-->
+            <!--                    android:layout_width="30dp"-->
+            <!--                    android:layout_height="30dp"-->
+            <!--                    android:padding="5dp"-->
+            <!--                    android:layout_gravity="start|center"-->
+            <!--                    android:layout_marginHorizontal="10dp"-->
+            <!--                    android:src="@drawable/search_vecctor" />-->
 
 
-            </FrameLayout>
+            <!--            </FrameLayout>-->
 
             <FrameLayout
                 android:id="@+id/FrameLayoutMainActivity"
@@ -144,9 +151,9 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/FLSearchMainActivity"
+                app:layout_constraintTop_toBottomOf="@id/EtSearchVaultMainActivity"
                 app:layout_constraintVertical_bias="0.0" />
-            
+
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/CoordinatorLayout"
                 android:layout_width="match_parent"
@@ -159,9 +166,9 @@
                     style="@style/MainActivityBottomNavigator"
                     android:id="@+id/bottomNavigation"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="80dp"
                     app:cbn_curve_radius="26dp"
-                    app:cbn_height="76dp"
+                    app:cbn_height="80dp"
                     app:cbn_icon_size="24dp"
                     app:cbn_selected_icon_size="48dp"
                     app:cbn_titleFont="@font/sharetech_regular"
@@ -192,7 +199,5 @@
 
 
     </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

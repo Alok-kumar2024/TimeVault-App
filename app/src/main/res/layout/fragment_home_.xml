@@ -13,31 +13,33 @@
         android:layout_height="match_parent">
 
         <TextView
-            style="@style/Fragment_Vault_HomePrimaryText"
             android:id="@+id/TvNoResultFoundHomeFragment"
+            style="@style/Fragment_Vault_HomePrimaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="No Result Found"
-            android:textSize="24sp"
             android:textAlignment="center"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:visibility="gone"
-            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.459"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            style="@style/Fragment_Vault_HomeRvBackground"
             android:id="@+id/RVShowingVaultLists_HomeFragment"
+            style="@style/Fragment_Vault_HomeRvBackground"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="250dp"
+            android:layout_margin="5dp"
+            android:padding="5dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:padding="5dp"
-            android:layout_margin="5dp"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -189,32 +189,6 @@ class MainActivity : AppCompatActivity() {
             showBottomDialog()
         }
 
-//        permissionLaucnher =
-//            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
-//            { result ->
-//                val allGranted = result.entries.all { it.value }
-//                if (allGranted) {
-//                    DownloadUtils.markPermissionDenied(this) // Reset denied flag
-//                    Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    DownloadUtils.markPermissionDenied(this)
-//                    Toast.makeText(this, "Permissions denied", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-
-//        if (!DownloadUtils.hasAllPermission(this) && !DownloadUtils.wasPermissionDenied(this)) {
-//            permissionLaucnher.launch(DownloadUtils.getNeededPermission().toTypedArray())
-//        }
-
-//        if (!currentUserID.isEmpty())
-//        {
-//            setContentView(R.layout.activity_main)
-//        }else{
-//            val intent = Intent(this,Sign_In_Up_Activity::class.java)
-//            startActivity(intent)
-//            finishAffinity()
-//        }
-
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -279,7 +253,6 @@ class MainActivity : AppCompatActivity() {
                         Glide.with(this@MainActivity)
                             .load(ImgProfile)
                             .placeholder(R.drawable.account_image_vector)
-                            .error(R.drawable.error_vector)
                             .into(binding.IVOfMainActivityProfilePic)
                     }
 
@@ -466,18 +439,19 @@ class MainActivity : AppCompatActivity() {
     private fun switchFragment(itemId: Int) {
         if (itemId == currentFragment) return
 
-        val fragment: Fragment = when (itemId) {
-            1 -> Home_Fragment()
-            2 -> VaultFragment()
+            val fragment: Fragment = when (itemId) {
+                1 -> Home_Fragment()
+                2 -> VaultFragment()
 
-            else -> Home_Fragment()
-        }
+                else -> Home_Fragment()
+            }
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.FrameLayoutMainActivity, fragment)
-            .commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.FrameLayoutMainActivity, fragment)
+                .commit()
 
-        currentFragment = itemId
+            currentFragment = itemId
+
     }
 
 
@@ -584,7 +558,6 @@ class MainActivity : AppCompatActivity() {
                         Glide.with(this@MainActivity)
                             .load(imgurl)
                             .placeholder(R.drawable.profile_image_vector)
-                            .error(R.drawable.error_vector)
                             .into(imgProfile)
                     }
 

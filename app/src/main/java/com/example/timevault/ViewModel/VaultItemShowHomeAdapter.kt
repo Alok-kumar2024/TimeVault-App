@@ -1,5 +1,7 @@
 package com.example.timevault.ViewModel
 
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +22,17 @@ class VaultItemShowHomeAdapter(
 //    private val onSettingsClick : () -> Unit
 ) :
     RecyclerView.Adapter<VaultItemShowHomeAdapter.VaultFileHolder>() {
+
+        private val handler =Handler(Looper.getMainLooper())
+    private val updateRunnable = object  : Runnable {
+        override fun run() {
+            notifyDataSetChanged()
+            handler.postDelayed(this,1000L)
+        }
+    }
+    init {
+        handler.post(updateRunnable)
+    }
 
     inner class VaultFileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -56,14 +69,33 @@ class VaultItemShowHomeAdapter(
 //        }
 
 
-        if (items.unlockTime != null) {
-            val date = items.unlockTime?.toDate()
+        if (items.status == "Locked") {
+            if (items.unlockTime != null) {
+                val date = items.unlockTime?.toDate()?.time
+                val currentTime = System.currentTimeMillis()
 
-            val sdf = SimpleDateFormat("dd MMM yyyy HH:mm a", Locale.getDefault())
+                val diff = date?.minus(currentTime)
 
-            holder.unlockTimeRv.text = sdf.format(date)
-        }else{
-            holder.unlockTimeRv.text = "No Date Found"
+                val second = diff?.div(1000)
+                val minute = second?.div(60)
+                val hour = minute?.div(60)
+                val days = hour?.div(24)
+
+                val time = when {
+                    days!! > 0 -> "$days day${if (days > 1) "s" else ""} left"
+                    hour > 0 -> "$hour hr ${minute % 60} min left"
+                    minute > 0 -> "$minute min left"
+                    else -> "$second sec left"
+                }
+
+                holder.unlockTimeRv.text = time
+
+            } else {
+                holder.unlockTimeRv.text = "No Date Found"
+            }
+        }else
+        {
+            holder.unlockTimeRv.text = "Unlocked"
         }
 
 

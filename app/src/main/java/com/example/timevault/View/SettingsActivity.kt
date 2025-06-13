@@ -200,7 +200,6 @@ class SettingsActivity : AppCompatActivity() {
                         Glide.with(this@SettingsActivity)
                             .load(imgurl)
                             .placeholder(R.drawable.profile_image_vector)
-                            .error(R.drawable.error_vector)
                             .into(imgProfile)
                     }
 

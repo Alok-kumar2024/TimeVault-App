@@ -45,6 +45,7 @@ class Home_Fragment : Fragment(),SearchFragments {
     private var fullVaultLists = mutableListOf<VaultCretionFireStore>()
     private var VaultLists = mutableListOf<VaultCretionFireStore>()
 
+
     private lateinit var currentUserId: String
 
     override fun onCreateView(
@@ -104,6 +105,7 @@ class Home_Fragment : Fragment(),SearchFragments {
                 }
             }
 
+
         return binding.root
     }
 
@@ -134,7 +136,7 @@ class Home_Fragment : Fragment(),SearchFragments {
                                 return@addSnapshotListener
                             }
 
-                            if (datalist?.unlocked == false) {
+                            if (datalist.unlocked == false) {
                                 Toast.makeText(
                                     requireContext(),
                                     "Unlock Time has yet to be Come..",
@@ -143,7 +145,7 @@ class Home_Fragment : Fragment(),SearchFragments {
                                 return@addSnapshotListener
                             }
 
-                            if (datalist?.unlocked == true) {
+                            if (datalist.unlocked == true) {
 
                                 showDialog(itemlist)
 

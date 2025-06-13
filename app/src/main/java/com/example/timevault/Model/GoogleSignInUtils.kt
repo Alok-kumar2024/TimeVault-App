@@ -28,6 +28,9 @@ import kotlinx.coroutines.tasks.await
 class GoogleSignInUtils {
 
     companion object {
+
+        private lateinit var currentId : String
+
         fun googleSignIn(
             context: Context,
             scope: CoroutineScope,
@@ -39,6 +42,7 @@ class GoogleSignInUtils {
             val request = GetCredentialRequest.Builder()
                 .addCredentialOption(getcredentialOption(context))
                 .build()
+
 
             scope.launch {
                 try {
@@ -87,8 +91,6 @@ class GoogleSignInUtils {
                                                 it.photoUrl.toString()
                                             )
 
-                                            val currentId = useGenerateID(it.displayName.toString())
-                                            Log.d("Google_currentID", " currentId $currentId")
 
                                             FirebaseDatabase.getInstance().getReference("USERS")
                                                 .orderByChild("email").equalTo(googleEmail)
@@ -96,6 +98,8 @@ class GoogleSignInUtils {
                                                     ValueEventListener {
                                                     override fun onDataChange(snapshot: DataSnapshot) {
                                                         if (snapshot.exists().not()) {
+                                                            currentId = useGenerateID(it.displayName.toString())
+                                                            Log.d("Google_currentID", " currentId $currentId")
                                                             FirebaseDatabase.getInstance()
                                                                 .getReference("USERS")
                                                                 .child(currentId).setValue(data)
@@ -112,6 +116,10 @@ class GoogleSignInUtils {
                                                                         )
                                                                     }
                                                                 }
+                                                        }else
+                                                        {
+                                                            currentId = snapshot.children.first().key.toString()
+                                                            Log.d("Google_currentID", " currentId $currentId")
                                                         }
                                                     }
 

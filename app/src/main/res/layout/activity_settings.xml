@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     style="@style/SettingsBackground"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,44 +9,55 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:fitsSystemWindows="true"
-    tools:context=".View.SettingsActivity">
+    tools:context=".View.SettingsActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/SettingsTopTitleLL"
+        android:id="@+id/LLTitleSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            style="@style/SettingsImageButton"
+            android:id="@+id/IbBackButtonOfSettings"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/arrow_back_vector"
+            android:backgroundTint="@color/transparent"
+            android:layout_margin="10dp"/>
+
+
+        <TextView
+            style="@style/SettingsTextPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:layout_gravity="center"
+            android:layout_marginStart="50dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/CLOfSettings"
         android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_height="wrap_content">
-
-        <LinearLayout
-            style="@style/SettingsTopTitleLL"
-            android:id="@+id/LLTitleSettings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageButton
-                style="@style/SettingsImageButton"
-                android:id="@+id/IbBackButtonOfSettings"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/arrow_back_vector"
-                android:backgroundTint="@color/transparent"
-                android:layout_margin="10dp"/>
-
-
-            <TextView
-                style="@style/SettingsTextPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Settings"
-                android:textStyle="bold"
-                android:textSize="30sp"
-                android:layout_gravity="center"
-                android:layout_marginStart="50dp"/>
-
-        </LinearLayout>
 
         <LinearLayout
             style="@style/SettingsItemsLL"
@@ -441,6 +452,9 @@
 
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>

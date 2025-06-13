@@ -34,7 +34,7 @@
         <activity
             android:name=".View.vaultCreationActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".View.SettingsActivity"
             android:exported="false" />
@@ -43,7 +43,7 @@
             android:exported="false" />
         <activity
             android:name=".View.SplashScreen"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,21 +52,20 @@
         </activity>
         <activity
             android:name=".View.MainActivity"
-            android:exported="false">
-        </activity>
-
-        <activity android:name=".Model.VaultDeepLink"
+            android:exported="false"/>
+        <activity
+            android:name=".View.VaultLinkActivity"
             android:exported="true"
             android:launchMode="singleTop">
-
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="vaultapp"
-                    android:host="vault"/>
+                    android:host="vault"
+                    android:scheme="vaultapp" />
             </intent-filter>
         </activity>
 

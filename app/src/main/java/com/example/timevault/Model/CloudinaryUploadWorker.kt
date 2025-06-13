@@ -47,25 +47,6 @@ class CloudinaryUploadWorker(
         return try {
             val encrypted = EncryptionUtils.encryption(originalfile, applicationContext, password)
 
-//            val cloudinary = Cloudinary(
-//                ObjectUtils.asMap(
-//                    "cloud_name", "dxn2fhb7h",
-//                    "api_key", "475188521866227",
-//                    "api_secret", "zplVYyRoP9Cn43Z6JnaOicg53G8"
-//                )
-//            )
-//
-//            val uploadResult = cloudinary.uploader().upload(
-//                encrypted, ObjectUtils.asMap(
-//                    "folder", folderPath,
-//                    "use_filename", true,
-//                    "unique_filename", false,
-//                    "overwrite", true,
-//                    "resource_type", "raw",
-//                    "public_id",File(originalName).nameWithoutExtension
-//                )
-//            )
-
             val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart(
@@ -129,27 +110,5 @@ class CloudinaryUploadWorker(
         }
 
     }
-
-
-//    private fun uploadToCloudinary(file: File): Boolean {
-//        return try {
-//            val body = MultipartBody.Builder().setType(MultipartBody.FORM)
-//                .addFormDataPart("upload_preset", "your_upload_preset").build()
-//
-//            val request =
-//                Request.Builder().url("https://api.cloudinary.com/v1_1/dxn2fhb7h/auto/upload")
-//                    .post(body).build()
-//
-//            val client = OkHttpClient()
-//            val response = client.newCall(request).execute()
-//
-//            response.isSuccessful
-//
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            false
-//
-//        }
-//    }
 
 }

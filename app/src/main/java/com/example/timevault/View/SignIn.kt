@@ -80,30 +80,30 @@ class SignIn : Fragment() {
             alertBoxForgotPassword()
         }
 
-//        addGoogleAccountLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-//        {result->
-//            if (result.resultCode == Activity.RESULT_OK || result.resultCode == Activity.RESULT_CANCELED)
-//            {
-//                GoogleSignInUtils.googleSignIn(
-//                    requireContext(), lifecycleScope, addGoogleAccountLauncher, onLogin =
-//                        {
-//                            val intent = Intent(requireContext(),MainActivity::class.java)
-//                            startActivity(intent)
-//                            requireActivity().finishAffinity()
-//                        })
-//            }
-//
-//        }
-//
-//        binding.BtnGoogleSignIp.setOnClickListener {
-//            GoogleSignInUtils.googleSignIn(
-//                requireContext(), lifecycleScope, addGoogleAccountLauncher, onLogin =
-//                    {
-//                        val intent = Intent(requireContext(),MainActivity::class.java)
-//                        startActivity(intent)
-//                        requireActivity().finishAffinity()
-//                    })
-//        }
+        addGoogleAccountLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        {result->
+            if (result.resultCode == Activity.RESULT_OK || result.resultCode == Activity.RESULT_CANCELED)
+            {
+                GoogleSignInUtils.googleSignIn(
+                    requireContext(), lifecycleScope, addGoogleAccountLauncher, onLogin =
+                        {
+                            val intent = Intent(requireContext(),MainActivity::class.java)
+                            startActivity(intent)
+                            requireActivity().finishAffinity()
+                        })
+            }
+
+        }
+
+        binding.BtnGoogleSignIp.setOnClickListener {
+            GoogleSignInUtils.googleSignIn(
+                requireContext(), lifecycleScope, addGoogleAccountLauncher, onLogin =
+                    {
+                        val intent = Intent(requireContext(),MainActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finishAffinity()
+                    })
+        }
 
 
         binding.btnSignIn.setOnClickListener {

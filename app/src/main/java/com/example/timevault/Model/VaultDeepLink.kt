@@ -19,8 +19,8 @@ class VaultDeepLink : AppCompatActivity() {
         if (isFinishing || isDestroyed) return
 
         val uri = intent?.data
-        val uid = uri?.getQueryParameter("uid")
-        val vid = uri?.getQueryParameter("vid")
+        val uid = uri?.getQueryParameter("userId")
+        val vid = uri?.getQueryParameter("vaultId")
 
 
         if (uid != null && vid != null)

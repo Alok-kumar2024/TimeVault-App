@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -12,6 +13,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.airbnb.lottie.LottieDrawable
 import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.R
 import com.example.timevault.databinding.ActivityChangePasswordBinding
@@ -76,9 +78,15 @@ class ChangePassword_Activity : AppCompatActivity() {
 
         binding.BtnChanegPasswordButton.setOnClickListener {
 
+            binding.ProgressbarAnimationChangePAssword.visibility = View.VISIBLE
+            binding.ProgressbarAnimationChangePAssword.repeatCount = LottieDrawable.INFINITE
+            binding.ProgressbarAnimationChangePAssword.playAnimation()
+
             if (isChangePasswordClicked)
             {
                 Toast.makeText(this,"Currently In Progress, Please Wait Before Clicking Again",Toast.LENGTH_SHORT).show()
+                binding.ProgressbarAnimationChangePAssword.cancelAnimation()
+                binding.ProgressbarAnimationChangePAssword.visibility = View.GONE
                 return@setOnClickListener
             }
 
@@ -90,17 +98,23 @@ class ChangePassword_Activity : AppCompatActivity() {
             if (user == null) {
                 Toast.makeText(this, "User Not Found.", Toast.LENGTH_SHORT).show()
                 isChangePasswordClicked = false
+                binding.ProgressbarAnimationChangePAssword.cancelAnimation()
+                binding.ProgressbarAnimationChangePAssword.visibility = View.GONE
                 return@setOnClickListener
             }
             if (oldPass.isNullOrEmpty()) {
 //                binding.TIEcurrentPasswordChangePassword.error = "This is an Required Field."
                 Toast.makeText(this, "Current Password Cannot be Empty.", Toast.LENGTH_SHORT).show()
                 isChangePasswordClicked = false
+                binding.ProgressbarAnimationChangePAssword.cancelAnimation()
+                binding.ProgressbarAnimationChangePAssword.visibility = View.GONE
                 return@setOnClickListener
             }
             if (newPass.isNullOrEmpty()) {
                 Toast.makeText(this, "New Password Cannot be Empty.", Toast.LENGTH_SHORT).show()
                 isChangePasswordClicked = false
+                binding.ProgressbarAnimationChangePAssword.cancelAnimation()
+                binding.ProgressbarAnimationChangePAssword.visibility = View.GONE
                 return@setOnClickListener
             }
 
@@ -108,6 +122,8 @@ class ChangePassword_Activity : AppCompatActivity() {
                 Toast.makeText(this, "Confirm Password cannot be Empty. ", Toast.LENGTH_SHORT)
                     .show()
                 isChangePasswordClicked = false
+                binding.ProgressbarAnimationChangePAssword.cancelAnimation()
+                binding.ProgressbarAnimationChangePAssword.visibility = View.GONE
                 return@setOnClickListener
             }
             if (newPass.toString() == newConfirmPass.toString()) {
@@ -124,6 +140,8 @@ class ChangePassword_Activity : AppCompatActivity() {
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     isChangePasswordClicked = false
+                                    binding.ProgressbarAnimationChangePAssword.cancelAnimation()
+                                    binding.ProgressbarAnimationChangePAssword.visibility = View.GONE
                                     finish()
                                 } else {
                                     Toast.makeText(
@@ -131,6 +149,8 @@ class ChangePassword_Activity : AppCompatActivity() {
                                         "Error : Couldn't Update Password.",
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    binding.ProgressbarAnimationChangePAssword.cancelAnimation()
+                                    binding.ProgressbarAnimationChangePAssword.visibility = View.GONE
                                     isChangePasswordClicked = false
                                 }
                             }
@@ -138,6 +158,8 @@ class ChangePassword_Activity : AppCompatActivity() {
                         Toast.makeText(this, "Incorrect Current Password.", Toast.LENGTH_SHORT)
                             .show()
                         isChangePasswordClicked = false
+                        binding.ProgressbarAnimationChangePAssword.cancelAnimation()
+                        binding.ProgressbarAnimationChangePAssword.visibility = View.GONE
                     }
                 }
 
@@ -148,6 +170,8 @@ class ChangePassword_Activity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
                 isChangePasswordClicked = false
+                binding.ProgressbarAnimationChangePAssword.cancelAnimation()
+                binding.ProgressbarAnimationChangePAssword.visibility = View.GONE
                 return@setOnClickListener
             }
 
