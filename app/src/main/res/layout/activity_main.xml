@@ -49,8 +49,8 @@
                 android:layout_marginLeft="32dp"
                 android:background="@drawable/rounded_box_ll"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/CVOfMainActivityProfilePic"
+                app:layout_constraintTop_toTopOf="@+id/CVOfMainActivityProfilePic"
                 app:layout_constraintVertical_bias="0.25">
 
                 <ImageButton
@@ -154,6 +154,7 @@
                 app:layout_constraintTop_toBottomOf="@id/EtSearchVaultMainActivity"
                 app:layout_constraintVertical_bias="0.0" />
 
+
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/CoordinatorLayout"
                 android:layout_width="match_parent"
@@ -161,6 +162,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
+
 
                 <com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
                     style="@style/MainActivityBottomNavigator"
@@ -187,6 +189,7 @@
                     android:src="@drawable/add_vault_vector"
                     app:layout_anchor="@+id/bottomNavigation"
                     app:layout_anchorGravity="center"
+                    android:layout_marginBottom="20dp"
                     app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />

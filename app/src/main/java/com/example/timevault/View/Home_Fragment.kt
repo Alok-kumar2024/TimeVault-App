@@ -18,11 +18,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.lottie.LottieDrawable
 import com.example.timevault.Model.SearchFragments
 import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.Model.VaultCretionFireStore
 import com.example.timevault.R
+import com.example.timevault.ViewModel.HomeVaultViewModel
 import com.example.timevault.ViewModel.VaultItemShowHomeAdapter
 import com.example.timevault.databinding.FragmentHomeBinding
 import com.google.firebase.database.DatabaseReference
@@ -42,6 +45,8 @@ class Home_Fragment : Fragment(),SearchFragments {
     private lateinit var database: DatabaseReference
     private lateinit var firestore: FirebaseFirestore
 
+    private lateinit var vaultViewModelHolder : HomeVaultViewModel
+
     private var fullVaultLists = mutableListOf<VaultCretionFireStore>()
     private var VaultLists = mutableListOf<VaultCretionFireStore>()
 
@@ -60,6 +65,8 @@ class Home_Fragment : Fragment(),SearchFragments {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        vaultViewModelHolder = ViewModelProvider(this)[HomeVaultViewModel::class.java]
+
 
         val getshare = requireActivity().getSharedPreferences("DATA", Context.MODE_PRIVATE)
 
@@ -76,34 +83,72 @@ class Home_Fragment : Fragment(),SearchFragments {
             LinearLayoutManager(requireContext())
         binding.RVShowingVaultListsHomeFragment.adapter = vaultShowAdapter
 
-        firestore.collection("USERS").document(currentUserId).collection("Vaults")
-            .addSnapshotListener { querysnapShot, FirebaseFirestoreException ->
-                if (FirebaseFirestoreException != null) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Error : Couldnt't Fetch Vaults Info..",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@addSnapshotListener
-                }
-                VaultLists.clear()
-                fullVaultLists.clear()
+        vaultViewModelHolder.showVaultHome.observe(viewLifecycleOwner)
+        {list->
+            VaultLists.clear()
+            VaultLists.addAll(list)
 
-                if (querysnapShot != null && !querysnapShot.isEmpty) {
-                    for (doc in querysnapShot) {
-                        val vaultlist = doc.toObject(VaultCretionFireStore::class.java)
-                        if (vaultlist.unlocked == false) {
-                            fullVaultLists.add(vaultlist)
-                            VaultLists.add(vaultlist)
-                        }
+            fullVaultLists.clear()
+            fullVaultLists.addAll(list)
 
-                        vaultShowAdapter.notifyDataSetChanged()
-                    }
+            vaultShowAdapter.notifyDataSetChanged()
 
-                } else {
-                    Toast.makeText(requireContext(), "No vaults yet..", Toast.LENGTH_SHORT).show()
+        }
+
+//        firestore.collection("USERS").document(currentUserId).collection("Vaults")
+//            .addSnapshotListener { querysnapShot, FirebaseFirestoreException ->
+//                if (FirebaseFirestoreException != null) {
+//                    Toast.makeText(
+//                        requireContext(),
+//                        "Error : Couldnt't Fetch Vaults Info..",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    return@addSnapshotListener
+//                }
+//                VaultLists.clear()
+//                fullVaultLists.clear()
+//
+//                if (querysnapShot != null && !querysnapShot.isEmpty) {
+//                    for (doc in querysnapShot) {
+//                        val vaultlist = doc.toObject(VaultCretionFireStore::class.java)
+//                        if (vaultlist.unlocked == false) {
+//                            fullVaultLists.add(vaultlist)
+//                            VaultLists.add(vaultlist)
+//                        }
+//
+//                        vaultShowAdapter.notifyDataSetChanged()
+//                    }
+//
+//                } else {
+//                    Toast.makeText(requireContext(), "No vaults yet..", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+
+        vaultViewModelHolder.isLoading.observe(viewLifecycleOwner)
+        { loading->
+            if (loading)
+            {
+                binding.RVShowingVaultListsHomeFragment.visibility = View.GONE
+                binding.TvNoResultFoundHomeFragment.visibility = View.GONE
+                binding.ProgressbarAnimationHomeFragment.visibility = View.VISIBLE
+                binding.ProgressbarAnimationHomeFragment.repeatCount = LottieDrawable.INFINITE
+                binding.ProgressbarAnimationHomeFragment.playAnimation()
+            }else
+            {
+                binding.RVShowingVaultListsHomeFragment.visibility = View.VISIBLE
+                binding.ProgressbarAnimationHomeFragment.cancelAnimation()
+                binding.ProgressbarAnimationHomeFragment.visibility = View.GONE
+                if (VaultLists.isEmpty())
+                {
+                    binding.TvNoResultFoundHomeFragment.visibility = View.VISIBLE
+                }else
+                {
+                    binding.TvNoResultFoundHomeFragment.visibility = View.GONE
                 }
             }
+        }
+
+        vaultViewModelHolder.fetchVault(currentUserId,requireContext())
 
 
         return binding.root

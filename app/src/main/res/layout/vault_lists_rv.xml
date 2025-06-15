@@ -14,7 +14,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
@@ -67,31 +68,6 @@
                 android:text="24 May 2025,8:00 AM"
                 android:textSize="20sp"
                 tools:ignore="TextViewEdits" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-<!--            <ImageButton-->
-<!--                android:id="@+id/IbSettingsRv"-->
-<!--                android:layout_width="50dp"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:layout_gravity="start"-->
-<!--                android:layout_margin="10dp"-->
-<!--                android:background="@color/transparent"-->
-<!--                android:src="@drawable/settings_vector" />-->
-
-            <ImageView
-                style="@style/VaultListRvLocImg"
-                android:id="@+id/IvLockRv"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="10dp"
-                android:src="@drawable/lock" />
 
         </LinearLayout>
 

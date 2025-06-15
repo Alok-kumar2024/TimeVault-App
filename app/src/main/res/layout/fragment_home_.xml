@@ -33,12 +33,27 @@
             android:id="@+id/RVShowingVaultLists_HomeFragment"
             style="@style/Fragment_Vault_HomeRvBackground"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:padding="5dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            style="@style/VaultShowActivityLottieAnimation"
+            android:id="@+id/ProgressbarAnimationHomeFragment"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            app:lottie_fileName="progressbar_replacement.json"
+            app:lottie_autoPlay="true"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/RVShowingVaultLists_HomeFragment"
+            app:layout_constraintBottom_toBottomOf="@+id/RVShowingVaultLists_HomeFragment"
+            android:visibility="gone"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

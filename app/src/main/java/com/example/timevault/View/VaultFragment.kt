@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,12 +17,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.lottie.LottieDrawable
 import com.example.timevault.Model.SearchFragments
 import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.Model.VaultCretionFireStore
 import com.example.timevault.R
 import com.example.timevault.ViewModel.VaultItemShowHomeAdapter
+import com.example.timevault.ViewModel.vaultShowViewModel
 import com.example.timevault.databinding.FragmentVaultBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -38,6 +42,7 @@ class VaultFragment : Fragment(), SearchFragments {
 
     private lateinit var database: DatabaseReference
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var vaultViewHolder : vaultShowViewModel
 
     private var fullVaultLists = mutableListOf<VaultCretionFireStore>()
     private var VaultLists = mutableListOf<VaultCretionFireStore>()
@@ -56,7 +61,11 @@ class VaultFragment : Fragment(), SearchFragments {
         // Inflate the layout for this fragment
         _binding = FragmentVaultBinding.inflate(inflater,container,false)
 
+
+
         val getshare = requireActivity().getSharedPreferences("DATA", Context.MODE_PRIVATE)
+
+        vaultViewHolder = ViewModelProvider(this)[vaultShowViewModel::class.java]
 
         currentUserId = getshare.getString("customuserID", null) ?: "Not Found"
 
@@ -72,33 +81,47 @@ class VaultFragment : Fragment(), SearchFragments {
         binding.RVShowingVaultListsVaultFragment.adapter = vaultShowAdapter
 
 
-        firestore.collection("USERS").document(currentUserId).collection("Vaults")
-            .addSnapshotListener { querysnapShot, FirebaseFirestoreException ->
-                if (FirebaseFirestoreException != null) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Error : Couldnt't Fetch Vaults Info..",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@addSnapshotListener
-                }
-                VaultLists.clear()
-                fullVaultLists.clear()
+        vaultViewHolder.showVault.observe(viewLifecycleOwner){vaultList ->
+            VaultLists.clear()
+            VaultLists.addAll(vaultList)
+            vaultShowAdapter.notifyDataSetChanged()
 
-                if (querysnapShot != null && !querysnapShot.isEmpty) {
-                    for (doc in querysnapShot) {
-                        val vaultlist = doc.toObject(VaultCretionFireStore::class.java)
 
-                        fullVaultLists.add(vaultlist)
-                        VaultLists.add(vaultlist)
+        }
 
-                        vaultShowAdapter.notifyDataSetChanged()
-                    }
+        vaultViewHolder.showFullVault.observe(viewLifecycleOwner){vaultList ->
+            fullVaultLists.clear()
+            fullVaultLists.addAll(vaultList)
 
-                } else {
-                    Toast.makeText(requireContext(), "No vaults yet..", Toast.LENGTH_SHORT).show()
+
+        }
+
+        vaultViewHolder.isLoading.observe(viewLifecycleOwner){loading->
+            if (loading)
+            {
+                binding.RVShowingVaultListsVaultFragment.visibility = View.GONE
+                binding.TvNoResultFoundVaultFragment.visibility = View.GONE
+
+                binding.ProgressbarAnimationVaultFragment.visibility = View.VISIBLE
+                binding.ProgressbarAnimationVaultFragment.repeatCount = LottieDrawable.INFINITE
+                binding.ProgressbarAnimationVaultFragment.playAnimation()
+            }else{
+                binding.RVShowingVaultListsVaultFragment.visibility = View.VISIBLE
+
+                binding.ProgressbarAnimationVaultFragment.cancelAnimation()
+                binding.ProgressbarAnimationVaultFragment.visibility = View.GONE
+
+                if (VaultLists.isEmpty())
+                {
+                    binding.TvNoResultFoundVaultFragment.visibility = View.VISIBLE
+                }else
+                {
+                    binding.TvNoResultFoundVaultFragment.visibility = View.GONE
                 }
             }
+        }
+
+        vaultViewHolder.fetchData(currentUserId,requireContext())
 
         return binding.root
     }

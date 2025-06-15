@@ -66,7 +66,7 @@
 
         <TextView
             android:id="@+id/TvVaultId_VaultShow"
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
@@ -103,6 +103,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.599"
         app:lottie_autoPlay="true"
+        android:visibility="gone"
         app:lottie_fileName="progressbar_replacement.json" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

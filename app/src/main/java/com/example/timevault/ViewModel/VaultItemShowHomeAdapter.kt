@@ -40,7 +40,6 @@ class VaultItemShowHomeAdapter(
         val statusRv : TextView = itemView.findViewById(R.id.TvShowStatusRv)
         val unlockTimeRv : TextView = itemView.findViewById(R.id.TvShowUnlockTimeRv)
 //        val settingsBtn : ImageButton = itemView.findViewById(R.id.IbSettingsRv)
-        val ImageViewLockRv : ImageView = itemView.findViewById(R.id.IvLockRv)
         val fullVaultRv : LinearLayout = itemView.findViewById(R.id.LLWholeRv)
 
     }

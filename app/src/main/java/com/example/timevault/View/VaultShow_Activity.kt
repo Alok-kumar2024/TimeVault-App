@@ -9,11 +9,14 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.Lottie
 import com.airbnb.lottie.LottieDrawable
 import com.example.timevault.Model.DownloadUtils
 import com.example.timevault.Model.StoreUploadedFiles
@@ -23,6 +26,8 @@ import com.example.timevault.Model.downloadandDecrypt
 import com.example.timevault.Model.vaultFilesDecrypt
 import com.example.timevault.R
 import com.example.timevault.ViewModel.VaultShowAdapter
+import com.example.timevault.ViewModel.vaultDownloadViewHolder
+import com.example.timevault.ViewModel.vaultShowViewModel
 import com.example.timevault.databinding.ActivityVaultShowBinding
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -36,18 +41,20 @@ import java.util.Locale
 class VaultShow_Activity : AppCompatActivity() {
 
     private lateinit var currentUserId: String
-    private lateinit var password : String
-    private lateinit var vaultId : String
+    private lateinit var password: String
+    private lateinit var vaultId: String
 
-    private lateinit var recyclerViewVaultShow : RecyclerView
+    private lateinit var recyclerViewVaultShow: RecyclerView
 
-    private lateinit var vaultshowadapter : VaultShowAdapter
+    private lateinit var vaultshowadapter: VaultShowAdapter
 
     private lateinit var firestore: FirebaseFirestore
 
+    private val vaultShowViewModelHolder: vaultDownloadViewHolder by viewModels()
+
     private lateinit var binding: ActivityVaultShowBinding
 
-    private var fileToDownload : vaultFilesDecrypt? = null
+    private var fileToDownload: vaultFilesDecrypt? = null
 
 //    private lateinit var permissionLauncher : ActivityResultLauncher<Array<String>>
 
@@ -56,7 +63,8 @@ class VaultShow_Activity : AppCompatActivity() {
         enableEdgeToEdge()
 
         val sharetheme = getSharedPreferences("theme", MODE_PRIVATE)
-        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        val savedTheme =
+            sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
         ThemeHelper.applyTheme(savedTheme)
 
         binding = ActivityVaultShowBinding.inflate(layoutInflater)
@@ -83,6 +91,7 @@ class VaultShow_Activity : AppCompatActivity() {
 //
 //        }
 
+//        vaultShowViewModelHolder = ViewModelProvider(this)[vaultDownloadViewHolder::class.java]
 
         binding.IvBackButtonVaultShow.setOnClickListener {
             finish()
@@ -112,10 +121,10 @@ class VaultShow_Activity : AppCompatActivity() {
         binding.ProgressbarAnimationShowVault.repeatCount = LottieDrawable.INFINITE
         binding.ProgressbarAnimationShowVault.playAnimation()
 
-        firestore.collection("USERS").document(currentUserId).collection("Vaults").document(vaultId).get().addOnSuccessListener { document->
+        firestore.collection("USERS").document(currentUserId).collection("Vaults").document(vaultId)
+            .get().addOnSuccessListener { document ->
 
-            if (document != null && document.exists())
-            {
+            if (document != null && document.exists()) {
                 val dataList = document.toObject(VaultCretionFireStore::class.java)
 
                 binding.TvVaultNameVaultShow.text = dataList?.vaultname.toString()
@@ -125,78 +134,128 @@ class VaultShow_Activity : AppCompatActivity() {
         }.addOnFailureListener {
             binding.ProgressbarAnimationShowVault.cancelAnimation()
             binding.ProgressbarAnimationShowVault.visibility = View.GONE
-            Toast.makeText(this,"Can't find vaults informantion",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Can't find vaults informantion", Toast.LENGTH_SHORT).show()
         }
 
-        firestore.collection("USERS").document(currentUserId).collection("Vaults").document(vaultId).collection("Files")
-            .get().addOnSuccessListener { document ->
-                Log.d("Check1","Inside on success")
+        vaultShowViewModelHolder.showDownloadFileShow.observe(this)
+        { triple ->
 
-                val fileListT = document.documents.mapNotNull{ filemap->
+            decryptedandDisplay(triple)
 
-                    Log.d("Check2","Inside fileListT")
-                    val filename = filemap.getString("fileName")
-                    val fileURL = filemap.getString("fileURL")
-                    val uploadTime = filemap.getTimestamp("uploadedTime")
+        }
+
+        vaultShowViewModelHolder.decryptedFiles.observe(this){file->
+            showInRecycler(file)
+        }
+
+        Log.d(
+            "LiveDataDebug",
+            "LiveData value right after observing: ${vaultShowViewModelHolder.showDownloadFileShow.value}"
+        )
 
 
-                    if (filename != null && fileURL != null && uploadTime != null)
-                    {
-                        val formattedDate = SimpleDateFormat("dd MMM yyyy , HH:mm a", Locale.getDefault()).format(uploadTime.toDate())
+        vaultShowViewModelHolder.isLoadingShow.observe(this)
+        { loading ->
+            if (loading && vaultShowViewModelHolder.decryptedFiles.value == null) {
+                binding.ProgressbarAnimationShowVault.visibility = View.VISIBLE
+                binding.ProgressbarAnimationShowVault.repeatCount = LottieDrawable.INFINITE
+                binding.ProgressbarAnimationShowVault.playAnimation()
 
-                        Triple(filename,fileURL,uploadTime)
-                    }else null
-                }
-                Log.d("DEBUG_FILE_LIST", "List size: ${fileListT.size}")
+                binding.RvListOffileVaultShow.visibility = View.GONE
+            } else {
+                binding.RvListOffileVaultShow.visibility = View.VISIBLE
 
-                Log.d("Check3","near decryptedanddisplay")
-                decryptedandDisplay(fileListT)
-            }.addOnFailureListener {
-
-                binding.ProgressbarAnimationShowVault.cancelAnimation()
-                binding.ProgressbarAnimationShowVault.visibility = View.GONE
-                Toast.makeText(this, "Failed to load files", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        vaultShowViewModelHolder.errorMessage.observe(this) { msg ->
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+
+        }
+
+        vaultShowViewModelHolder.fetchDownloadFiles(currentUserId, vaultId)
+//
+//        firestore.collection("USERS").document(currentUserId).collection("Vaults").document(vaultId).collection("Files")
+//            .get().addOnSuccessListener { document ->
+//                Log.d("Check1","Inside on success")
+//
+//                val fileListT = document.documents.mapNotNull{ filemap->
+//
+//                    Log.d("Check2","Inside fileListT")
+//                    val filename = filemap.getString("fileName")
+//                    val fileURL = filemap.getString("fileURL")
+//                    val uploadTime = filemap.getTimestamp("uploadedTime")
+//
+//
+//                    if (filename != null && fileURL != null && uploadTime != null)
+//                    {
+//                        val formattedDate = SimpleDateFormat("dd MMM yyyy , HH:mm a", Locale.getDefault()).format(uploadTime.toDate())
+//
+//                        Triple(filename,fileURL,uploadTime)
+//                    }else null
+//                }
+//                Log.d("DEBUG_FILE_LIST", "List size: ${fileListT.size}")
+//
+//                Log.d("Check3","near decryptedanddisplay")
+//                decryptedandDisplay(fileListT)
+//            }.addOnFailureListener {
+//
+//                binding.ProgressbarAnimationShowVault.cancelAnimation()
+//                binding.ProgressbarAnimationShowVault.visibility = View.GONE
+//                Toast.makeText(this, "Failed to load files", Toast.LENGTH_SHORT).show()
+//            }
+
 
     }
 
-    private fun decryptedandDisplay(fileList : List<Triple<String,String,Timestamp>>)
-    {
+    private fun decryptedandDisplay(fileList: List<Triple<String, String, Timestamp>>) {
 
-        Log.d("Check4","Inside decryptedandDisplay")
+        if (vaultShowViewModelHolder.decryptedFiles.value != null)
+        {
+            Log.d("Cache", "Already decrypted. Using cached files.")
+            vaultShowViewModelHolder.decryptedFiles.value?.let { showInRecycler(it) }
+            return
+        }
+        Log.d("Check4", "Inside decryptedandDisplay")
         CoroutineScope(Dispatchers.IO).launch {
-            Log.d("Check5","Inside coroutinescope")
-            val decrypedfile = fileList.mapNotNull { (name,url,time) ->
-                downloadandDecrypt(url,name,password,time)
+            Log.d("Check5", "Inside coroutinescope")
+            val decrypedfile = fileList.mapNotNull { (name, url, time) ->
+                downloadandDecrypt(url, name, password, time)
             }
             Log.d("DecryptedFileCount", "Decrypted files: ${decrypedfile.size}")
 
-
             withContext(Dispatchers.Main)
             {
-                Log.d("Check6","Inside withcontext Dispatchers")
-                vaultshowadapter = VaultShowAdapter(decrypedfile , onDownloadClick = { file->
-                    Log.d("Downloads","clicked Download Button")
-
-                    val mimeType = when {
-                        file.file?.endsWith(".pdf") == true -> "application/pdf"
-                        file.file?.endsWith(".jpg") == true || file.file?.endsWith(".jpeg") == true -> "image/jpeg"
-                        file.file?.endsWith(".png") == true -> "image/png"
-                        file.file?.endsWith(".mp4") == true -> "video/mp4"
-                        else -> "*/*"
-                    }
-
-
-                    DownloadUtils.checkPermissionAndSave(this@VaultShow_Activity,file,mimeType)
-                })
-
-                recyclerViewVaultShow.adapter = vaultshowadapter
-                vaultshowadapter.notifyDataSetChanged()
-
-                binding.ProgressbarAnimationShowVault.cancelAnimation()
-                binding.ProgressbarAnimationShowVault.visibility = View.GONE
+                vaultShowViewModelHolder.setDecryptedFiles(decrypedfile)
             }
+
         }
+    }
+
+    private fun showInRecycler(decrypedfile : List<vaultFilesDecrypt>)
+    {
+        Log.d("Check6", "Inside withcontext Dispatchers")
+        vaultshowadapter = VaultShowAdapter(decrypedfile, onDownloadClick = { file ->
+            Log.d("Downloads", "clicked Download Button")
+
+            val mimeType = when {
+                file.file?.endsWith(".pdf") == true -> "application/pdf"
+                file.file?.endsWith(".jpg") == true || file.file?.endsWith(".jpeg") == true -> "image/jpeg"
+                file.file?.endsWith(".png") == true -> "image/png"
+                file.file?.endsWith(".mp4") == true -> "video/mp4"
+                else -> "*/*"
+            }
+
+
+            DownloadUtils.checkPermissionAndSave(this@VaultShow_Activity, file, mimeType)
+        })
+
+        recyclerViewVaultShow.adapter = vaultshowadapter
+        vaultshowadapter.notifyDataSetChanged()
+
+        binding.ProgressbarAnimationShowVault.cancelAnimation()
+        binding.ProgressbarAnimationShowVault.visibility = View.GONE
+
     }
 
 }
