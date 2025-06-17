@@ -114,20 +114,25 @@
 ## 🖼️ Screenshots
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-  <img src="App-TimeVault-SS/SplashScreenActivity.jpg" alt="Splash Screen Activity" width="200"/>
-  <img src="App-TimeVault-SS/SignInFragment.jpg" alt="Sign In Fragment" width="200"/>
-  <img src="App-TimeVault-SS/SigbnUpFragment.jpg" alt="Sign Up Fragment" width="200"/>
-  <img src="App-TimeVault-SS/Home_Fragment.jpg" alt="Home Fragment" width="200"/>
-  <img src="App-TimeVault-SS/VaultFragment.jpg" alt="Vault Fragment" width="200"/>
-  <img src="App-TimeVault-SS/PopUpMenu.jpg" alt="Pop Up Menu" width="200"/>
-  <img src="App-TimeVault-SS/Notification_BottomSheetDialog.jpg" alt="Notification Bottom Sheet Dialog" width="200"/>
-  <img src="App-TimeVault-SS/VaultCreationActivity.jpg" alt="Vault Creation Activity" width="200"/>
-  <img src="App-TimeVault-SS/SettingsActivity.jpg" alt="Settings Activity" width="200"/>
-  <img src="App-TimeVault-SS/Theme_AlertDialog.jpg" alt="Theme Alert Dialog" width="200"/>
-  <img src="App-TimeVault-SS/EditProfileActivity.jpg" alt="Edit Profile Activity" width="200"/>
-  <img src="App-TimeVault-SS/ChangePasswordActivity.jpg" alt="Change Password Activity" width="200"/>
-  <img src="App-TimeVault-SS/ForgotPasswordAlertDialog.jpg" alt="Forgot Password Alert Dialog" width="200"/>
-  <img src="App-TimeVault-SS/LogOutAlertDialog.jpg" alt="Log Out Alert Dialog" width="200"/>
+  <img src="App-TimeVault-Images/SplashScreenActivity.jpg" alt="Splash Screen Activity" width="200"/>
+  <img src="App-TimeVault-Images/SignInFragment.jpg" alt="Sign In Fragment" width="200"/>
+  <img src="App-TimeVault-Images/SignUpFragment.jpg" alt="Sign Up Fragment" width="200"/>
+  <img src="App-TimeVault-Images/Home_Fragment.jpg" alt="Home Fragment" width="200"/>
+  <img src="App-TimeVault-Images/VaultFragment.jpg" alt="Vault Fragment" width="200"/>
+  <img src="App-TimeVault-Images/PopUpMenu.jpg" alt="Pop Up Menu" width="200"/>
+  <img src="App-TimeVault-Images/Notification_BottomSheetDialog.jpg" alt="Notification Bottom Sheet Dialog" width="200"/>
+  <img src="App-TimeVault-Images/VaultCreationActivity.jpg" alt="Vault Creation Activity" width="200"/>
+  <img src="App-TimeVault-Images/Vault_Password_AlertDialog.jpg" alt="Vault Password AlertDialog" width="200"/>
+  <img src="App-TimeVault-Images/Vault_Show_Activity.jpg" alt="Vault Show Activity" width="200"/>
+  <img src="App-TimeVault-Images/SettingsActivity.jpg" alt="Settings Activity" width="200"/>
+  <img src="App-TimeVault-Images/Theme_AlertDialog.jpg" alt="Theme Alert Dialog" width="200"/>
+  <img src="App-TimeVault-Images/App_Info_AlertDialog.jpg" alt="App info AlertDialog" width="200"/>
+  <img src="App-TimeVault-Images/EditProfileActivity.jpg" alt="Edit Profile Activity" width="200"/>
+  <img src="App-TimeVault-Images/ChangePasswordActivity.jpg" alt="Change Password Activity" width="200"/>
+  <img src="App-TimeVault-Images/ForgotPasswordAlertDialog.jpg" alt="Forgot Password Alert Dialog" width="200"/>
+  <img src="App-TimeVault-Images/LogOutAlertDialog.jpg" alt="Log Out Alert Dialog" width="200"/>
+  <img src="App-TimeVault-Images/Help_Center_AlertDialog.jpg" alt="Help Center AlertDialog" width="200"/>
+  <img src="App-TimeVault-Images/Privacy_Policy_AlertDialog.jpg" alt="Privacy Policy AlertDialog" width="200"/>
 </div>
 
 
