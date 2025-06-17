@@ -37,7 +37,6 @@
             android:layout_gravity="center">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/Vault_Creation_ActivityEditTextTIE"
                 android:id="@+id/etEmailSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +61,6 @@
             android:layout_gravity="center">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/Vault_Creation_ActivityEditTextTIE"
                 android:id="@+id/etPasswordSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,40 +104,41 @@
             android:layout_marginTop="20dp">
 
             <View
+                style="@style/SignInUp_Divider"
                 android:layout_marginStart="20sp"
                 android:layout_gravity="center"
                 android:layout_width="100dp"
                 android:layout_height="1dp"
-                android:layout_weight="5"
-                android:background="@color/black"/>
+                android:layout_weight="5"/>
 
             <TextView
+                style="@style/SignInUp_TextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Or Sign in with"
                 android:textStyle="bold"
-                android:textColor="@color/black"
                 android:textSize="25dp"/>
 
             <View
+                style="@style/SignInUp_Divider"
                 android:layout_gravity="center"
                 android:layout_width="100dp"
                 android:layout_height="1dp"
                 android:layout_weight="5"
-                android:background="@color/black"
                 android:layout_marginEnd="20sp"/>
         </LinearLayout>
 
         <Button
-            android:id="@+id/BtnGoogleSignIp"
+            android:id="@+id/BtnGoogleSignIn"
             android:layout_width="250dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20sp"
             android:text="Google"
             android:gravity="start"
+            android:drawableLeft="@drawable/googleg_standard_color_18"
             android:layout_gravity="center"
             android:textColor="@color/black"
-            android:textSize="30sp"
+            android:textSize="24sp"
             android:layout_marginBottom="30dp"
             android:backgroundTint="#F4EFEF"/>
 

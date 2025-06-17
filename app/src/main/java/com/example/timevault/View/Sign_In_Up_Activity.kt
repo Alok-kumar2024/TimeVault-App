@@ -37,9 +37,6 @@ class Sign_In_Up_Activity : AppCompatActivity() {
         binding = ActivitySignInUpBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[SignViewModel::class.java]
 
-        WindowCompat.setDecorFitsSystemWindows(window,false)
-        WindowInsetsControllerCompat(window,window.decorView).isAppearanceLightStatusBars = false
-
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

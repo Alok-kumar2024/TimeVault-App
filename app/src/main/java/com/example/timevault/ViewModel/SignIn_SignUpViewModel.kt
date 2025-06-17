@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 enum class TabSelected { SignIn, SignUp }
 
 class SignViewModel : ViewModel() {
-    private val _SelectedTab = MutableLiveData<TabSelected>()
+    private val _SelectedTab = MutableLiveData<TabSelected>(TabSelected.SignIn)
 
     val selectedTab : LiveData<TabSelected> get() = _SelectedTab
 

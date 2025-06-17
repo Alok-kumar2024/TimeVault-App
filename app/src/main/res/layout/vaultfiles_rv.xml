@@ -1,65 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    style="@style/VaultFileRvBackground"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/VaultFileRvBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="5dp"
-    android:orientation="horizontal">
+    android:layout_margin="8dp"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical">
 
     <ImageView
         android:id="@+id/IvShowImageOfFileType"
-        android:layout_width="40sp"
+        android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="10dp"
+        android:layout_marginEnd="12dp"
         android:src="@drawable/vault_unknow_vector" />
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="15dp"
-        android:layout_marginHorizontal="10dp"
-        android:orientation="vertical">
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingVertical="4dp">
 
         <TextView
-            style="@style/VaultFileRvPrimaryText"
             android:id="@+id/TvShowFileNameRv"
-            android:layout_width="120dp"
+            style="@style/VaultFileRvPrimaryText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:text="File Name"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="File Name" />
 
         <TextView
-            style="@style/VaultFileRvSecondaryText"
             android:id="@+id/TvShowUploadDateRv"
-            android:layout_width="wrap_content"
+            style="@style/VaultFileRvSecondaryText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:text="Upload Date"
-            android:textStyle="bold"/>
-
+            android:text="Upload Date" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <ImageButton
-            style="@style/VaultFileRvBtnDownload"
-            android:id="@+id/IbDownloadFilesRv"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:padding="10dp"
-            android:scaleType="center"
-            android:src="@drawable/cloud_download_vector"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="10dp"/>
-
-
-    </LinearLayout>
-
+    <ImageButton
+        android:id="@+id/IbDownloadFilesRv"
+        style="@style/VaultFileRvBtnDownload"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="10dp"
+        android:src="@drawable/cloud_download_vector" />
 </LinearLayout>

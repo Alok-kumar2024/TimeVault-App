@@ -1,4 +1,3 @@
-
 package com.example.timevault.View
 
 import android.app.AlertDialog
@@ -12,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
@@ -27,22 +28,26 @@ import com.example.timevault.R
 import com.example.timevault.ViewModel.VaultItemShowHomeAdapter
 import com.example.timevault.ViewModel.vaultShowViewModel
 import com.example.timevault.databinding.FragmentVaultBinding
+import com.google.firebase.Timestamp
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 
 class VaultFragment : Fragment(), SearchFragments {
-    private var _binding : FragmentVaultBinding? = null
+    private var _binding: FragmentVaultBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var vaultShowAdapter: VaultItemShowHomeAdapter
 
-    private lateinit var builderShowPassword : AlertDialog
+    private lateinit var builderShowPassword: AlertDialog
     private var isDialogShowing = false
 
     private lateinit var database: DatabaseReference
     private lateinit var firestore: FirebaseFirestore
-    private lateinit var vaultViewHolder : vaultShowViewModel
+    private lateinit var vaultViewHolder: vaultShowViewModel
+
+    private var popUp: PopupWindow? = null
 
     private var fullVaultLists = mutableListOf<VaultCretionFireStore>()
     private var VaultLists = mutableListOf<VaultCretionFireStore>()
@@ -55,12 +60,12 @@ class VaultFragment : Fragment(), SearchFragments {
     ): View? {
 
         val sharetheme = requireActivity().getSharedPreferences("theme", MODE_PRIVATE)
-        val savedTheme = sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
+        val savedTheme =
+            sharetheme.getString("themeOption", ThemeHelper.SYSTEM) ?: ThemeHelper.SYSTEM
         ThemeHelper.applyTheme(savedTheme)
 
         // Inflate the layout for this fragment
-        _binding = FragmentVaultBinding.inflate(inflater,container,false)
-
+        _binding = FragmentVaultBinding.inflate(inflater, container, false)
 
 
         val getshare = requireActivity().getSharedPreferences("DATA", Context.MODE_PRIVATE)
@@ -75,13 +80,15 @@ class VaultFragment : Fragment(), SearchFragments {
 
         vaultShowAdapter = VaultItemShowHomeAdapter(VaultLists, onVaultClick = { item ->
             VaultClick(item)
+        }, onMoreClick = { item, view ->
+            showPopUpVaultList(item, view)
         })
         binding.RVShowingVaultListsVaultFragment.layoutManager =
             LinearLayoutManager(requireContext())
         binding.RVShowingVaultListsVaultFragment.adapter = vaultShowAdapter
 
 
-        vaultViewHolder.showVault.observe(viewLifecycleOwner){vaultList ->
+        vaultViewHolder.showVault.observe(viewLifecycleOwner) { vaultList ->
             VaultLists.clear()
             VaultLists.addAll(vaultList)
             vaultShowAdapter.notifyDataSetChanged()
@@ -89,39 +96,36 @@ class VaultFragment : Fragment(), SearchFragments {
 
         }
 
-        vaultViewHolder.showFullVault.observe(viewLifecycleOwner){vaultList ->
+        vaultViewHolder.showFullVault.observe(viewLifecycleOwner) { vaultList ->
             fullVaultLists.clear()
             fullVaultLists.addAll(vaultList)
 
 
         }
 
-        vaultViewHolder.isLoading.observe(viewLifecycleOwner){loading->
-            if (loading)
-            {
+        vaultViewHolder.isLoading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
                 binding.RVShowingVaultListsVaultFragment.visibility = View.GONE
                 binding.TvNoResultFoundVaultFragment.visibility = View.GONE
 
                 binding.ProgressbarAnimationVaultFragment.visibility = View.VISIBLE
                 binding.ProgressbarAnimationVaultFragment.repeatCount = LottieDrawable.INFINITE
                 binding.ProgressbarAnimationVaultFragment.playAnimation()
-            }else{
+            } else {
                 binding.RVShowingVaultListsVaultFragment.visibility = View.VISIBLE
 
                 binding.ProgressbarAnimationVaultFragment.cancelAnimation()
                 binding.ProgressbarAnimationVaultFragment.visibility = View.GONE
 
-                if (VaultLists.isEmpty())
-                {
+                if (VaultLists.isEmpty()) {
                     binding.TvNoResultFoundVaultFragment.visibility = View.VISIBLE
-                }else
-                {
+                } else {
                     binding.TvNoResultFoundVaultFragment.visibility = View.GONE
                 }
             }
         }
 
-        vaultViewHolder.fetchData(currentUserId,requireContext())
+        vaultViewHolder.fetchData(currentUserId, requireContext())
 
         return binding.root
     }
@@ -148,9 +152,12 @@ class VaultFragment : Fragment(), SearchFragments {
 
                             val datalist = query.toObject(VaultCretionFireStore::class.java)
 
-                            if (datalist?.unlockTime == null)
-                            {
-                                Toast.makeText(requireContext(),"Vault Locked Forever, Contact Admin For more Detail",Toast.LENGTH_SHORT).show()
+                            if (datalist?.unlockTime == null) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Vault Locked Forever, Contact Admin For more Detail",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return@addSnapshotListener
                             }
 
@@ -163,7 +170,7 @@ class VaultFragment : Fragment(), SearchFragments {
                                 return@addSnapshotListener
                             }
 
-                            if (datalist?.unlocked == true) {
+                            if (datalist.unlocked == true) {
 
                                 showDialog(itemlist)
 
@@ -180,6 +187,9 @@ class VaultFragment : Fragment(), SearchFragments {
     }
 
     private fun showDialog(item: VaultCretionFireStore) {
+        if (!isAdded || isRemoving || requireActivity().isFinishing) {
+            return
+        }
 
         if (isDialogShowing) return
 
@@ -208,7 +218,12 @@ class VaultFragment : Fragment(), SearchFragments {
         }
         isDialogShowing = true
 
-        builderShowPassword.window?.setBackgroundDrawable(ContextCompat.getColor(requireContext(),R.color.transparent).toDrawable())
+        builderShowPassword.window?.setBackgroundDrawable(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.transparent
+            ).toDrawable()
+        )
 
         builderShowPassword.show()
 
@@ -234,14 +249,31 @@ class VaultFragment : Fragment(), SearchFragments {
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            activity?.runOnUiThread{
+
+                            val intent = Intent(requireContext(), VaultShow_Activity::class.java)
+                            intent.putExtra("customuserID", currentUserId)
+                            intent.putExtra("password", enterpassword)
+                            intent.putExtra("vaultID", item.uniqueID)
+
+                            val data = mapOf(
+                                "lastAccessedTime" to Timestamp.now()
+                            )
+
+
+                            item.uniqueID?.let {
+                                FirebaseFirestore.getInstance().collection("USERS")
+                                    .document(currentUserId).collection("Vaults").document(it)
+                                    .set(data, SetOptions.merge()).addOnSuccessListener {
+                                        Log.d("Added LastAccess","The Last Access Added is ${Timestamp.now()}")
+                                    }.addOnFailureListener {
+                                        Log.e("Added LastAccess","The Last Access Not Added error : ${it.message}")
+                                    }
+                            }
+
+                            activity?.runOnUiThread {
                                 builderShowPassword.dismiss()
                             }
 
-                            val intent = Intent(requireContext(), VaultShow_Activity::class.java)
-                            intent.putExtra("customuserID",currentUserId)
-                            intent.putExtra("password", enterpassword)
-                            intent.putExtra("vaultID", item.uniqueID)
                             startActivity(intent)
                         } else {
                             Toast.makeText(
@@ -270,13 +302,11 @@ class VaultFragment : Fragment(), SearchFragments {
     }
 
     override fun filterVaults(query: String) {
-        val filterList = if (query.isBlank())
-        {
+        val filterList = if (query.isBlank()) {
             fullVaultLists
-        }else
-        {
+        } else {
             fullVaultLists.filter {
-                it.uniqueID?.contains(query, ignoreCase = true) == true||
+                it.uniqueID?.contains(query, ignoreCase = true) == true ||
                         it.vaultname?.contains(query, ignoreCase = true) == true
             }
         }
@@ -285,12 +315,118 @@ class VaultFragment : Fragment(), SearchFragments {
         VaultLists.addAll(filterList)
         vaultShowAdapter.notifyDataSetChanged()
 
-        if (VaultLists.isEmpty())
-        {
+        if (VaultLists.isEmpty()) {
             binding.TvNoResultFoundVaultFragment.visibility = View.VISIBLE
-        }else
-        {
+        } else {
             binding.TvNoResultFoundVaultFragment.visibility = View.GONE
+        }
+    }
+
+    fun showPopUpVaultList(item: VaultCretionFireStore, anchor: View) {
+        if (isAdded && !isRemoving && !requireActivity().isFinishing) {
+            if (popUp == null) {
+                val popUpView = layoutInflater.inflate(R.layout.popup_vaultlist, null)
+                val shareBtn = popUpView.findViewById<LinearLayout>(R.id.LLSharePopUpVaultList)
+//                val deleteBtn = popUpView.findViewById<LinearLayout>(R.id.LLDeletePopUpVaultList)
+                val pinnedBtn = popUpView.findViewById<LinearLayout>(R.id.LLPinnedPopUpVaultList)
+                val pinnedText = popUpView.findViewById<TextView>(R.id.TvPinPopUPVaultList)
+
+                popUp = PopupWindow(
+                    popUpView,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    true
+                ).apply {
+                    elevation = 20f
+                    isOutsideTouchable = true
+
+                    setBackgroundDrawable(activity?.getColor(R.color.transparent)?.toDrawable())
+
+                    setOnDismissListener {
+                        popUp = null
+                    }
+
+                }
+
+                shareBtn.setOnClickListener {
+
+                    val shareBody = """
+                             Vault: ${item.vaultname}
+
+                            🔗 Open Vault:
+                                https://alok-kumar2024.github.io/Vault-Web/vault.html?userId=$currentUserId&vaultId=${item.uniqueID}
+                                """.trimIndent()
+
+
+                    val shareSub = "TimeVault"
+
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.type = "text/plain"
+
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub)
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+
+                    popUp?.dismiss()
+
+                    startActivity(shareIntent)
+
+                }
+
+                if (item.pinned)
+                {
+                    pinnedText.text = "UnPin"
+                }else{
+                    pinnedText.text = "Pin"
+                }
+
+                pinnedBtn.setOnClickListener {
+
+                    if (item.pinned)
+                    {
+                        val data = mapOf(
+                            "pinned" to false
+                        )
+
+                        item.uniqueID?.let { it1 ->
+                            FirebaseFirestore.getInstance().collection("USERS")
+                                .document(currentUserId)
+                                .collection("Vaults")
+                                .document(it1).set(data, SetOptions.merge()).addOnSuccessListener {
+                                    pinnedText.text = "UnPin"
+                                    popUp?.dismiss()
+                                    Log.d("PINNED_True","Pinned was true , upon clicking done it false")
+                                }.addOnFailureListener {
+                                    Log.d("PINNED_True","Pinned was true , upon clicking could not change it false")
+                                }
+                        }
+                    }else{
+
+                        val data = mapOf(
+                            "pinned" to true
+                        )
+
+                        item.uniqueID?.let { it1 ->
+                            FirebaseFirestore.getInstance().collection("USERS")
+                                .document(currentUserId)
+                                .collection("Vaults")
+                                .document(it1).set(data, SetOptions.merge()).addOnSuccessListener {
+                                    pinnedText.text = "Pin"
+                                    popUp?.dismiss()
+                                    Log.d("PINNED_False","Pinned was false , upon clicking done it true")
+                                }.addOnFailureListener {
+                                    Log.d("PINNED_False","Pinned was false , upon clicking could not change it true")
+                                }
+                        }
+
+                    }
+
+                }
+
+            }
+
+            if (popUp!!.isShowing) return
+
+            popUp?.showAsDropDown(anchor)
         }
     }
 

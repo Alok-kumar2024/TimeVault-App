@@ -10,102 +10,119 @@
     android:orientation="vertical"
     tools:context=".View.EditProfile_Activity">
 
+    <!-- Top Bar -->
     <LinearLayout
         style="@style/SettingsTopTitleLL"
         android:id="@+id/LLTitleEditProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:elevation="8dp">
 
         <ImageButton
             style="@style/SettingsImageButton"
             android:id="@+id/IbBackButtonOfEditProfile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/arrow_back_vector"
-            android:backgroundTint="@color/transparent"
-            android:layout_margin="10dp"/>
+            android:contentDescription="Back"
+            android:background="?attr/selectableItemBackgroundBorderless" />
 
         <TextView
             style="@style/SettingsTextPrimary"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Account"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:textSize="30sp"
-            android:layout_gravity="center"
-            android:layout_marginStart="50dp"/>
-
+            android:gravity="center"
+            android:fontFamily="@font/sharetech_regular" />
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/ScrollViewEditProfile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:layout_marginBottom="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginVertical="20dp">
 
-
+            <!-- Profile Image Section -->
             <FrameLayout
                 android:id="@+id/FLEditProfile"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="50dp"
+                android:background="@color/transparent"
                 android:layout_gravity="center"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LLTitleEditProfile">
+                android:layout_marginTop="40dp">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    app:cardCornerRadius="50dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="4dp">
 
                     <ImageView
                         android:id="@+id/IvProfileImageEditProfile"
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
+                        android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         android:src="@drawable/profile_image_vector" />
-
                 </androidx.cardview.widget.CardView>
 
+                <!-- Choose Image Icon -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/CardViewClickCHoosePicEditPRofile"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     app:cardCornerRadius="15dp"
-                    android:backgroundTint="@color/gray_dark"
-                    android:layout_gravity="bottom|end">
+                    android:layout_gravity="bottom|end"
+                    app:cardElevation="5dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="@color/gray_dark">
 
                     <ImageButton
                         android:layout_width="20dp"
-                        android:layout_height="20sp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
                         android:src="@drawable/camera_vector"
                         app:tint="@color/white"
-                        android:layout_gravity="center"
-                        android:background="@color/transparent"/>
-
+                        android:background="@android:color/transparent"
+                        android:contentDescription="Choose Image" />
                 </androidx.cardview.widget.CardView>
-
             </FrameLayout>
 
+            <!-- Remove Image Button -->
+            <Button
+                android:id="@+id/BtnRemoveProfileImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remove Image"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:fontFamily="@font/sharetech_regular"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp" />
+
+            <!-- User Info Section -->
             <LinearLayout
                 style="@style/SettingsBackground"
                 android:id="@+id/LlShowInofEditProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginTop="20dp">
 
+                <!-- User ID -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/EditProfileTIL"
                     android:layout_width="match_parent"
@@ -119,14 +136,14 @@
                         style="@style/EditProfileTIE"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/transparent"
+                        android:enabled="false"
                         android:drawableStart="@drawable/id_vector"
                         android:drawablePadding="10dp"
-                        android:enabled="false"
-                        android:textSize="18sp" />
-
+                        android:textSize="18sp"
+                        android:background="@color/transparent" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Name -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/EditProfileTIL"
                     android:layout_width="match_parent"
@@ -136,18 +153,18 @@
                     android:hint="Name">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        style="@style/EditProfileTIE"
                         android:id="@+id/TIEnameEditProfile"
+                        style="@style/EditProfileTIE"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/transparent"
                         android:drawableStart="@drawable/name_vector"
                         android:drawableEnd="@drawable/editt_square_vector"
                         android:drawablePadding="10dp"
-                        android:textSize="18sp" />
-
+                        android:textSize="18sp"
+                        android:background="@color/transparent" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Email -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/EditProfileTIL"
                     android:layout_width="match_parent"
@@ -157,33 +174,33 @@
                     android:hint="Email">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        style="@style/EditProfileTIE"
                         android:id="@+id/TIEEmailIDShowProfile"
+                        style="@style/EditProfileTIE"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:enabled="false"
-                        android:background="@color/transparent"
                         android:drawableStart="@drawable/email_vector"
                         android:drawablePadding="10dp"
-                        android:textSize="18sp" />
-
+                        android:textSize="18sp"
+                        android:background="@color/transparent" />
                 </com.google.android.material.textfield.TextInputLayout>
-
             </LinearLayout>
 
+            <!-- Save Button -->
             <Button
                 android:id="@+id/BtnSaveEditProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="50dp"
-                android:background="@drawable/buttonbox_samlllrouned"
+                android:layout_marginVertical="50dp"
                 android:text="Save"
                 android:textColor="@color/black"
-                android:textSize="24sp"
-                android:layout_marginVertical="20dp"
+                android:textSize="20sp"
+                android:fontFamily="@font/sharetech_regular"
+                android:background="@drawable/buttonbox_samlllrouned"
                 app:backgroundTint="@color/purple" />
 
-
+            <!-- Lottie Progress -->
             <com.airbnb.lottie.LottieAnimationView
                 style="@style/VaultShowActivityLottieAnimation"
                 android:id="@+id/ProgressbarAnimationEditProfile"
@@ -193,12 +210,7 @@
                 android:layout_marginTop="20dp"
                 app:lottie_fileName="progressbar_replacement.json"
                 app:lottie_autoPlay="true"
-                android:visibility="gone"/>
-
-
+                android:visibility="gone" />
         </LinearLayout>
-
     </ScrollView>
-
-
 </LinearLayout>

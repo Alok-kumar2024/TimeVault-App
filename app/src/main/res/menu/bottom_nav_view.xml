@@ -10,9 +10,6 @@
     <item android:id="@+id/BottomMenuVault"
         android:title="Vault"/>
 
-    <item android:id="@+id/BottomMenuSetting"
-        android:title="Settings"/>
-
 
 
 

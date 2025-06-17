@@ -2,39 +2,35 @@
 <LinearLayout
     style="@style/Notification_Item_RvLL"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="5dp"
-    android:orientation="horizontal">
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="6dp"
+    android:padding="10dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
 
+    <!-- App Icon -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="4dp"
+        android:layout_marginEnd="12dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/app_logo"
+            android:scaleType="centerCrop"/>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Text Layout -->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:cardCornerRadius="25dp"
-            android:layout_margin="10dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/app_logo"
-                android:scaleType="centerCrop"/>
-
-
-        </androidx.cardview.widget.CardView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="180dp"
-        android:minWidth="200dp"
-        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
@@ -43,51 +39,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Title"
-            android:inputType="textMultiLine"
             android:textStyle="bold"
-            android:layout_marginVertical="10dp"
-            android:textSize="24sp"/>
+            android:textSize="18sp"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
         <TextView
             style="@style/Notification_Item_RvSecondaryText"
             android:id="@+id/TvBodyNotificationRv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:inputType="textMultiLine"
-            android:text="body"/>
+            android:text="body"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp"/>
 
         <TextView
             style="@style/Notification_Item_RvSecondaryText"
             android:id="@+id/TvTimeNotificationRv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:text="Time"
             android:textAlignment="textEnd"
-            android:inputType="textMultiLine"
-            android:layout_gravity="end"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="5dp"/>
-
-
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageButton
-            style="@style/Notification_Item_RvImageDelete"
-            android:id="@+id/IbDeleteNotificationRv"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:layout_gravity="start|center"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/delete_vector"/>
-
-    </LinearLayout>
-
-
+    <!-- Delete Button -->
+    <ImageButton
+        style="@style/Notification_Item_RvImageDelete"
+        android:id="@+id/IbDeleteNotificationRv"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/delete_vector"
+        android:contentDescription="Delete Notification"
+        app:tint="?attr/colorError"/>
 </LinearLayout>

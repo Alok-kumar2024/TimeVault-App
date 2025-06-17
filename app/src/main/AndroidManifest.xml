@@ -27,7 +27,7 @@
             android:exported="false" />
         <activity
             android:name=".View.EditProfile_Activity"
-            android:exported="false" />
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".View.VaultShow_Activity"
             android:exported="false" />

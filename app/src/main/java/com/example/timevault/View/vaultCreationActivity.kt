@@ -261,7 +261,7 @@ class vaultCreationActivity : AppCompatActivity() {
 
                 if (vaultPassword == vaultConfirmPassword) {
 
-                    val uniqueid = useGenerateID(vaultName)
+                    val uniqueid = useGenerateID(vaultName.replace(" ","_"))
                     val data = VaultCretionFireStore(
                         uniqueid,
                         vaultName,

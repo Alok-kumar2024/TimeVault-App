@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.timevault.Model.VaultCretionFireStore
 import com.example.timevault.R
@@ -19,7 +20,7 @@ import java.util.Locale
 class VaultItemShowHomeAdapter(
     private val vaultInfo: MutableList<VaultCretionFireStore>,
     private val onVaultClick : (item : VaultCretionFireStore) -> Unit ,
-//    private val onSettingsClick : () -> Unit
+    private val onMoreClick : (item : VaultCretionFireStore, View) -> Unit
 ) :
     RecyclerView.Adapter<VaultItemShowHomeAdapter.VaultFileHolder>() {
 
@@ -39,8 +40,8 @@ class VaultItemShowHomeAdapter(
         val vaultTitleRv : TextView = itemView.findViewById(R.id.TvShowVaultTitleRv)
         val statusRv : TextView = itemView.findViewById(R.id.TvShowStatusRv)
         val unlockTimeRv : TextView = itemView.findViewById(R.id.TvShowUnlockTimeRv)
-//        val settingsBtn : ImageButton = itemView.findViewById(R.id.IbSettingsRv)
-        val fullVaultRv : LinearLayout = itemView.findViewById(R.id.LLWholeRv)
+        val MoreIbRv : ImageButton = itemView.findViewById(R.id.overflowBtn)
+        val fullVaultRv : CardView = itemView.findViewById(R.id.vaultCard)
 
     }
 
@@ -75,19 +76,25 @@ class VaultItemShowHomeAdapter(
 
                 val diff = date?.minus(currentTime)
 
-                val second = diff?.div(1000)
-                val minute = second?.div(60)
-                val hour = minute?.div(60)
-                val days = hour?.div(24)
+                if (diff != null && diff <= 0)
+                {
+                    holder.unlockTimeRv.text = "Unlocking..."
+                }else
+                {
+                    val second = diff?.div(1000)
+                    val minute = second?.div(60)
+                    val hour = minute?.div(60)
+                    val days = hour?.div(24)
 
-                val time = when {
-                    days!! > 0 -> "$days day${if (days > 1) "s" else ""} left"
-                    hour > 0 -> "$hour hr ${minute % 60} min left"
-                    minute > 0 -> "$minute min left"
-                    else -> "$second sec left"
+                    val time = when {
+                        days!! > 0 -> "$days day${if (days > 1) "s" else ""} left"
+                        hour > 0 -> "$hour hr ${minute % 60} min left"
+                        minute > 0 -> "$minute min left"
+                        else -> "$second sec left"
+                    }
+
+                    holder.unlockTimeRv.text = time
                 }
-
-                holder.unlockTimeRv.text = time
 
             } else {
                 holder.unlockTimeRv.text = "No Date Found"
@@ -102,8 +109,10 @@ class VaultItemShowHomeAdapter(
             onVaultClick(items)
         }
 
-//        holder.settingsBtn.setOnClickListener {
-//            onSettingsClick()
-//        }
+        holder.MoreIbRv.setOnClickListener {
+            onMoreClick(items,it)
+        }
+
     }
+
 }

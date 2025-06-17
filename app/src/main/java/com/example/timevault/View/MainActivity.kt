@@ -235,6 +235,9 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
+//        profileName = share.getString("name", null) ?: "Not Found"
+//
+//        profileEmail = share.getString("email", null) ?: "Not Found"
 
         database.child(uniqueKey).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -265,9 +268,6 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-//        profileName = share.getString("name", null) ?: "Not Found"
-//
-//        profileEmail = share.getString("email", null) ?: "Not Found"
 
         bottomNavViewHolder.chosenBottom.observe(this@MainActivity)
         { nav ->
@@ -489,45 +489,6 @@ class MainActivity : AppCompatActivity() {
         outState.putInt("CURRENT_FRAGMENT", currentFragment)
     }
 
-//    private fun requestPermission()
-//    {
-//        val permissionList = mutableListOf<String>()
-//
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-//        {
-//            permissionList.add(android.Manifest.permission.READ_MEDIA_IMAGES)
-//            permissionList.add(android.Manifest.permission.READ_MEDIA_VIDEO)
-//        }else
-//        {
-//            permissionList.add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-//
-//            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P)
-//            {
-//                permissionList.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//            }
-//        }
-//
-//        Dexter.withContext(this)
-//            .withPermissions(*permissionList.toTypedArray())
-//            .withListener(object : MultiplePermissionsListener {
-//                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-//                    if (report?.areAllPermissionsGranted() == true) {
-//                        Toast.makeText(applicationContext, "Permissions Granted!", Toast.LENGTH_SHORT).show()
-//                        // 🔓 You can access and download files including PDFs now
-//                    } else {
-//                        Toast.makeText(applicationContext, "Permissions Denied!", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//
-//                override fun onPermissionRationaleShouldBeShown(
-//                    permissions: List<PermissionRequest>,
-//                    token: PermissionToken
-//                ) {
-//                    token.continuePermissionRequest()
-//                }
-//            }).check()
-//    }
-
     fun logOutAlertBox() {
 
         if (isLogOutDialogShowing) return
@@ -739,6 +700,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         isNotificationBottomDialogShowing = true
+
+        dialog.window?.setBackgroundDrawable(getColor(R.color.transparent).toDrawable())
 
         dialog.show()
 

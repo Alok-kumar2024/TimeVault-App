@@ -7,63 +7,40 @@
     android:layout_height="match_parent"
     tools:context=".View.MainActivity">
 
+    <!-- Top Bar -->
     <LinearLayout
         style="@style/MainActivityTopLL"
         android:id="@+id/LinearLayoutOfTopDesign"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             style="@style/MainActivityTopConstraint"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!--            Will Write elements here-->
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/CVOfMainActivityProfilePic"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="25dp"
-                app:cardCornerRadius="30dp"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/IVOfMainActivityProfilePic"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/account_image_vector" />
-
-            </androidx.cardview.widget.CardView>
-
+            <!-- Notification Icon Frame -->
             <FrameLayout
+                android:id="@+id/FLNotification"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginLeft="32dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
                 android:background="@drawable/rounded_box_ll"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/CVOfMainActivityProfilePic"
-                app:layout_constraintTop_toTopOf="@+id/CVOfMainActivityProfilePic"
-                app:layout_constraintVertical_bias="0.25">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageButton
                     style="@style/MainActivityNotificationBtn"
                     android:id="@+id/IbNotificationMainActivity"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginRight="32dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:padding="10dp"
-                    android:scaleType="center"
                     android:src="@drawable/notification_vector" />
 
                 <View
@@ -71,47 +48,59 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="end|top"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/rounded_box_ll"
                     android:backgroundTint="@color/red"
-                    android:visibility="gone"
-                    android:layout_margin="1dp"
-                    android:background="@drawable/rounded_box_ll" />
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Profile Picture with Overlay Icon -->
+            <FrameLayout
+                android:id="@+id/FLProfileContainer"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="25dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/CVOfMainActivityProfilePic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="30dp">
+
+                    <ImageView
+                        android:id="@+id/IVOfMainActivityProfilePic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/account_image_vector" />
+                </androidx.cardview.widget.CardView>
 
             </FrameLayout>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </LinearLayout>
 
+    <!-- Main Content -->
     <LinearLayout
         style="@style/MainActivityBottomLL"
         android:id="@+id/LinearLayoutOfBottomDesign"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/LinearLayoutOfTopDesign"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearLayoutOfTopDesign">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             style="@style/MainActivityBottomConstraint"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!--And for down one , will writ here-->
-
-            <!--            <FrameLayout-->
-            <!--                style="@style/MainActivitySearchFrameLayout"-->
-            <!--                android:id="@+id/FLSearchMainActivity"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginHorizontal="30dp"-->
-            <!--                android:layout_marginTop="10dp"-->
-            <!--                android:clipToOutline="true"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="parent">-->
-
+            <!-- Search Box -->
             <EditText
                 android:id="@+id/EtSearchVaultMainActivity"
                 style="@style/MainActivitySearchEditText"
@@ -119,50 +108,35 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
-                android:hint="Enter Vault Name "
-                android:padding="10dp"
+                android:hint="Enter Vault Name"
                 android:drawableStart="@drawable/search_vecctor"
                 android:drawablePadding="10dp"
                 android:drawableTint="@color/white"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="10dp"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <!--                <ImageView-->
-            <!--                    style="@style/MainActivitySearchImageView"-->
-            <!--                    android:id="@+id/IbSearchButtonMainActivity"-->
-            <!--                    android:layout_width="30dp"-->
-            <!--                    android:layout_height="30dp"-->
-            <!--                    android:padding="5dp"-->
-            <!--                    android:layout_gravity="start|center"-->
-            <!--                    android:layout_marginHorizontal="10dp"-->
-            <!--                    android:src="@drawable/search_vecctor" />-->
-
-
-            <!--            </FrameLayout>-->
-
+            <!-- Fragment Container -->
             <FrameLayout
                 android:id="@+id/FrameLayoutMainActivity"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="5dp"
-                app:layout_constraintBottom_toTopOf="@id/CoordinatorLayout"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/EtSearchVaultMainActivity"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintBottom_toTopOf="@id/CoordinatorLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-
+            <!-- Bottom Navigation -->
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/CoordinatorLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
                     style="@style/MainActivityBottomNavigator"
@@ -173,33 +147,23 @@
                     app:cbn_height="80dp"
                     app:cbn_icon_size="24dp"
                     app:cbn_selected_icon_size="48dp"
-                    app:cbn_titleFont="@font/sharetech_regular"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:cbn_titleFont="@font/sharetech_regular" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/FloatingButton"
                     style="@style/MainActivityFloatingBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:contentDescription="@string/vault_button_des"
-                    android:src="@drawable/add_vault_vector"
-                    app:layout_anchor="@+id/bottomNavigation"
-                    app:layout_anchorGravity="center"
+                    android:layout_gravity="bottom|center"
                     android:layout_marginBottom="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent" />
-
+                    android:src="@drawable/add_vault_vector"
+                    app:layout_anchor="@id/bottomNavigation"
+                    app:layout_anchorGravity="center"
+                    android:contentDescription="@string/vault_button_des" />
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </LinearLayout>
 

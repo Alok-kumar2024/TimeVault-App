@@ -54,6 +54,8 @@ class EditProfile_Activity : AppCompatActivity() {
     private var ImageURI: Uri? = null
     private var isEditableClicked = false
 
+    private var clickedRemove = false
+
 
     private val imagePciker = registerForActivityResult(ActivityResultContracts.GetContent())
     { uri ->
@@ -136,6 +138,26 @@ class EditProfile_Activity : AppCompatActivity() {
 
         })
 
+        binding.BtnRemoveProfileImage.setOnClickListener {
+
+            clickedRemove = true
+            Glide.with(this)
+                .load("")
+                .placeholder(R.drawable.profile_image_vector)
+                .into(binding.IvProfileImageEditProfile)
+
+            ImageURI = null
+        }
+
+        binding.TIEnameEditProfile.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus)
+            {
+                binding.ScrollViewEditProfile.post{
+                    binding.ScrollViewEditProfile.smoothScrollBy(0, binding.TIEnameEditProfile.top)
+                }
+            }
+        }
+
         binding.BtnSaveEditProfile.setOnClickListener {
 
             binding.ProgressbarAnimationEditProfile.visibility = View.VISIBLE
@@ -150,15 +172,6 @@ class EditProfile_Activity : AppCompatActivity() {
             }
 
             val name = binding.TIEnameEditProfile.text.toString().trim()
-
-//            if (Editable)
-//            {
-//                Editable= false
-//                Toast.makeText(this,"InProgress",Toast.LENGTH_SHORT).show()
-//                return@setOnClickListener
-//            }
-//
-//            Editable = true
 
             val imageURi = ImageURI
             if (name.isNullOrBlank()) {
@@ -183,10 +196,10 @@ class EditProfile_Activity : AppCompatActivity() {
 
                             val share = getSharedPreferences(
                                 "DATA",
-                                Context.MODE_PRIVATE
+                                MODE_PRIVATE
                             )
-                            val editor = share.edit()
-                            editor.putString("name", name.toString()).apply()
+
+                            share.edit().putString("name", name).apply()
                             isEditableClicked = false
                             binding.ProgressbarAnimationEditProfile.visibility = View.GONE
                             binding.ProgressbarAnimationEditProfile.cancelAnimation()
@@ -218,13 +231,14 @@ class EditProfile_Activity : AppCompatActivity() {
 
                     val share = getSharedPreferences(
                         "DATA",
-                        Context.MODE_PRIVATE
+                        MODE_PRIVATE
                     )
-                    val editor = share.edit()
-                    editor.putString("name", name.toString()).apply()
+
+                    share.edit().putString("name", name).apply()
 
                     binding.ProgressbarAnimationEditProfile.visibility = View.GONE
                     binding.ProgressbarAnimationEditProfile.cancelAnimation()
+
 
                     finish()
                 }.addOnFailureListener {
@@ -234,6 +248,14 @@ class EditProfile_Activity : AppCompatActivity() {
                     isEditableClicked = false
                     binding.ProgressbarAnimationEditProfile.visibility = View.GONE
                     binding.ProgressbarAnimationEditProfile.cancelAnimation()
+                }
+
+                if (clickedRemove)
+                {
+                    val mapimg = mapOf(
+                        "imgUrl" to ""
+                    )
+                    database.child(currentID).updateChildren(mapimg)
                 }
 
             }

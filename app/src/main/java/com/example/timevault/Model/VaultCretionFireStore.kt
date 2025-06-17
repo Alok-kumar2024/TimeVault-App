@@ -10,7 +10,9 @@ data class VaultCretionFireStore(
     var emailrecipent: String?,
     var unlockTime: Timestamp? = null,
     var status : String? = null,
-    var unlocked : Boolean? = null
+    var unlocked : Boolean? = null,
+    val lastAccessedTime: Timestamp?= null,
+    val pinned: Boolean = false
 )
 {
     constructor() : this(null,null,null,null,null,null,null)

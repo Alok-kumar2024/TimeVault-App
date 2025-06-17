@@ -30,8 +30,8 @@ class SplashScreen : AppCompatActivity() {
 
         val fade = AnimationUtils.loadAnimation(this,android.R.anim.fade_in)
         binding.appLogoSplashScreen.startAnimation(fade)
-        binding.textView.startAnimation(fade)
-        binding.textview2.startAnimation(fade)
+        binding.textViewAppName.startAnimation(fade)
+        binding.textViewTagline.startAnimation(fade)
 
         binding.clockSplashCreen.repeatCount = LottieDrawable.INFINITE
         binding.clockSplashCreen.playAnimation()

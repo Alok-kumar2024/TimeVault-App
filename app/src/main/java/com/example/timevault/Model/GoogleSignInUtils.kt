@@ -17,10 +17,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -29,13 +26,13 @@ class GoogleSignInUtils {
 
     companion object {
 
-        private lateinit var currentId : String
+        private lateinit var currentId: String
 
         fun googleSignIn(
             context: Context,
             scope: CoroutineScope,
             launcher: ActivityResultLauncher<Intent>,
-            onLogin: () -> Unit
+            onLogin: () -> Unit,
         ) {
             val credentialManager = CredentialManager.create(context)
 
@@ -43,133 +40,124 @@ class GoogleSignInUtils {
                 .addCredentialOption(getcredentialOption(context))
                 .build()
 
-
             scope.launch {
                 try {
                     val result = credentialManager.getCredential(context, request)
 
-                    when (result.credential) {
+                    when (val credential = result.credential) {
                         is CustomCredential -> {
-                            if (result.credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                            if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                                 val googleIdTokenCredential =
-                                    GoogleIdTokenCredential.createFrom(result.credential.data)
-
+                                    GoogleIdTokenCredential.createFrom(credential.data)
                                 val googleEmail = googleIdTokenCredential.id
                                 val googleTokenId = googleIdTokenCredential.idToken
                                 val authCredential =
                                     GoogleAuthProvider.getCredential(googleTokenId, null)
+                                val encodeEmail = googleEmail.replace(".", ",")
 
                                 try {
+//                                    val methodResult = FirebaseAuth.getInstance()
+//                                        .fetchSignInMethodsForEmail(googleEmail).await()
+//                                    val signInMethods = methodResult.signInMethods
+//
+//                                    val isExistingUser = !signInMethods.isNullOrEmpty()
+//
+//                                    if (isExistingUser) {
+                                    val emailRef = FirebaseDatabase.getInstance()
+                                        .getReference("EMAILMAP")
+                                        .child(encodeEmail)
 
-                                    val methodResult = FirebaseAuth.getInstance()
-                                        .fetchSignInMethodsForEmail(googleEmail).await()
+                                    emailRef.addListenerForSingleValueEvent(object :
+                                        ValueEventListener {
+                                        override fun onDataChange(snapshot: DataSnapshot) {
 
-                                    val signInMethods = methodResult.signInMethods
+                                            if (snapshot.exists()) {
+                                                val method =
+                                                    snapshot.getValue(String::class.java)
 
-                                    if (signInMethods != null && signInMethods.contains("password")) {
-                                        // Email registered with password, block Google sign-in
-                                        Toast.makeText(
-                                            context,
-                                            "This email is already registered using Email & Password. Please sign in using that method.",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        return@launch  // Stop further processing here
-                                    }
+                                                if (method == "GOOGLE") {
+                                                    proceedGoogleSignIn(
+                                                        context,
+                                                        authCredential,
+                                                        googleEmail,
+                                                        encodeEmail,
+                                                        scope,
+                                                        onLogin
+                                                    )
+                                                } else if (method == "CUSTOM") {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "This email is registered with Email & Password. Please sign in using that.",
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+                                                } else {
+                                                    // This should not happen – handle missing EMAILMAP record
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Unknown sign-in method. Please contact support.",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            } else {
+                                                // New user, set sign-in method as GOOGLE
 
-                                    val user =
-                                        FirebaseAuth.getInstance()
-                                            .signInWithCredential(authCredential)
-                                            .await().user
-
-                                    user?.let {
-                                        if (it.isAnonymous.not()) {
-
-                                            val data = DatabaseSignUp(
-                                                it.uid,
-                                                it.displayName,
-                                                it.email,
-                                                it.photoUrl.toString()
-                                            )
-
-
-                                            FirebaseDatabase.getInstance().getReference("USERS")
-                                                .orderByChild("email").equalTo(googleEmail)
-                                                .addListenerForSingleValueEvent(object :
-                                                    ValueEventListener {
-                                                    override fun onDataChange(snapshot: DataSnapshot) {
-                                                        if (snapshot.exists().not()) {
-                                                            currentId = useGenerateID(it.displayName.toString())
-                                                            Log.d("Google_currentID", " currentId $currentId")
-                                                            FirebaseDatabase.getInstance()
-                                                                .getReference("USERS")
-                                                                .child(currentId).setValue(data)
-                                                                .addOnCompleteListener { task ->
-                                                                    if (task.isSuccessful) {
-                                                                        Log.d(
-                                                                            "Google_Real",
-                                                                            "SuccessFully Uploaded To RealTime Database"
-                                                                        )
-                                                                    } else {
-                                                                        Log.d(
-                                                                            "Google_Real",
-                                                                            "Couldn't Upload To RealTime Database"
-                                                                        )
-                                                                    }
-                                                                }
-                                                        }else
-                                                        {
-                                                            currentId = snapshot.children.first().key.toString()
-                                                            Log.d("Google_currentID", " currentId $currentId")
-                                                        }
-                                                    }
-
-                                                    override fun onCancelled(error: DatabaseError) {
-                                                        Log.d(
-                                                            "Google_Real",
-                                                            "Couldn't fetch RealTime Database Error : ${error.message}"
+                                                val mapemail = mapOf(
+                                                    encodeEmail to "GOOGLE"
+                                                )
+                                                FirebaseDatabase.getInstance()
+                                                    .getReference("EMAILMAP")
+                                                    .updateChildren(mapemail)
+                                                    .addOnSuccessListener {
+                                                        proceedGoogleSignIn(
+                                                            context,
+                                                            authCredential,
+                                                            googleEmail,
+                                                            encodeEmail,
+                                                            scope,
+                                                            onLogin
                                                         )
                                                     }
-
-                                                })
-
-                                            val share = context.getSharedPreferences(
-                                                "DATA",
-                                                MODE_PRIVATE
-                                            )
-                                            val editor = share.edit()
-                                            editor.putString("name", it.displayName).apply()
-                                            editor.putString("email", it.email).apply()
-                                            editor.putBoolean("isSignIn", true).apply()
-                                            editor.putString("customuserID", currentId).apply()
-
-                                            onLogin.invoke()
-
-
+                                            }
                                         }
-                                    }
+
+                                        override fun onCancelled(error: DatabaseError) {
+                                            Toast.makeText(
+                                                context,
+                                                "Error checking sign-in method",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    })
+//                                    } else {
+//                                        // New user, set sign-in method as GOOGLE
+//                                        FirebaseDatabase.getInstance().getReference("EMAILMAP")
+//                                            .child(encodeEmail)
+//                                            .setValue("GOOGLE")
+//                                            .addOnSuccessListener {
+//                                                proceedGoogleSignIn(
+//                                                    context,
+//                                                    authCredential,
+//                                                    googleEmail,
+//                                                    encodeEmail,
+//                                                    scope,
+//                                                    onLogin
+//                                                )
+//                                            }
+//                                    }
                                 } catch (e: Exception) {
                                     if (e.message?.contains("account exists with different credential") == true) {
-                                        // Ask user to sign in with Email/Password first, then link accounts
-                                        Log.e(
-                                            "GoogleSignIn",
-                                            "Email already used. Linking required."
-                                        )
                                         Toast.makeText(
                                             context,
                                             "User Already Exists , SignIn With Email and Password",
                                             Toast.LENGTH_SHORT
                                         ).show()
-
-                                        // OPTIONAL: Notify user with dialog to sign in with password and then link Google
                                     } else {
                                         e.printStackTrace()
                                     }
                                 }
-
                             }
                         }
                     }
-
                 } catch (e: NoCredentialException) {
                     launcher.launch(getIntent())
                 } catch (e: GetCredentialException) {
@@ -178,13 +166,90 @@ class GoogleSignInUtils {
             }
         }
 
-        fun getIntent(): Intent {
+        private fun proceedGoogleSignIn(
+            context: Context,
+            authCredential: com.google.firebase.auth.AuthCredential,
+            googleEmail: String,
+            encodeEmail: String,
+            scope: CoroutineScope,
+            onLogin: () -> Unit
+        ) {
+            scope.launch {
+                try {
+                    val user = FirebaseAuth.getInstance()
+                        .signInWithCredential(authCredential)
+                        .await().user
+
+                    user?.let {
+                        if (!it.isAnonymous) {
+                            val data = DatabaseSignUp(
+                                it.uid,
+                                it.displayName,
+                                it.email,
+                                it.photoUrl.toString(),
+                                "GOOGLE"
+                            )
+
+                            FirebaseDatabase.getInstance().getReference("USERS")
+                                .orderByChild("email").equalTo(googleEmail)
+                                .addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if (!snapshot.exists()) {
+                                            currentId = useGenerateID(it.displayName.toString().replace(" ","_"))
+                                            Log.d("Google_currentID", "Generated ID: $currentId")
+
+                                            // Add to USERS
+                                            FirebaseDatabase.getInstance()
+                                                .getReference("USERS")
+                                                .child(currentId)
+                                                .setValue(data)
+
+                                            // Add to UIDMAP
+                                            val mapUid = mapOf(it.uid to currentId)
+                                            FirebaseDatabase.getInstance()
+                                                .getReference("UIDMAP")
+                                                .updateChildren(mapUid)
+                                        } else {
+                                            currentId = snapshot.children.first().key.toString()
+                                            Log.d(
+                                                "Google_currentID",
+                                                "Fetched existing ID: $currentId"
+                                            )
+                                        }
+
+                                        // SharedPrefs
+                                        val share =
+                                            context.getSharedPreferences("DATA", MODE_PRIVATE)
+                                        with(share.edit()) {
+                                            putString("name", it.displayName)
+                                            putString("email", it.email)
+                                            putBoolean("isSignIn", true)
+                                            putString("customuserID", currentId)
+                                            apply()
+                                        }
+
+                                        onLogin.invoke()
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Log.d("Google_Real", "Realtime DB Error: ${error.message}")
+                                    }
+                                })
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+        private fun getIntent(): Intent {
             return Intent(android.provider.Settings.ACTION_ADD_ACCOUNT).apply {
                 putExtra(android.provider.Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
             }
         }
 
-        fun getcredentialOption(context: Context): CredentialOption {
+        private fun getcredentialOption(context: Context): CredentialOption {
             return GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
                 .setAutoSelectEnabled(false)

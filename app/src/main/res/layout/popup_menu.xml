@@ -7,146 +7,111 @@
     android:id="@+id/PopUpMenuLayout"
     android:layout_width="200dp"
     android:layout_height="wrap_content"
-    android:clipToOutline="true"
     android:layout_marginTop="10dp"
-    android:layout_marginEnd="20dp"
-    android:orientation="vertical">
+    android:layout_marginEnd="16dp"
+    android:orientation="vertical"
+    android:clipToOutline="true"
+    android:padding="12dp"
+    android:elevation="8dp">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal">-->
+    <!-- Profile Info -->
+    <LinearLayout
+        android:id="@+id/LLProfileInformationPopUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="8dp">
 
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/CVOPopUpMenuProfilePic"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            app:cardCornerRadius="25dp"-->
-<!--            android:layout_gravity="top"-->
-<!--            android:layout_marginStart="10dp"-->
-<!--            android:layout_marginTop="25dp"-->
-<!--            android:layout_marginEnd="25dp">-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/IVOfPopUpMenuProfilePic"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:background="@color/white"-->
-<!--                android:scaleType="centerCrop"-->
-<!--                android:src="@drawable/profile_image_vector" />-->
-
-<!--        </androidx.cardview.widget.CardView>-->
-
-        <LinearLayout
-            android:id="@+id/LLProfileInformationPopUp"
+        <TextView
+            style="@style/Popup_menuPrimaryText"
+            android:id="@+id/ProfileNamePopUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:minWidth="150dp"
-            android:layout_gravity="end"
-            android:orientation="vertical">
+            android:text="Profile Name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="end"/>
 
-            <TextView
-                style="@style/Popup_menuPrimaryText"
-                android:id="@+id/ProfileNamePopUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Profile Name"
-                android:textSize="20sp"
-                android:layout_gravity="end"
-                android:textStyle="bold"/>
-            <TextView
-                style="@style/Popup_menuSecondaryText"
-                android:id="@+id/ProfileEmailPopUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_gravity="end"/>
+        <TextView
+            style="@style/Popup_menuSecondaryText"
+            android:id="@+id/ProfileEmailPopUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="email@example.com"
+            android:textSize="14sp"
+            android:layout_gravity="end"/>
+    </LinearLayout>
 
-
-        </LinearLayout>
-
-
-<!--    </LinearLayout>-->
-
+    <!-- Divider -->
     <View
         style="@style/Popup_menuDivder"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="5"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="10dp"/>
+        android:layout_marginVertical="8dp"/>
 
+    <!-- Settings -->
     <LinearLayout
         android:id="@+id/LLSettingsPopUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:minWidth="150dp"
+        android:orientation="horizontal"
         android:padding="10dp"
-        android:orientation="horizontal">
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             style="@style/Popup_menuImageTint"
             android:id="@+id/IVOfSettingsPopUp"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:contentDescription="Settings Image View"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/settings_vector"
-            android:layout_marginHorizontal="10dp"/>
+            android:contentDescription="Settings"/>
 
         <TextView
             style="@style/Popup_menuPrimaryText"
             android:id="@+id/SettingsTextPopUP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:text="Settings"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
-
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"/>
     </LinearLayout>
 
+    <!-- Divider -->
     <View
         style="@style/Popup_menuDivder"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="5"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="10dp"/>
+        android:layout_marginVertical="8dp"/>
 
+    <!-- Logout -->
     <LinearLayout
-        style="@style/Popup_menuLogoutLL"
         android:id="@+id/LLLogOutPopUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:minWidth="180dp"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             style="@style/Popup_menuImageTint"
             android:id="@+id/IVOfLogOutPopUp"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginHorizontal="10dp"
-            android:contentDescription="Settings Image View"
-            android:src="@drawable/logout_vector" />
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/logout_vector"
+            android:contentDescription="Logout"/>
 
         <TextView
             style="@style/Popup_menuPrimaryText"
             android:id="@+id/LogoutTextPopUP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginStart="12dp"
             android:text="LOG OUT"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"/>
     </LinearLayout>
-
 
 </LinearLayout>

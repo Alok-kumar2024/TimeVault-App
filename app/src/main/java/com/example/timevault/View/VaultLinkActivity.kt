@@ -5,7 +5,11 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -19,7 +23,9 @@ import com.example.timevault.Model.VaultCretionFireStore
 import com.example.timevault.R
 import com.example.timevault.ViewModel.VaultItemShowHomeAdapter
 import com.example.timevault.databinding.ActivityVaultLinkBinding
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 class VaultLinkActivity : AppCompatActivity() {
 
@@ -30,6 +36,8 @@ class VaultLinkActivity : AppCompatActivity() {
     private lateinit var  builderShowPassword : AlertDialog
 
     private lateinit var firestore : FirebaseFirestore
+
+    private var popUp : PopupWindow? = null
 
     private var isDialogShowing = false
 
@@ -70,6 +78,8 @@ class VaultLinkActivity : AppCompatActivity() {
 
         vaultShowOnlineAdapter = VaultItemShowHomeAdapter(VaultListsOnline, onVaultClick = {
             VaultClick(it,userId)
+        }, onMoreClick = { item,view->
+            showPopUpVaultList(item,view,userId)
         })
 
         binding.RVShowingVaultListsOnlineVaultHomeFragment.adapter = vaultShowOnlineAdapter
@@ -208,14 +218,30 @@ class VaultLinkActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            runOnUiThread{
-                                builderShowPassword.dismiss()
-                            }
-
                             val intent = Intent(this, VaultShow_Activity::class.java)
                             intent.putExtra("customuserID",currentUserId)
                             intent.putExtra("password", enterpassword)
                             intent.putExtra("vaultID", item.uniqueID)
+
+//                            val data = mapOf(
+//                                "lastAccessedTime" to Timestamp.now()
+//                            )
+//
+//
+//                            item.uniqueID?.let {
+//                                FirebaseFirestore.getInstance().collection("USERS")
+//                                    .document(currentUserId).collection("Vaults").document(it)
+//                                    .set(data, SetOptions.merge()).addOnSuccessListener {
+//                                        Log.d("Added LastAccess","The Last Access Added is ${Timestamp.now()}")
+//                                    }.addOnFailureListener {
+//                                        Log.e("Added LastAccess","The Last Access Not Added error : ${it.message}")
+//                                    }
+//                            }
+
+                            runOnUiThread{
+                                builderShowPassword.dismiss()
+                            }
+
                             startActivity(intent)
 
 
@@ -243,6 +269,116 @@ class VaultLinkActivity : AppCompatActivity() {
                 }
         }
 
+    }
+
+    fun showPopUpVaultList(item : VaultCretionFireStore,anchor : View,currentUserId : String)
+    {
+        if (!isDialogShowing && !isFinishing)
+        {
+            if (popUp == null)
+            {
+                val popUpView = layoutInflater.inflate(R.layout.popup_vaultlist,null)
+                val shareBtn = popUpView.findViewById<LinearLayout>(R.id.LLSharePopUpVaultList)
+//                val deleteBtn = popUpView.findViewById<LinearLayout>(R.id.LLDeletePopUpVaultList)
+                val pinnedBtn = popUpView.findViewById<LinearLayout>(R.id.LLPinnedPopUpVaultList)
+                val pinnedText = popUpView.findViewById<TextView>(R.id.TvPinPopUPVaultList)
+                val divider = popUpView.findViewById<View>(R.id.PopUpDividerVaultList)
+
+
+
+                popUp = PopupWindow(
+                    popUpView,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    true
+                ).apply {
+                    elevation = 20f
+                    isOutsideTouchable = true
+
+                    setBackgroundDrawable(getColor(R.color.transparent)?.toDrawable())
+
+                    setOnDismissListener {
+                        popUp = null
+                    }
+
+                }
+
+                shareBtn.setOnClickListener{
+
+                    val shareBody = "Vault-> ${item.vaultname} \nLink -> https://alok-kumar2024.github.io/Vault-Web/vault.html?userId=$currentUserId&vaultId=${item.uniqueID}&hl=en"
+                    val shareSub ="TimeVault"
+
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.type = "text/plain"
+
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT,shareSub)
+                    shareIntent.putExtra(Intent.EXTRA_TEXT,shareBody)
+
+                    popUp?.dismiss()
+
+                    startActivity(shareIntent)
+
+                }
+
+                pinnedBtn.visibility = View.GONE
+                divider.visibility = View.GONE
+
+//                if (item.pinned)
+//                {
+//                    pinnedText.text = "UnPin"
+//                }else{
+//                    pinnedText.text = "Pin"
+//                }
+//
+//                pinnedBtn.setOnClickListener {
+//
+//                    if (item.pinned)
+//                    {
+//                        val data = mapOf(
+//                            "pinned" to false
+//                        )
+//
+//                        item.uniqueID?.let { it1 ->
+//                            FirebaseFirestore.getInstance().collection("USERS")
+//                                .document(currentUserId)
+//                                .collection("Vaults")
+//                                .document(it1).set(data, SetOptions.merge()).addOnSuccessListener {
+//                                    pinnedText.text = "UnPin"
+//                                    popUp?.dismiss()
+//                                    Log.d("PINNED_True","Pinned was true , upon clicking done it false")
+//                                }.addOnFailureListener {
+//                                    Log.d("PINNED_True","Pinned was true , upon clicking could not change it false")
+//                                }
+//                        }
+//                    }else{
+//
+//                        val data = mapOf(
+//                            "pinned" to true
+//                        )
+//
+//                        item.uniqueID?.let { it1 ->
+//                            FirebaseFirestore.getInstance().collection("USERS")
+//                                .document(currentUserId)
+//                                .collection("Vaults")
+//                                .document(it1).set(data, SetOptions.merge()).addOnSuccessListener {
+//                                    pinnedText.text = "Pin"
+//                                    popUp?.dismiss()
+//                                    Log.d("PINNED_False","Pinned was false , upon clicking done it true")
+//                                }.addOnFailureListener {
+//                                    Log.d("PINNED_False","Pinned was false , upon clicking could not change it true")
+//                                }
+//                        }
+//
+//                    }
+//
+//                }
+
+            }
+
+            if (popUp!!.isShowing) return
+
+            popUp?.showAsDropDown(anchor)
+        }
     }
 
 }

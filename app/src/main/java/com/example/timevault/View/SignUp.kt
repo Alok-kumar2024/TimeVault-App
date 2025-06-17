@@ -1,5 +1,6 @@
 package com.example.timevault.View
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,10 +13,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieDrawable
 import com.example.timevault.Model.DatabaseSignUp
+import com.example.timevault.Model.GoogleSignInUtils
 import com.example.timevault.Model.ThemeHelper
 import com.example.timevault.Model.useGenerateID
 import com.example.timevault.databinding.FragmentSignUpBinding
@@ -33,6 +38,8 @@ class SignUp : Fragment() {
     private lateinit var auth: FirebaseAuth
 
     private lateinit var database: DatabaseReference
+
+    private lateinit var addGoogleAccountLauncher: ActivityResultLauncher<Intent>
 
     private val signUpTimeOutMills = 15000L
     private val timeoutHandler = Handler(Looper.getMainLooper())
@@ -58,6 +65,31 @@ class SignUp : Fragment() {
         binding.etEmail.addTextChangedListener { resetSignUpState() }
         binding.etPassword.addTextChangedListener { resetSignUpState() }
         binding.etPasswordConfirm.addTextChangedListener { resetSignUpState() }
+
+        addGoogleAccountLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { result ->
+                if (result.resultCode == Activity.RESULT_OK || result.resultCode == Activity.RESULT_CANCELED) {
+                    GoogleSignInUtils.googleSignIn(
+                        requireContext(), lifecycleScope, addGoogleAccountLauncher, onLogin =
+                            {
+                                val intent = Intent(requireContext(), MainActivity::class.java)
+                                startActivity(intent)
+                                requireActivity().finishAffinity()
+                            })
+                }
+
+            }
+
+        binding.BtnGoogleSignUp.setOnClickListener {
+            GoogleSignInUtils.googleSignIn(
+                requireContext(), lifecycleScope, addGoogleAccountLauncher, onLogin =
+                    {
+                        val intent = Intent(requireContext(), MainActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finishAffinity()
+                    })
+        }
 
 
         binding.btnSignUp.setOnClickListener {
@@ -97,7 +129,7 @@ class SignUp : Fragment() {
 //
 //                                edit.putBoolean("Login",true).apply()
                                     val userIdFirebase = auth.currentUser!!.uid
-                                    val userdata = DatabaseSignUp(userIdFirebase,fullname, email)
+                                    val userdata = DatabaseSignUp(userIdFirebase,fullname, email, signUpMethod = "CUSTOM")
                                     Log.d(
                                         "UserDetailsInSignUp", "The user details : " +
                                                 "Full Name : $fullname" +
@@ -105,11 +137,18 @@ class SignUp : Fragment() {
                                                 "ImgUrl : "
                                     )
 
-                                    val currentid = useGenerateID(fullname)
+                                    val currentid = useGenerateID(fullname.replace(" ","_"))
 
                                     Log.d(
                                         "UserIdInSignUp",
                                         "The User Id Default From Firebase is $currentid"
+                                    )
+                                    val mapUid = mapOf(
+                                        userIdFirebase to currentid
+                                    )
+
+                                    val mapEmail = mapOf(
+                                        encodeEmail(email) to "CUSTOM"
                                     )
 
                                     database.child("USERS").child(currentid).setValue(userdata)
@@ -120,6 +159,11 @@ class SignUp : Fragment() {
                                                     "DATA",
                                                     Context.MODE_PRIVATE
                                                 )
+
+                                                FirebaseDatabase.getInstance().reference.child("UIDMAP").updateChildren(mapUid)
+                                                FirebaseDatabase.getInstance().reference.child("EMAILMAP").updateChildren(mapEmail)
+
+
                                                 val editor = share.edit()
                                                 editor.putString("name", fullname).apply()
                                                 editor.putString("email", email).apply()
@@ -213,6 +257,10 @@ class SignUp : Fragment() {
 
     fun isvaildemail(check: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(check).matches()
+    }
+
+    fun encodeEmail(email: String): String {
+        return email.replace(".", ",")
     }
 
 }
