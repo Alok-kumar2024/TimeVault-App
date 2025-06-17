@@ -238,12 +238,12 @@ class VaultLinkActivity : AppCompatActivity() {
 //                                    }
 //                            }
 
-                            runOnUiThread{
-                                builderShowPassword.dismiss()
-                            }
 
                             startActivity(intent)
 
+                            runOnUiThread{
+                                builderShowPassword.dismiss()
+                            }
 
                         } else {
                             Toast.makeText(

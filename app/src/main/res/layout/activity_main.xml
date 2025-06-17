@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
-                android:hint="Enter Vault Name"
+                android:hint="Enter Vault Name/ID"
                 android:drawableStart="@drawable/search_vecctor"
                 android:drawablePadding="10dp"
                 android:drawableTint="@color/white"

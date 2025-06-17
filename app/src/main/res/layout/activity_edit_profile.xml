@@ -24,8 +24,8 @@
         <ImageButton
             style="@style/SettingsImageButton"
             android:id="@+id/IbBackButtonOfEditProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
             android:src="@drawable/arrow_back_vector"
             android:contentDescription="Back"
             android:background="?attr/selectableItemBackgroundBorderless" />

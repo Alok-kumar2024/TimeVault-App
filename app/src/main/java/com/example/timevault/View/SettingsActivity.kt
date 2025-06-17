@@ -72,13 +72,13 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (savedTheme == ThemeHelper.LIGHT)
-        {
+        if (savedTheme == ThemeHelper.LIGHT) {
             // This line allows your layout to draw behind system
             WindowCompat.setDecorFitsSystemWindows(window, false)
 
             // Make status bar icons dark (good for light backgrounds)
-            WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
+            WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars =
+                true
         }
 
 
@@ -186,8 +186,7 @@ class SettingsActivity : AppCompatActivity() {
 
         database.child(currentID).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists())
-                {
+                if (snapshot.exists()) {
                     val username = (snapshot.child("name").value ?: "Not Found").toString()
                     val imgurl = (snapshot.child("imgUrl").value ?: "Not Found").toString()
 
@@ -195,8 +194,7 @@ class SettingsActivity : AppCompatActivity() {
                         "LogoutInfo", "The name is $username.\n" +
                                 "The Url is $imgurl."
                     )
-                    if (!isDestroyed && !isFinishing)
-                    {
+                    if (!isDestroyed && !isFinishing) {
                         Glide.with(this@SettingsActivity)
                             .load(imgurl)
                             .placeholder(R.drawable.profile_image_vector)
@@ -208,7 +206,7 @@ class SettingsActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("LogOut","Cant Fetch from Database : error -> ${error.message}")
+                Log.e("LogOut", "Cant Fetch from Database : error -> ${error.message}")
             }
 
         })
@@ -222,7 +220,7 @@ class SettingsActivity : AppCompatActivity() {
                     val clearStateRequest = ClearCredentialStateRequest()
                     credentialManager.clearCredentialState(clearStateRequest)
                     Log.d("Logout", "CredentialManager cleared")
-                }catch (e: Exception) {
+                } catch (e: Exception) {
                     Log.e("Logout", "Error clearing CredentialManager", e)
                 }
             }
@@ -276,70 +274,77 @@ class SettingsActivity : AppCompatActivity() {
         val versionCode = packageManager.getPackageInfo(packageName, 0).versionCode
 
         val message = """
-                        🕰️ TimeVault – Version $versionName (Build $versionCode)
+                    🕰️ TimeVault – Version $versionName (Build $versionCode)
+                    
+                    Your memories. Secured for your future self.
+                    
+                    🔐 About the App:
+                    TimeVault is a secure and intelligent vault-based notification system built to help you preserve messages,
+                    memories, and moments for the future. Whether it’s a thought, a goal, or a surprise – TimeVault lets you 
+                    lock it away and be reminded at the right time.
+                    
+                    Backed by Firebase and modern cloud architecture, TimeVault offers seamless vault creation, real-time alerts, 
+                    and secure storage — all in an intuitive, elegant interface.
+                    
+                    🧩 Core Features:
+                    
+                        • Vault Creation:
+                          Securely create personal vaults for storing important content tied to specific events or dates. 
+                          Every vault is uniquely stored in Firebase for easy retrieval.
+                    
+                        • Time-Locked Events:
+                          Create events with future unlock times – your messages and data remain hidden until the selected moment arrives.
+                    
+                        • Push Notifications:
+                          Receive real-time push alerts through Firebase Cloud Messaging (FCM HTTP v1), keeping you updated on important vault activity.
                         
-                        Your memories. Secured for your future self.
+                        • Email Alerts:
+                          Get email notifications delivered directly to your inbox via a secure Node.js backend using integrated Gmail services.
                         
-                        🔐 About the App:
-                        TimeVault is a secure and intelligent vault-based notification system built to help you preserve messages,
-                         memories, and moments for the future. Whether it’s a thought, a goal, or a surprise – TimeVault lets you 
-                         lock it away and be reminded at the right time.
+                        • Notification Dashboard:
+                          Access all notifications in a sleek bottom sheet interface with drag-handle support, offering smooth and organized viewing.
+                    
+                        • Notification Deletion:
+                          Easily remove outdated or unnecessary notifications – changes reflect instantly in Firebase to keep your app synced.
                         
-                        Backed by Firebase and modern cloud architecture, TimeVault offers seamless vault creation, real-time alerts, 
-                        and secure storage — all in an intuitive, elegant interface.
+                        • Smart Search & Filtering:
+                          Search vaults by name or unique ID with instant dynamic filtering.
                         
-                        🧩 Core Features:
-                            • Vault Creation:
-                              Securely create personal vaults for storing important content tied to specific events or dates. 
-                              Every vault is uniquely stored in Firebase for easy retrieval.
+                        • Date-Time Validation:
+                          Prevent accidental past entries with built-in validation to ensure accuracy when scheduling events.
                         
-                            • Time-Locked Events:
-                              Create events with future unlock times – your messages and data remain hidden until the selected moment arrives.
+                        • 📌 Pin Vault:
+                          Pin important vaults to the top of your list for quicker access and better organization.
                         
-                            • Push Notifications:
-                              Receive real-time push alerts through Firebase Cloud Messaging (FCM HTTP v1), keeping you updated on important vault activity.
-                            
-                            • Email Alerts:
-                              Get email notifications delivered directly to your inbox via a secure Node.js backend using integrated Gmail services.
-                            
-                            • Notification Dashboard:
-                              Access all notifications in a sleek bottom sheet interface with drag-handle support, offering smooth and organized viewing.
-                        
-                            • Notification Deletion:
-                              Easily remove outdated or unnecessary notifications – changes reflect instantly in Firebase to keep your app synced.
-                            
-                            • Smart Search & Filtering:
-                              Search vaults by name or unique ID with instant dynamic filtering.
-                            
-                            • Date-Time Validation:
-                              Prevent accidental past entries with built-in validation to ensure accuracy when scheduling events.
-                        
-                        🎨 User Experience:
-                        Crafted with modern Android design principles, TimeVault features:
-                        • Polished UI elements
-                        • Responsive layouts
-                        • Themed components for a visually appealing experience
-                        
-                        🛡️ Security & Cloud Infrastructure:
-                        • Encrypted content handling
-                        • Realtime Database & Firestore support
-                        • Cloudinary for secure media storage
-                        • End-to-end safety for user data
-                        
-                        🛠️ Tech Stack:
-                        • Kotlin (Android Development)
-                        • Firebase Realtime DB & Firestore
-                        • Firebase Cloud Messaging (HTTP v1)
-                        • Node.js + Nodemailer (Email System)
-                        • Cloudinary (Media Storage)
-                        • Modern Android UI Components (BottomSheet, RecyclerView)
-                        
-                        💬 From the Creator:
-                        TimeVault isn’t just an app — it’s a message in a bottle for your future self.
-                         Built with care by **Alok Kumar**, it’s designed to make your memories last, and your intentions matter.
-                        
-                        Thanks for trusting us with your time. ⏳
-                        """.trimIndent()
+                        • 🔗 Share Vault:
+                          Share vaults with others via unique links — ideal for group memories, scheduled surprises, or collaborative reminders.
+                
+                    🎨 User Experience:
+                    Crafted with modern Android design principles, TimeVault features:
+                    • Polished UI elements
+                    • Responsive layouts
+                    • Themed components for a visually appealing experience
+                    
+                    🛡️ Security & Cloud Infrastructure:
+                    • Encrypted content handling
+                    • Realtime Database & Firestore support
+                    • Cloudinary for secure media storage
+                    • End-to-end safety for user data
+                    
+                    🛠️ Tech Stack:
+                    • Kotlin (Android Development)
+                    • Firebase Realtime DB & Firestore
+                    • Firebase Cloud Messaging (HTTP v1)
+                    • Node.js + Nodemailer (Email System)
+                    • Cloudinary (Media Storage)
+                    • Modern Android UI Components (BottomSheet, RecyclerView)
+                    
+                    💬 From the Creator:
+                    TimeVault isn’t just an app — it’s a message in a bottle for your future self.
+                    Built with care by ${getString(R.string.Creator)}, it’s designed to make your memories last, and your intentions matter.
+                    
+                    Thanks for trusting us with your time. ⏳
+                """.trimIndent()
 
 
         val builder =

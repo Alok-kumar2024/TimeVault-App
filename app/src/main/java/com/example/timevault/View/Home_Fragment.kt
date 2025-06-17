@@ -357,12 +357,11 @@ class Home_Fragment : Fragment(), SearchFragments {
                                     }
                             }
 
+                            startActivity(intent)
+
                             activity?.runOnUiThread {
                                 builderShowPassword.dismiss()
                             }
-
-                            startActivity(intent)
-
 
                         } else {
                             Toast.makeText(
