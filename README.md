@@ -88,25 +88,53 @@
    - Sign up at [cloudinary.com](https://cloudinary.com)
    - In Dashboard, get:
      - `cloud_name`
-     - `api_key`
-     - `api_secret`
+     - `Upload_Preset name`
+         - **Steps**
+             - Go To Settings
+             - In Settings go to Upload
+             - In that Click Add Upload Preset
+             - Enter name and in signing Mode `Select Unsigned`
 
    - In `CloudinaryUploadWorker.kt`, replace:
      ```kotlin
-     val cloudinary = Cloudinary(
-         ObjectUtils.asMap(
-             "cloud_name", "your_cloud_name",
-             "api_key", "your_api_key",
-             "api_secret", "your_api_secret"
-         )
-     )
+     val requestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(
+                    "file",
+                    encrypted.name,
+                    encrypted.asRequestBody("application/octet-stream".toMediaTypeOrNull()))
+                .addFormDataPart("upload_preset","Your_Upload_preset Name")
+                .addFormDataPart("asset_folder", folderPath)
+                .addFormDataPart("public_id",File(originalName).nameWithoutExtension)
+                .addFormDataPart("resource_type","raw")
+                .build()
+
+            val request = Request.Builder()
+                .url("https://api.cloudinary.com/v1_1/Your_Cloud_Name/raw/upload")
+                .post(requestBody)
+                .build()
      ```
 
    - In `EditProfile_Activity.kt`, inside `uploadToCloudinary`:
      ```kotlin
-     val cloudName = "your_cloud_name"
-     val apiKey = "your_api_key"
-     val apiSecret = "your_api_secret"
+     val requestBuilder =
+                fileStream?.let { RequestBody.create("image/*".toMediaTypeOrNull(), it) }?.let {
+                    MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("file","image.jpg",
+                            it
+                        ).addFormDataPart("upload_preset","Your_Upload_preset Name")
+                        .addFormDataPart("asset_folder", folder)
+                        .build()
+                }
+
+      val request = requestBuilder?.let {
+                Request.Builder()
+                    .url("https://api.cloudinary.com/v1_1/Your_Cloud_Name/image/upload")
+                    .post(it)
+                    .build()
+            }
+     
      ```
 
 ---
