@@ -262,7 +262,7 @@
 
     <style name="Fragment_HomeRvBackground">
         <item name="android:background">@drawable/buttonbox_samlllrouned</item>
-        <item name="android:backgroundTint">#0E0E0E</item>
+        <item name="android:backgroundTint">#1E1E1E</item>
         <item name="android:elevation">2dp</item>
     </style>
 
